@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Buku Tamu Perusahaan</title>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+
+  <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-slate-200">
+    <h1 class="text-2xl font-bold text-slate-800 mb-6">Registrasi Tamu</h1>
+    
+    <div class="space-y-4">
+      <input id="nama" type="text" placeholder="Nama Lengkap" class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+      <input id="perusahaan" type="text" placeholder="Asal Perusahaan" class="w-full border p-3 rounded-lg">
+      <select id="tujuan" class="w-full border p-3 rounded-lg">
+        <option value="">Tujuan Bertemu</option>
+        <option value="Meeting">Meeting</option>
+        <option value="Interview">Interview</option>
+        <option value="Dokumen">Kirim Dokumen</option>
+      </select>
+      <button onclick="saveData()" class="w-full bg-blue-900 text-white p-3 rounded-lg font-semibold hover:bg-blue-800 transition">Check-In Sekarang</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+    // PASTE KODE FIREBASE CONFIG ANDA DISINI
+    const firebaseConfig = {
+      apiKey: "...", 
+      authDomain: "...",
+      databaseURL: "...",
+      projectId: "...",
+      storageBucket: "...",
+      messagingSenderId: "...",
+      appId: "..."
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    window.saveData = () => {
+      const nama = document.getElementById('nama').value;
+      const perusahaan = document.getElementById('perusahaan').value;
+      const tujuan = document.getElementById('tujuan').value;
+
+      if(!nama || !tujuan) { alert("Mohon lengkapi data!"); return; }
+
+      push(ref(db, 'buku_tamu'), {
+        nama, perusahaan, tujuan,
+        timestamp: new Date().toLocaleString()
+      }).then(() => {
+        alert("Berhasil Check-In!");
+        location.reload();
+      });
+    };
+  </script>
+</body>
+</html>
