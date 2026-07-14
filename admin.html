@@ -7,30 +7,31 @@
 </head>
 <body class="bg-slate-100 p-4">
 
-  <div class="max-w-5xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <div class="bg-blue-900 text-white p-6 rounded-2xl shadow-lg text-center">
-        <p class="text-sm opacity-80">Total Antrian</p>
-        <h2 id="totalTamu" class="text-4xl font-bold">0</h2>
+  <div class="max-w-6xl mx-auto">
+    <!-- Ringkasan Statistik -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div class="bg-blue-900 text-white p-4 rounded-xl shadow text-center">
+        <p class="text-xs opacity-80">Total Antrian</p>
+        <h2 id="totalTamu" class="text-2xl font-bold">0</h2>
       </div>
-      <div class="bg-green-600 text-white p-6 rounded-2xl shadow-lg text-center">
-        <p class="text-sm opacity-80">Sudah Terlayani</p>
-        <h2 id="totalSelesai" class="text-4xl font-bold">0</h2>
+      <div class="bg-yellow-500 text-white p-4 rounded-xl shadow text-center">
+        <p class="text-xs opacity-80">Dalam Proses</p>
+        <h2 id="totalProses" class="text-2xl font-bold">0</h2>
       </div>
-      <div class="bg-orange-500 text-white p-6 rounded-2xl shadow-lg text-center">
-        <p class="text-sm opacity-80">Menunggu</p>
-        <h2 id="totalMenunggu" class="text-4xl font-bold">0</h2>
+      <div class="bg-green-600 text-white p-4 rounded-xl shadow text-center">
+        <p class="text-xs opacity-80">Selesai</p>
+        <h2 id="totalSelesai" class="text-2xl font-bold">0</h2>
       </div>
     </div>
 
+    <!-- Tabel Daftar Tamu -->
     <div class="bg-white p-6 rounded-2xl shadow-lg overflow-x-auto">
-      <h2 class="text-xl font-bold mb-4 text-blue-900">Daftar Antrian Real-time</h2>
       <table class="w-full text-left">
         <thead>
-          <tr class="border-b text-gray-500 text-sm uppercase">
+          <tr class="border-b text-gray-500 text-xs uppercase">
             <th class="p-3">Antrian</th>
             <th class="p-3">Nama</th>
-            <th class="p-3">Durasi</th>
+            <th class="p-3">Status</th>
             <th class="p-3">Aksi</th>
           </tr>
         </thead>
@@ -54,53 +55,43 @@
     };
 
     const db = getFirestore(initializeApp(firebaseConfig));
-
-    // Menggunakan onSnapshot agar real-time
     const q = query(collection(db, "tamu"), orderBy("waktu", "desc"));
     
     onSnapshot(q, (snapshot) => {
-      let total = snapshot.size;
-      let selesai = 0;
-      let menunggu = 0;
-      
+      let total = 0, proses = 0, selesai = 0;
       const tabel = document.getElementById("tabelTamu");
       tabel.innerHTML = "";
 
       snapshot.forEach((docSnap) => {
         const data = docSnap.data();
-        if (data.status === "selesai") selesai++; else menunggu++;
+        total++;
+        if (data.status === "proses") proses++;
+        else if (data.status === "selesai") selesai++;
 
-        // Hitung Durasi jika sudah selesai
-        let durasi = "-";
-        if (data.status === "selesai" && data.waktuSelesai && data.waktu) {
-          const diff = Math.round((data.waktuSelesai.toDate() - data.waktu.toDate()) / 60000);
-          durasi = diff + " menit";
-        }
-
+        let statusLabel = data.status === 'selesai' ? 'Selesai' : (data.status === 'proses' ? 'Sedang Diproses' : 'Menunggu');
+        
         tabel.innerHTML += `
-          <tr class="border-b">
+          <tr class="border-b text-sm">
             <td class="p-3 font-bold">${data.nomorAntrian}</td>
             <td class="p-3">${data.nama}</td>
-            <td class="p-3 text-sm">${durasi}</td>
-            <td class="p-3">
-              ${data.status !== 'selesai' ? 
-                `<button onclick="tandaiSelesai('${docSnap.id}')" class="bg-blue-900 text-white px-3 py-1 rounded text-sm">Selesai</button>` : 
-                '<span class="text-green-600 font-bold">✓ Selesai</span>'}
+            <td class="p-3 font-semibold ${data.status === 'selesai' ? 'text-green-600' : (data.status === 'proses' ? 'text-yellow-600' : 'text-gray-500')}">${statusLabel}</td>
+            <td class="p-3 flex gap-2">
+              ${data.status === 'menunggu' ? `<button onclick="updateStatus('${docSnap.id}', 'proses')" class="bg-yellow-500 text-white px-3 py-1 rounded">Proses</button>` : ''}
+              ${data.status !== 'selesai' ? `<button onclick="updateStatus('${docSnap.id}', 'selesai')" class="bg-green-600 text-white px-3 py-1 rounded">Selesai</button>` : '✓'}
             </td>
           </tr>
         `;
       });
 
       document.getElementById("totalTamu").innerText = total;
+      document.getElementById("totalProses").innerText = proses;
       document.getElementById("totalSelesai").innerText = selesai;
-      document.getElementById("totalMenunggu").innerText = menunggu;
     });
 
-    // Fungsi untuk update status
-    window.tandaiSelesai = async (id) => {
+    window.updateStatus = async (id, status) => {
       await updateDoc(doc(db, "tamu", id), {
-        status: "selesai",
-        waktuSelesai: serverTimestamp()
+        status: status,
+        waktuUpdate: serverTimestamp() // Catat waktu saat status berubah
       });
     };
   </script>
