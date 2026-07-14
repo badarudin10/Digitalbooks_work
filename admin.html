@@ -19,13 +19,11 @@
 
   <div id="dashboardAdmin" class="hidden p-4 max-w-6xl mx-auto space-y-6">
     
-    <!-- Area Grafik -->
     <div class="bg-white p-6 rounded-2xl shadow-lg">
       <h2 class="text-xl font-bold text-blue-900 mb-4">Grafik Tren Tamu (7 Hari Terakhir)</h2>
       <canvas id="grafikPelayanan" height="80"></canvas>
     </div>
 
-    <!-- Area Counter Ringkasan -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div class="bg-blue-900 text-white p-6 rounded-2xl shadow-lg text-center">
         <p class="text-sm opacity-80">Total Antrian</p>
@@ -41,7 +39,6 @@
       </div>
     </div>
 
-    <!-- Tabel Antrian Real-time -->
     <div class="bg-white p-6 rounded-2xl shadow-lg overflow-x-auto">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-bold text-blue-900">Daftar Antrian Real-time</h2>
@@ -64,30 +61,25 @@
       </table>
     </div>
 
-    <!-- PANEL ADMIN: MANAJEMEN EDUKASI & GALERI -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       
-      <!-- Bagian Kelola Galeri Foto -->
       <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col justify-between">
         <div>
           <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Galeri Kegiatan</h2>
           <div class="flex gap-2 mb-4">
             <input type="text" id="urlFotoInput" placeholder="Tempel Link Foto (Direct Link)" class="flex-1 p-2 border rounded-lg text-sm">
-            <button onclick="tambahFoto Kegiatan()" class="bg-blue-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-800">Tambah</button>
+            <button onclick="tambahFotoKegiatan()" class="bg-blue-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-800">Tambah</button>
           </div>
           <p class="text-xs text-gray-500 mb-4">*Tips: Upload foto ke ImgBB/PostImage lalu salin Direct Link-nya ke sini.</p>
         </div>
         
-        <!-- List Preview Foto Aktif -->
         <div class="border-t pt-4 max-h-60 overflow-y-auto">
           <h3 class="text-sm font-bold text-gray-700 mb-2">Daftar Foto Aktif:</h3>
           <div id="listFotoGaleri" class="grid grid-cols-3 gap-2">
-            <!-- Data foto dari firebase akan di-render di sini -->
-          </div>
+            </div>
         </div>
       </div>
 
-      <!-- Bagian Kelola Edukasi UPTD -->
       <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col justify-between">
         <div>
           <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Informasi Edukasi</h2>
@@ -107,7 +99,6 @@
 
     </div>
 
-    <!-- Tombol Logout Utama -->
     <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700 transition">Keluar (Logout)</button>
   </div>
 
@@ -156,7 +147,6 @@
       document.getElementById("loginScreen").classList.add("hidden");
       document.getElementById("dashboardAdmin").classList.remove("hidden");
       
-      // Real-time listener untuk tabel antrian & grafik
       const q = query(collection(db, "tamu"), orderBy("waktu", "desc"));
       onSnapshot(q, (snapshot) => {
         let total = 0, proses = 0, selesai = 0;
@@ -200,7 +190,6 @@
         document.getElementById("totalSelesai").innerText = selesai;
       });
 
-      // Real-time listener untuk manajemen Galeri Foto
       const qGaleri = query(collection(db, "galeri"), orderBy("waktuInput", "desc"));
       onSnapshot(qGaleri, (snapshot) => {
         const areaGaleri = document.getElementById("listFotoGaleri");
@@ -218,7 +207,6 @@
         });
       });
 
-      // Real-time listener untuk memuat data Edukasi saat ini ke form input
       onSnapshot(doc(db, "konten", "edukasi"), (docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data();
@@ -228,7 +216,6 @@
       });
     }
 
-    // Fungsi Pengolahan Aksi & Database
     window.updateStatus = async (id, status, hp, nama, antrian) => {
       const updateData = { status: status };
       if (status === 'proses') updateData.waktuProses = serverTimestamp();
@@ -250,7 +237,6 @@
       window.open(`https://wa.me/${formattedHp}?text=${encodeURIComponent(pesan)}`, '_blank');
     };
 
-    // Fungsi Menambah Tautan Foto Baru ke Firebase
     window.tambahFotoKegiatan = async () => {
       const urlInput = document.getElementById("urlFotoInput");
       if (urlInput.value.trim() === "") return alert("Masukkan URL foto terlebih dahulu!");
@@ -259,17 +245,15 @@
         url: urlInput.value.trim(),
         waktuInput: serverTimestamp()
       });
-      urlInput.value = ""; // Bersihkan input
+      urlInput.value = ""; 
     };
 
-    // Fungsi Menghapus Foto dari Firebase
     window.hapusFoto = async (id) => {
       if (confirm("Apakah Anda yakin ingin menghapus foto ini dari galeri?")) {
         await deleteDoc(doc(db, "galeri", id));
       }
     };
 
-    // Fungsi Menyimpan/Mengupdate Informasi Edukasi
     window.simpanEdukasi = async () => {
       const judul = document.getElementById("judulEdukasiInput").value;
       const isi = document.getElementById("isiEdukasiInput").value;
