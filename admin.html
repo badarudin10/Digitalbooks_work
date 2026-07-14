@@ -17,13 +17,16 @@
     </div>
   </div>
 
-  <div id="dashboardAdmin" class="hidden p-4 max-w-6xl mx-auto">
-    <div class="bg-white p-6 rounded-2xl shadow-lg mb-6">
+  <div id="dashboardAdmin" class="hidden p-4 max-w-6xl mx-auto space-y-6">
+    
+    <!-- Area Grafik -->
+    <div class="bg-white p-6 rounded-2xl shadow-lg">
       <h2 class="text-xl font-bold text-blue-900 mb-4">Grafik Tren Tamu (7 Hari Terakhir)</h2>
       <canvas id="grafikPelayanan" height="80"></canvas>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <!-- Area Counter Ringkasan -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div class="bg-blue-900 text-white p-6 rounded-2xl shadow-lg text-center">
         <p class="text-sm opacity-80">Total Antrian</p>
         <h2 id="totalTamu" class="text-4xl font-bold">0</h2>
@@ -38,6 +41,7 @@
       </div>
     </div>
 
+    <!-- Tabel Antrian Real-time -->
     <div class="bg-white p-6 rounded-2xl shadow-lg overflow-x-auto">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-bold text-blue-900">Daftar Antrian Real-time</h2>
@@ -58,14 +62,58 @@
         </thead>
         <tbody id="tabelTamu"></tbody>
       </table>
-      
-      <button onclick="logout()" class="mt-6 w-full bg-red-600 text-white p-3 rounded-lg font-bold">Keluar (Logout)</button>
     </div>
+
+    <!-- PANEL ADMIN: MANAJEMEN EDUKASI & GALERI -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- Bagian Kelola Galeri Foto -->
+      <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col justify-between">
+        <div>
+          <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Galeri Kegiatan</h2>
+          <div class="flex gap-2 mb-4">
+            <input type="text" id="urlFotoInput" placeholder="Tempel Link Foto (Direct Link)" class="flex-1 p-2 border rounded-lg text-sm">
+            <button onclick="tambahFoto Kegiatan()" class="bg-blue-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-800">Tambah</button>
+          </div>
+          <p class="text-xs text-gray-500 mb-4">*Tips: Upload foto ke ImgBB/PostImage lalu salin Direct Link-nya ke sini.</p>
+        </div>
+        
+        <!-- List Preview Foto Aktif -->
+        <div class="border-t pt-4 max-h-60 overflow-y-auto">
+          <h3 class="text-sm font-bold text-gray-700 mb-2">Daftar Foto Aktif:</h3>
+          <div id="listFotoGaleri" class="grid grid-cols-3 gap-2">
+            <!-- Data foto dari firebase akan di-render di sini -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Bagian Kelola Edukasi UPTD -->
+      <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col justify-between">
+        <div>
+          <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Informasi Edukasi</h2>
+          <div class="space-y-3">
+            <div>
+              <label class="text-xs font-bold text-gray-600 block mb-1">Judul Edukasi</label>
+              <input type="text" id="judulEdukasiInput" placeholder="Contoh: Tips Menyimpan Obat Yang Benar" class="w-full p-2 border rounded-lg text-sm">
+            </div>
+            <div>
+              <label class="text-xs font-bold text-gray-600 block mb-1">Isi Edukasi</label>
+              <textarea id="isiEdukasiInput" rows="4" placeholder="Tuliskan poin-poin edukasi di sini..." class="w-full p-2 border rounded-lg text-sm"></textarea>
+            </div>
+          </div>
+        </div>
+        <button onclick="simpanEdukasi()" class="w-full mt-4 bg-green-600 text-white p-3 rounded-lg font-bold hover:bg-green-700 transition">Simpan Perubahan Edukasi</button>
+      </div>
+
+    </div>
+
+    <!-- Tombol Logout Utama -->
+    <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700 transition">Keluar (Logout)</button>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy, updateDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, updateDoc, doc, serverTimestamp, addDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw",
@@ -108,6 +156,7 @@
       document.getElementById("loginScreen").classList.add("hidden");
       document.getElementById("dashboardAdmin").classList.remove("hidden");
       
+      // Real-time listener untuk tabel antrian & grafik
       const q = query(collection(db, "tamu"), orderBy("waktu", "desc"));
       onSnapshot(q, (snapshot) => {
         let total = 0, proses = 0, selesai = 0;
@@ -150,31 +199,88 @@
         document.getElementById("totalProses").innerText = proses;
         document.getElementById("totalSelesai").innerText = selesai;
       });
+
+      // Real-time listener untuk manajemen Galeri Foto
+      const qGaleri = query(collection(db, "galeri"), orderBy("waktuInput", "desc"));
+      onSnapshot(qGaleri, (snapshot) => {
+        const areaGaleri = document.getElementById("listFotoGaleri");
+        areaGaleri.innerHTML = "";
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          areaGaleri.innerHTML += `
+            <div class="relative group border rounded-lg overflow-hidden h-20 bg-gray-100">
+              <img src="${data.url}" class="w-full h-full object-cover">
+              <button onclick="hapusFoto('${docSnap.id}')" class="absolute inset-0 bg-red-600 bg-opacity-70 text-white text-xs font-bold opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+                Hapus
+              </button>
+            </div>
+          `;
+        });
+      });
+
+      // Real-time listener untuk memuat data Edukasi saat ini ke form input
+      onSnapshot(doc(db, "konten", "edukasi"), (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          document.getElementById("judulEdukasiInput").value = data.judul || "";
+          document.getElementById("isiEdukasiInput").value = data.isi || "";
+        }
+      });
     }
 
+    // Fungsi Pengolahan Aksi & Database
     window.updateStatus = async (id, status, hp, nama, antrian) => {
-  const updateData = { status: status };
-  if (status === 'proses') updateData.waktuProses = serverTimestamp();
-  if (status === 'selesai') updateData.waktuSelesai = serverTimestamp();
-  await updateDoc(doc(db, "tamu", id), updateData);
+      const updateData = { status: status };
+      if (status === 'proses') updateData.waktuProses = serverTimestamp();
+      if (status === 'selesai') updateData.waktuSelesai = serverTimestamp();
+      await updateDoc(doc(db, "tamu", id), updateData);
 
-  // LOGIKA PERBAIKAN FORMAT NOMOR
-  let formattedHp = hp;
-  if (formattedHp.startsWith('0')) {
-    formattedHp = '62' + formattedHp.substring(1);
-  } else if (formattedHp.startsWith('8')) {
-    formattedHp = '62' + formattedHp;
-  }
-  // Hapus karakter non-angka jika ada (spasi, tanda baca)
-  formattedHp = formattedHp.replace(/\D/g, '');
+      let formattedHp = hp;
+      if (formattedHp.startsWith('0')) {
+        formattedHp = '62' + formattedHp.substring(1);
+      } else if (formattedHp.startsWith('8')) {
+        formattedHp = '62' + formattedHp;
+      }
+      formattedHp = formattedHp.replace(/\D/g, '');
 
-  const pesan = status === 'proses' 
-    ? `Halo ${nama}, antrian Anda (${antrian}) saat ini sedang diproses oleh UPTD Farmasi. Mohon tunggu sejenak.`
-    : `Halo ${nama}, layanan untuk antrian (${antrian}) Anda telah selesai. Terima kasih atas kunjungan Anda di UPTD Farmasi.`;
-  
-  // Gunakan formattedHp yang sudah dibersihkan
-  window.open(`https://wa.me/${formattedHp}?text=${encodeURIComponent(pesan)}`, '_blank');
-};
+      const pesan = status === 'proses' 
+        ? `Halo ${nama}, antrian Anda (${antrian}) saat ini sedang diproses oleh UPTD Farmasi. Mohon tunggu sejenak.`
+        : `Halo ${nama}, layanan untuk antrian (${antrian}) Anda telah selesai. Terima kasih atas kunjungan Anda di UPTD Farmasi.`;
+      
+      window.open(`https://wa.me/${formattedHp}?text=${encodeURIComponent(pesan)}`, '_blank');
+    };
+
+    // Fungsi Menambah Tautan Foto Baru ke Firebase
+    window.tambahFotoKegiatan = async () => {
+      const urlInput = document.getElementById("urlFotoInput");
+      if (urlInput.value.trim() === "") return alert("Masukkan URL foto terlebih dahulu!");
+      
+      await addDoc(collection(db, "galeri"), {
+        url: urlInput.value.trim(),
+        waktuInput: serverTimestamp()
+      });
+      urlInput.value = ""; // Bersihkan input
+    };
+
+    // Fungsi Menghapus Foto dari Firebase
+    window.hapusFoto = async (id) => {
+      if (confirm("Apakah Anda yakin ingin menghapus foto ini dari galeri?")) {
+        await deleteDoc(doc(db, "galeri", id));
+      }
+    };
+
+    // Fungsi Menyimpan/Mengupdate Informasi Edukasi
+    window.simpanEdukasi = async () => {
+      const judul = document.getElementById("judulEdukasiInput").value;
+      const isi = document.getElementById("isiEdukasiInput").value;
+      
+      await setDoc(doc(db, "konten", "edukasi"), {
+        judul: judul,
+        isi: isi,
+        terakhirDiubah: serverTimestamp()
+      });
+      alert("Informasi edukasi berhasil diperbarui!");
+    };
 
     window.logout = () => { localStorage.removeItem("adminLogedIn"); location.reload(); };
 
