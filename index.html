@@ -58,7 +58,7 @@
     </div>
   </div>
 
-   <script type="module">
+     <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
@@ -86,12 +86,21 @@
         return;
       }
 
-      // Generate Nomor Antrian
-      const querySnapshot = await getDocs(collection(db, "tamu"));
-      const antrianBaru = querySnapshot.size + 1;
-      const kodeAntrian = keperluan.substring(0, 1) + "-" + antrianBaru.toString().padStart(3, '0');
+      // Daftar nomor WA berdasarkan keperluan
+      const daftarNomor = {
+        "OBAT_PKD": "62881080698977", // Contoh nomor 1
+        "VAKSIN": "62881080698977",   // Bisa ganti ke nomor lain
+        "REAGEN": "62881080698977"    // Bisa ganti ke nomor lain
+        // Tambahkan key lainnya sesuai kebutuhan
+      };
+
+      const noAdmin = daftarNomor[keperluan] || "62881080698977"; // Default jika tidak ada di daftar
 
       try {
+        const querySnapshot = await getDocs(collection(db, "tamu"));
+        const antrianBaru = querySnapshot.size + 1;
+        const kodeAntrian = keperluan.substring(0, 1) + "-" + antrianBaru.toString().padStart(3, '0');
+
         await addDoc(collection(db, "tamu"), {
           nama: nama,
           instansi: instansi,
@@ -101,20 +110,15 @@
           waktu: serverTimestamp()
         });
 
-        // Pesan otomatis untuk WhatsApp
-        const noAdmin = "62881080698977"; // Format internasional
         const pesan = `Halo Admin, saya ingin Check-In.%0A%0A*No. Antrian:* ${kodeAntrian}%0A*Nama:* ${nama}%0A*Instansi:* ${instansi}%0A*Keperluan:* ${keperluan}`;
         
         alert("Berhasil! Nomor antrian Anda: " + kodeAntrian);
-        
-        // Arahkan ke WhatsApp
         window.open(`https://wa.me/${noAdmin}?text=${pesan}`, '_blank');
-        
         location.reload(); 
       } catch (e) {
         alert("Error: " + e.message);
       }
     });
-  </script> 
+  </script>
 </body>
 </html>
