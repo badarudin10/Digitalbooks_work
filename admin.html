@@ -78,7 +78,7 @@
     };
 
     const db = getFirestore(initializeApp(firebaseConfig));
-    let chart; // Variabel global untuk grafik
+    let chart; 
 
     window.onload = () => {
       if (localStorage.getItem("adminLogedIn") === "true") tampilkanDashboard();
@@ -121,7 +121,6 @@
           if (data.status === "proses") proses++;
           else if (data.status === "selesai") selesai++;
 
-          // Pengolahan data untuk grafik
           if (data.waktu) {
             const tgl = data.waktu.toDate().toLocaleDateString('id-ID', {day: 'numeric', month: 'short'});
             dataPerHari[tgl] = (dataPerHari[tgl] || 0) + 1;
@@ -139,8 +138,8 @@
               <td class="p-3 font-semibold text-${data.status === 'selesai' ? 'green' : 'yellow'}-600">${data.status || 'menunggu'}</td>
               <td class="p-3">${durasi}</td>
               <td class="p-3 flex gap-2">
-                ${data.status !== 'selesai' && data.status !== 'proses' ? `<button onclick="updateStatus('${docSnap.id}', 'proses')" class="bg-yellow-500 text-white px-2 py-1 rounded text-xs">Proses</button>` : ''}
-                ${data.status !== 'selesai' ? `<button onclick="updateStatus('${docSnap.id}', 'selesai')" class="bg-green-600 text-white px-2 py-1 rounded text-xs">Selesai</button>` : '✓'}
+                ${data.status !== 'selesai' && data.status !== 'proses' ? `<button onclick="updateStatus('${docSnap.id}', 'proses', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-yellow-500 text-white px-2 py-1 rounded text-xs">Proses</button>` : ''}
+                ${data.status !== 'selesai' ? `<button onclick="updateStatus('${docSnap.id}', 'selesai', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-green-600 text-white px-2 py-1 rounded text-xs">Selesai</button>` : '✓'}
               </td>
             </tr>
           `;
@@ -153,11 +152,18 @@
       });
     }
 
-    window.updateStatus = async (id, status) => {
+    window.updateStatus = async (id, status, hp, nama, antrian) => {
       const updateData = { status: status };
       if (status === 'proses') updateData.waktuProses = serverTimestamp();
       if (status === 'selesai') updateData.waktuSelesai = serverTimestamp();
       await updateDoc(doc(db, "tamu", id), updateData);
+
+      // Pemicu WhatsApp
+      const pesan = status === 'proses' 
+        ? `Halo ${nama}, antrian Anda (${antrian}) saat ini sedang diproses oleh UPTD Farmasi. Mohon tunggu sejenak.`
+        : `Halo ${nama}, layanan untuk antrian (${antrian}) Anda telah selesai. Terima kasih atas kunjungan Anda di UPTD Farmasi.`;
+      
+      window.open(`https://wa.me/${hp}?text=${encodeURIComponent(pesan)}`, '_blank');
     };
 
     window.logout = () => { localStorage.removeItem("adminLogedIn"); location.reload(); };
