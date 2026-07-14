@@ -4,50 +4,64 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); min-height: 100vh; padding: 20px; }
-    .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
-  </style>
+  <title>Buku Tamu Digital - UPTD Farmasi Tangsel</title>
 </head>
-<body>
+<body class="bg-slate-50 font-sans p-4">
 
-  <div class="max-w-md mx-auto glass p-8 rounded-3xl shadow-2xl">
-    <!-- Header -->
-    <div class="text-center mb-8">
-      <h1 class="text-2xl font-bold text-blue-900">UPTD FARMASI</h1>
-      <p class="text-xs font-semibold text-blue-600 uppercase">Kota Tangerang Selatan</p>
-      <p class="italic mt-3 text-gray-600 text-sm">"Melayani dengan sepenuh hati, ramah, sopan santun, dan cepat."</p>
+  <div class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-lg border-t-4 border-blue-900">
+    <h1 class="text-2xl font-bold text-blue-900 text-center">UPTD FARMASI</h1>
+    <h2 class="text-sm text-center text-gray-600 mb-6 uppercase">Kota Tangerang Selatan</h2>
+    <p class="italic text-center text-sm text-gray-500 mb-6">"Kami melayani dengan sepenuh hati, ramah, sopan santun dan cepat."</p>
+
+    <div class="space-y-4 mb-8">
+      <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+        <h3 class="font-bold text-blue-800">Edukasi Obat</h3>
+        <p class="text-xs">Informasi seputar penyimpanan dan penggunaan obat yang benar.</p>
+      </div>
+      <div class="h-32 bg-gray-200 rounded-xl flex items-center justify-center text-gray-500">
+        [Area Galeri Foto Kegiatan]
+      </div>
     </div>
 
-    <!-- Form & Konten -->
-    <div class="space-y-6">
-      <!-- Link Survei -->
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" 
-         target="_blank" class="block w-full bg-green-600 text-white text-center p-3 rounded-xl font-bold shadow-lg">
-        Isi Survei Kepuasan
-      </a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank"
+       class="block w-full bg-green-600 text-white text-center p-3 rounded-lg font-bold mb-6 hover:bg-green-700">
+      Isi Survei Kepuasan Dulu
+    </a>
 
-      <!-- Input Data -->
-      <div class="space-y-3">
-        <input id="nama" placeholder="Nama Lengkap" class="w-full p-3 border rounded-xl">
-        <select id="keperluan" class="w-full p-3 border rounded-xl">
-          <option value="">Pilih Keperluan</option>
-          <option value="OBAT_PKD">A. OBAT PKD</option>
-          <option value="VAKSIN">B. VAKSIN</option>
-        </select>
-        <button class="w-full bg-blue-900 text-white p-4 rounded-xl font-bold">Check-In</button>
-      </div>
+    <div class="space-y-4 border-t pt-6">
+      <h3 class="font-bold text-gray-700">Registrasi Tamu</h3>
+      <input id="nama" placeholder="Nama Lengkap" class="w-full p-3 border rounded-lg">
+      <input id="instansi" placeholder="Instansi" class="w-full p-3 border rounded-lg">
+      <input id="hp" placeholder="No. Telepon" class="w-full p-3 border rounded-lg">
+      
+      <select id="keperluan" class="w-full p-3 border rounded-lg">
+        <option value="">Pilih Keperluan:</option>
+        <option value="OBAT_PKD">A. OBAT PKD</option>
+        <option value="VAKSIN">B. VAKSIN</option>
+        <option value="REAGEN">C. REAGEN</option>
+        <option value="TB_KUSTA">D. TB dan KUSTA</option>
+        <option value="HIV_JIWA">E. HIV dan JIWA</option>
+        <option value="DBD_MALARIA">F. DBD dan MALARIA</option>
+        <option value="KECACINGAN">G. KECACINGAN</option>
+        <option value="HEPATITIS">H. HEPATITIS</option>
+        <option value="GIZI">I. GIZI</option>
+      </select>
 
-      <!-- Menu Edukasi -->
-      <div class="border-t pt-6">
-        <h3 class="font-bold text-blue-900 mb-3">Pojok Edukasi</h3>
-        <div class="bg-blue-50 p-4 rounded-xl border-l-4 border-blue-500">
-          <h4 class="font-bold text-sm">Cara Penyimpanan Obat</h4>
-          <p class="text-xs text-gray-600 mt-1">Simpan di tempat sejuk dan kering...</p>
-        </div>
-      </div>
+      <input type="file" id="surat" class="w-full text-sm text-gray-500 border p-2 rounded-lg">
+      
+      <button onclick="prosesSubmit()" class="w-full bg-blue-900 text-white p-4 rounded-lg font-bold">
+        Check-In & Ambil Antrian
+      </button>
     </div>
   </div>
 
+  <script type="module">
+    // (Di sini Anda akan menaruh logika Firebase Anda nanti)
+    window.prosesSubmit = () => {
+      alert("Pastikan Anda sudah mengisi survei kepuasan di atas!");
+      // Logika Firebase akan kita pasang setelah Anda mengonfirmasi desain ini sudah OK
+    };
+  </script>
 </body>
 </html>
+
