@@ -13,7 +13,6 @@
     <h2 class="text-sm text-center text-gray-600 mb-6 uppercase">Kota Tangerang Selatan</h2>
     <p class="italic text-center text-sm text-gray-500 mb-6">"Kami melayani dengan sepenuh hati, ramah, sopan santun dan cepat."</p>
 
-    <!-- Tombol Edukasi -->
     <a href="edukasi.html" class="flex items-center justify-between bg-blue-50 p-4 rounded-xl border border-blue-200 mb-6 hover:bg-blue-100 transition">
       <span class="font-bold text-blue-800">📚 Pojok Edukasi</span>
       <span class="text-xs text-blue-600 bg-blue-200 px-2 py-1 rounded-full">Baca Info</span>
@@ -105,13 +104,15 @@
         const antrianBaru = querySnapshot.size + 1;
         const kodeAntrian = keperluan.substring(0, 1) + "-" + antrianBaru.toString().padStart(3, '0');
 
+        // Menambahkan status "menunggu" ke Firestore
         await addDoc(collection(db, "tamu"), {
           nama: nama,
           instansi: instansi,
           hp: hp,
           keperluan: keperluan,
           nomorAntrian: kodeAntrian,
-          waktu: serverTimestamp()
+          waktu: serverTimestamp(),
+          status: "menunggu" 
         });
 
         dataPesanWA = `Halo Admin, saya ingin Check-In.%0A%0A*No. Antrian:* ${kodeAntrian}%0A*Nama:* ${nama}%0A*Instansi:* ${instansi}%0A*Keperluan:* ${keperluan}%0A%0A---%0A*Mohon kirimkan file dokumen/surat permintaan Anda melalui chat ini.*`;
