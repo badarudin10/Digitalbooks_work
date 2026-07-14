@@ -10,7 +10,7 @@
   <div class="max-w-5xl mx-auto">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       <div class="bg-blue-900 text-white p-6 rounded-2xl shadow-lg text-center">
-        <p class="text-sm opacity-80">Total Antrian Hari Ini</p>
+        <p class="text-sm opacity-80">Total Antrian</p>
         <h2 id="totalTamu" class="text-4xl font-bold">0</h2>
       </div>
       <div class="bg-green-600 text-white p-6 rounded-2xl shadow-lg text-center">
@@ -18,19 +18,19 @@
         <h2 id="totalSelesai" class="text-4xl font-bold">0</h2>
       </div>
       <div class="bg-orange-500 text-white p-6 rounded-2xl shadow-lg text-center">
-        <p class="text-sm opacity-80">Rata-rata Durasi (Menit)</p>
-        <h2 id="avgDurasi" class="text-4xl font-bold">0</h2>
+        <p class="text-sm opacity-80">Menunggu</p>
+        <h2 id="totalMenunggu" class="text-4xl font-bold">0</h2>
       </div>
     </div>
 
     <div class="bg-white p-6 rounded-2xl shadow-lg overflow-x-auto">
-      <h2 class="text-xl font-bold mb-4 text-blue-900">Daftar Tamu Real-time</h2>
+      <h2 class="text-xl font-bold mb-4 text-blue-900">Daftar Antrian Real-time</h2>
       <table class="w-full text-left">
         <thead>
           <tr class="border-b text-gray-500 text-sm uppercase">
             <th class="p-3">Antrian</th>
             <th class="p-3">Nama</th>
-            <th class="p-3">Status</th>
+            <th class="p-3">Durasi</th>
             <th class="p-3">Aksi</th>
           </tr>
         </thead>
@@ -41,31 +41,51 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, updateDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, updateDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    const db = getFirestore(initializeApp({ /* sesuaikan config */ }));
+    const firebaseConfig = {
+      apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw",
+      authDomain: "digital-books-d22c9.firebaseapp.com",
+      projectId: "digital-books-d22c9",
+      storageBucket: "digital-books-d22c9.firebasestorage.app",
+      messagingSenderId: "905407530155",
+      appId: "1:905407530155:web:dd90e18d4158ce42fae3ee",
+      measurementId: "G-LL7GF2RMF8"
+    };
 
-    async function loadData() {
-      const q = query(collection(db, "tamu"), orderBy("waktu", "desc"));
-      const snapshot = await getDocs(q);
+    const db = getFirestore(initializeApp(firebaseConfig));
+
+    // Menggunakan onSnapshot agar real-time
+    const q = query(collection(db, "tamu"), orderBy("waktu", "desc"));
+    
+    onSnapshot(q, (snapshot) => {
       let total = snapshot.size;
       let selesai = 0;
-      let durasiTotal = 0;
-
+      let menunggu = 0;
+      
       const tabel = document.getElementById("tabelTamu");
       tabel.innerHTML = "";
 
       snapshot.forEach((docSnap) => {
         const data = docSnap.data();
-        if (data.status === "selesai") selesai++;
-        
+        if (data.status === "selesai") selesai++; else menunggu++;
+
+        // Hitung Durasi jika sudah selesai
+        let durasi = "-";
+        if (data.status === "selesai" && data.waktuSelesai && data.waktu) {
+          const diff = Math.round((data.waktuSelesai.toDate() - data.waktu.toDate()) / 60000);
+          durasi = diff + " menit";
+        }
+
         tabel.innerHTML += `
           <tr class="border-b">
             <td class="p-3 font-bold">${data.nomorAntrian}</td>
             <td class="p-3">${data.nama}</td>
-            <td class="p-3">${data.status === 'selesai' ? '<span class="text-green-600">Selesai</span>' : '<span class="text-yellow-600">Menunggu</span>'}</td>
+            <td class="p-3 text-sm">${durasi}</td>
             <td class="p-3">
-              ${data.status !== 'selesai' ? `<button onclick="tandaiSelesai('${docSnap.id}')" class="bg-blue-900 text-white px-3 py-1 rounded">Selesai</button>` : '-'}
+              ${data.status !== 'selesai' ? 
+                `<button onclick="tandaiSelesai('${docSnap.id}')" class="bg-blue-900 text-white px-3 py-1 rounded text-sm">Selesai</button>` : 
+                '<span class="text-green-600 font-bold">✓ Selesai</span>'}
             </td>
           </tr>
         `;
@@ -73,17 +93,16 @@
 
       document.getElementById("totalTamu").innerText = total;
       document.getElementById("totalSelesai").innerText = selesai;
-    }
+      document.getElementById("totalMenunggu").innerText = menunggu;
+    });
 
+    // Fungsi untuk update status
     window.tandaiSelesai = async (id) => {
       await updateDoc(doc(db, "tamu", id), {
         status: "selesai",
         waktuSelesai: serverTimestamp()
       });
-      loadData();
     };
-
-    loadData();
   </script>
 </body>
 </html>
