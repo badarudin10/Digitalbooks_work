@@ -13,24 +13,11 @@
     <h2 class="text-sm text-center text-gray-600 mb-6 uppercase">Kota Tangerang Selatan</h2>
     <p class="italic text-center text-sm text-gray-500 mb-6">"Kami melayani dengan sepenuh hati, ramah, sopan santun dan cepat."</p>
 
-    <!-- Menu Edukasi & Galeri -->
-    <div class="space-y-4 mb-8">
-      <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
-        <h3 class="font-bold text-blue-800">Edukasi Obat</h3>
-        <p class="text-xs">Informasi seputar penyimpanan dan penggunaan obat yang benar.</p>
-      </div>
-      <div class="h-32 bg-gray-200 rounded-xl flex items-center justify-center text-gray-500">
-        Galeri Foto Kegiatan
-      </div>
-    </div>
-
-    <!-- Link Survei -->
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank"
        class="block w-full bg-green-600 text-white text-center p-3 rounded-lg font-bold mb-6 hover:bg-green-700">
       Isi Survei Kepuasan Dulu
     </a>
 
-    <!-- Form Registrasi -->
     <div class="space-y-4 border-t pt-6">
       <h3 class="font-bold text-gray-700">Registrasi Tamu</h3>
       <input id="nama" placeholder="Nama Lengkap" class="w-full p-3 border rounded-lg">
@@ -49,8 +36,6 @@
         <option value="HEPATITIS">H. HEPATITIS</option>
         <option value="GIZI">I. GIZI</option>
       </select>
-
-      <input type="file" id="surat" class="w-full text-sm text-gray-500 border p-2 rounded-lg">
       
       <button id="btnSubmit" class="w-full bg-blue-900 text-white p-4 rounded-lg font-bold">
         Check-In & Ambil Antrian
@@ -58,7 +43,7 @@
     </div>
   </div>
 
-     <script type="module">
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
@@ -86,15 +71,14 @@
         return;
       }
 
-      // Daftar nomor WA berdasarkan keperluan
+      // Daftar nomor WA (Bisa ditambah nanti)
       const daftarNomor = {
-        "OBAT_PKD": "62881080698977", // Contoh nomor 1
-        "VAKSIN": "62881080698977",   // Bisa ganti ke nomor lain
-        "REAGEN": "62881080698977"    // Bisa ganti ke nomor lain
-        // Tambahkan key lainnya sesuai kebutuhan
+        "OBAT_PKD": "62881080698977",
+        "VAKSIN": "62881080698977",
+        "REAGEN": "62881080698977"
       };
 
-      const noAdmin = daftarNomor[keperluan] || "62881080698977"; // Default jika tidak ada di daftar
+      const noAdmin = daftarNomor[keperluan] || "62881080698977";
 
       try {
         const querySnapshot = await getDocs(collection(db, "tamu"));
@@ -110,7 +94,8 @@
           waktu: serverTimestamp()
         });
 
-        const pesan = `Halo Admin, saya ingin Check-In.%0A%0A*No. Antrian:* ${kodeAntrian}%0A*Nama:* ${nama}%0A*Instansi:* ${instansi}%0A*Keperluan:* ${keperluan}`;
+        // Pesan dengan instruksi pengiriman dokumen
+        const pesan = `Halo Admin, saya ingin Check-In.%0A%0A*No. Antrian:* ${kodeAntrian}%0A*Nama:* ${nama}%0A*Instansi:* ${instansi}%0A*Keperluan:* ${keperluan}%0A%0A---%0A*Mohon kirimkan file dokumen/surat permintaan Anda melalui chat ini.*`;
         
         alert("Berhasil! Nomor antrian Anda: " + kodeAntrian);
         window.open(`https://wa.me/${noAdmin}?text=${pesan}`, '_blank');
