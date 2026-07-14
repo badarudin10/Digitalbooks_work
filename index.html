@@ -60,7 +60,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, query, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw",
@@ -75,7 +75,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    document.getElementById("btnSubmit").addEventListener("click", async () => {
+    window.prosesSubmit = async () => {
       const nama = document.getElementById("nama").value;
       const keperluan = document.getElementById("keperluan").value;
       
@@ -84,19 +84,27 @@
         return;
       }
 
+      // Generate Nomor Antrian sederhana (Contoh: Berdasarkan total dokumen)
+      const querySnapshot = await getDocs(collection(db, "tamu"));
+      const antrianBaru = querySnapshot.size + 1;
+      const kodeAntrian = keperluan.substring(0, 1) + "-" + antrianBaru.toString().padStart(3, '0');
+
       try {
         await addDoc(collection(db, "tamu"), {
           nama: nama,
           instansi: document.getElementById("instansi").value,
           hp: document.getElementById("hp").value,
           keperluan: keperluan,
+          nomorAntrian: kodeAntrian, // Menyimpan nomor antrian
           waktu: serverTimestamp()
         });
-        alert("Berhasil Check-In! Silakan tunggu antrian Anda.");
+        
+        alert("Berhasil! Nomor antrian Anda: " + kodeAntrian);
+        location.reload(); // Refresh halaman setelah sukses
       } catch (e) {
         alert("Error: " + e.message);
       }
-    });
+    };
   </script>
 </body>
 </html>
