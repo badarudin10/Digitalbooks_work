@@ -33,8 +33,14 @@
     </div>
 
     <div class="bg-white p-6 rounded-2xl shadow-lg overflow-x-auto">
-      <h2 class="text-xl font-bold mb-4 text-blue-900">Daftar Antrian Real-time</h2>
-      <table class="w-full text-left">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-blue-900">Daftar Antrian Real-time</h2>
+        <button onclick="exportTableToCSV('Laporan_Antrian_UPTD.csv')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 transition">
+          Download Excel (.csv)
+        </button>
+      </div>
+      
+      <table class="w-full text-left" id="tabelTamuData">
         <thead>
           <tr class="border-b text-gray-500 text-xs uppercase">
             <th class="p-3">Antrian</th>
@@ -67,7 +73,6 @@
 
     const db = getFirestore(initializeApp(firebaseConfig));
 
-    // Cek Login saat halaman dibuka
     window.onload = () => {
       if (localStorage.getItem("adminLogedIn") === "true") {
         tampilkanDashboard();
@@ -76,7 +81,7 @@
 
     window.cekPassword = () => {
       const pass = document.getElementById("passwordInput").value;
-      if (pass === "Badarudin1010") { // Ganti password di sini
+      if (pass === "Badarudin1010") {
         localStorage.setItem("adminLogedIn", "true");
         tampilkanDashboard();
       } else {
@@ -134,6 +139,26 @@
     window.logout = () => {
       localStorage.removeItem("adminLogedIn");
       location.reload();
+    };
+
+    // Fungsi Export Excel
+    window.exportTableToCSV = (filename) => {
+      var csv = [];
+      var rows = document.querySelectorAll("#tabelTamuData tr");
+      for (var i = 0; i < rows.length; i++) {
+        var row = [], cols = rows[i].querySelectorAll("td, th");
+        for (var j = 0; j < cols.length - 1; j++) { 
+          row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');
+        }
+        csv.push(row.join(","));
+      }
+      var csvFile = new Blob([csv.join("\n")], {type: "text/csv"});
+      var downloadLink = document.createElement("a");
+      downloadLink.download = filename;
+      downloadLink.href = window.URL.createObjectURL(csvFile);
+      downloadLink.style.display = "none";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
     };
   </script>
 </body>
