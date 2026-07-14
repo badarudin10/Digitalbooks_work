@@ -43,6 +43,18 @@
     </div>
   </div>
 
+  <div id="modalAntrian" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
+      <div class="text-green-600 mb-4">
+        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      </div>
+      <h2 class="text-xl font-bold text-gray-800">Check-In Berhasil!</h2>
+      <p class="text-gray-600 mt-2">Nomor antrian Anda adalah:</p>
+      <div id="nomorAntrianDisplay" class="text-5xl font-black text-blue-900 my-6 tracking-wider">A-000</div>
+      <button onclick="tutupModal()" class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold">Tutup & Lanjut ke WA</button>
+    </div>
+  </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
@@ -60,6 +72,9 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    let dataPesanWA = "";
+    let nomorAdminWA = "";
+
     document.getElementById("btnSubmit").addEventListener("click", async () => {
       const nama = document.getElementById("nama").value;
       const instansi = document.getElementById("instansi").value;
@@ -71,14 +86,13 @@
         return;
       }
 
-      // Daftar nomor WA (Bisa ditambah nanti)
       const daftarNomor = {
         "OBAT_PKD": "62881080698977",
         "VAKSIN": "62881080698977",
         "REAGEN": "62881080698977"
       };
 
-      const noAdmin = daftarNomor[keperluan] || "62881080698977";
+      nomorAdminWA = daftarNomor[keperluan] || "62881080698977";
 
       try {
         const querySnapshot = await getDocs(collection(db, "tamu"));
@@ -94,16 +108,21 @@
           waktu: serverTimestamp()
         });
 
-        // Pesan dengan instruksi pengiriman dokumen
-        const pesan = `Halo Admin, saya ingin Check-In.%0A%0A*No. Antrian:* ${kodeAntrian}%0A*Nama:* ${nama}%0A*Instansi:* ${instansi}%0A*Keperluan:* ${keperluan}%0A%0A---%0A*Mohon kirimkan file dokumen/surat permintaan Anda melalui chat ini.*`;
+        dataPesanWA = `Halo Admin, saya ingin Check-In.%0A%0A*No. Antrian:* ${kodeAntrian}%0A*Nama:* ${nama}%0A*Instansi:* ${instansi}%0A*Keperluan:* ${keperluan}%0A%0A---%0A*Mohon kirimkan file dokumen/surat permintaan Anda melalui chat ini.*`;
         
-        alert("Berhasil! Nomor antrian Anda: " + kodeAntrian);
-        window.open(`https://wa.me/${noAdmin}?text=${pesan}`, '_blank');
-        location.reload(); 
+        document.getElementById("nomorAntrianDisplay").innerText = kodeAntrian;
+        document.getElementById("modalAntrian").classList.remove("hidden");
       } catch (e) {
         alert("Error: " + e.message);
       }
     });
+
+    window.tutupModal = () => {
+      document.getElementById('modalAntrian').classList.add('hidden');
+      window.open(`https://wa.me/${nomorAdminWA}?text=${dataPesanWA}`, '_blank');
+      location.reload(); 
+    };
   </script>
 </body>
 </html>
+
