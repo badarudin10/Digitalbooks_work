@@ -4,11 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <title>Dashboard Admin - UPTD Farmasi</title>
+  <title>Login Admin - UPTD Farmasi</title>
 </head>
-<body class="bg-slate-100 p-4">
+<body class="bg-slate-100 flex items-center justify-center min-h-screen p-4">
 
-  <div class="max-w-6xl mx-auto">
+  <div id="loginScreen" class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm text-center">
+    <h2 class="text-2xl font-bold text-blue-900 mb-6">Login Admin</h2>
+    <input type="password" id="passwordInput" placeholder="Masukkan Password" class="w-full p-3 border rounded-lg mb-4">
+    <button onclick="cekPassword()" class="w-full bg-blue-900 text-white p-3 rounded-lg font-bold hover:bg-blue-800">Masuk</button>
+  </div>
+
+  <div id="dashboardAdmin" class="hidden w-full max-w-6xl">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       <div class="bg-blue-900 text-white p-6 rounded-2xl shadow-lg text-center">
         <p class="text-sm opacity-80">Total Antrian</p>
@@ -42,62 +48,62 @@
   </div>
 
   <script type="module">
+    // Script Login Sederhana
+    window.cekPassword = () => {
+      const pass = document.getElementById("passwordInput").value;
+      // GANTI PASSWORD DI BAWAH INI
+      if (pass === "AdminFarmasi2026") {
+        document.getElementById("loginScreen").classList.add("hidden");
+        document.getElementById("dashboardAdmin").classList.remove("hidden");
+        loadData();
+      } else {
+        alert("Password Salah!");
+      }
+    };
+
+    // Pindahkan semua kode Firebase dari admin sebelumnya ke sini
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, onSnapshot, query, orderBy, updateDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw",
-      authDomain: "digital-books-d22c9.firebaseapp.com",
-      projectId: "digital-books-d22c9",
-      storageBucket: "digital-books-d22c9.firebasestorage.app",
-      messagingSenderId: "905407530155",
-      appId: "1:905407530155:web:dd90e18d4158ce42fae3ee",
-      measurementId: "G-LL7GF2RMF8"
-    };
-
+    const firebaseConfig = { /* isikan konfigurasi firebase anda seperti sebelumnya */ };
     const db = getFirestore(initializeApp(firebaseConfig));
-    const q = query(collection(db, "tamu"), orderBy("waktu", "desc"));
-    
-    onSnapshot(q, (snapshot) => {
-      let total = 0, proses = 0, selesai = 0;
-      const tabel = document.getElementById("tabelTamu");
-      tabel.innerHTML = "";
 
-      snapshot.forEach((docSnap) => {
-        const data = docSnap.data();
-        total++;
-        if (data.status === "proses") proses++;
-        else if (data.status === "selesai") selesai++;
+    window.loadData = () => {
+      const q = query(collection(db, "tamu"), orderBy("waktu", "desc"));
+      onSnapshot(q, (snapshot) => {
+        let total = 0, proses = 0, selesai = 0;
+        const tabel = document.getElementById("tabelTamu");
+        tabel.innerHTML = "";
 
-        let statusLabel = data.status === 'selesai' ? 'Selesai' : (data.status === 'proses' ? 'Sedang Diproses' : 'Menunggu');
-        
-        // Kalkulasi Durasi
-        let durasi = "-";
-        if (data.status === 'selesai' && data.waktuSelesai && data.waktuProses) {
-          const diff = Math.round((data.waktuSelesai.toDate() - data.waktuProses.toDate()) / 60000);
-          durasi = diff + " Menit";
-        } else if (data.status === 'proses') {
-          durasi = "Berjalan...";
-        }
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          total++;
+          if (data.status === "proses") proses++;
+          else if (data.status === "selesai") selesai++;
 
-        tabel.innerHTML += `
-          <tr class="border-b text-sm">
-            <td class="p-3 font-bold">${data.nomorAntrian}</td>
-            <td class="p-3">${data.nama}</td>
-            <td class="p-3 font-semibold ${data.status === 'selesai' ? 'text-green-600' : (data.status === 'proses' ? 'text-yellow-600' : 'text-gray-500')}">${statusLabel}</td>
-            <td class="p-3">${durasi}</td>
-            <td class="p-3 flex gap-2">
-              ${data.status === 'menunggu' ? `<button onclick="updateStatus('${docSnap.id}', 'proses')" class="bg-yellow-500 text-white px-3 py-1 rounded">Proses</button>` : ''}
-              ${data.status !== 'selesai' ? `<button onclick="updateStatus('${docSnap.id}', 'selesai')" class="bg-green-600 text-white px-3 py-1 rounded">Selesai</button>` : '✓'}
-            </td>
-          </tr>
-        `;
+          let durasi = "-";
+          if (data.status === 'selesai' && data.waktuSelesai && data.waktuProses) {
+            durasi = Math.round((data.waktuSelesai.toDate() - data.waktuProses.toDate()) / 60000) + " Menit";
+          } else if (data.status === 'proses') { durasi = "Berjalan..."; }
+
+          tabel.innerHTML += `
+            <tr class="border-b text-sm">
+              <td class="p-3 font-bold">${data.nomorAntrian}</td>
+              <td class="p-3">${data.nama}</td>
+              <td class="p-3 font-semibold">${data.status}</td>
+              <td class="p-3">${durasi}</td>
+              <td class="p-3 flex gap-2">
+                ${data.status === 'menunggu' ? `<button onclick="updateStatus('${docSnap.id}', 'proses')" class="bg-yellow-500 text-white px-3 py-1 rounded">Proses</button>` : ''}
+                ${data.status !== 'selesai' ? `<button onclick="updateStatus('${docSnap.id}', 'selesai')" class="bg-green-600 text-white px-3 py-1 rounded">Selesai</button>` : '✓'}
+              </td>
+            </tr>
+          `;
+        });
+        document.getElementById("totalTamu").innerText = total;
+        document.getElementById("totalProses").innerText = proses;
+        document.getElementById("totalSelesai").innerText = selesai;
       });
-
-      document.getElementById("totalTamu").innerText = total;
-      document.getElementById("totalProses").innerText = proses;
-      document.getElementById("totalSelesai").innerText = selesai;
-    });
+    };
 
     window.updateStatus = async (id, status) => {
       const updateData = { status: status };
@@ -108,4 +114,3 @@
   </script>
 </body>
 </html>
-
