@@ -2,36 +2,37 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <title>Dashboard Evaluasi - UPTD Farmasi</title>
+  <title>Dashboard Admin - UPTD Farmasi</title>
 </head>
 <body class="bg-slate-100 p-4">
 
   <div class="max-w-6xl mx-auto">
-    <!-- Ringkasan Statistik -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-      <div class="bg-blue-900 text-white p-4 rounded-xl shadow text-center">
-        <p class="text-xs opacity-80">Total Antrian</p>
-        <h2 id="totalTamu" class="text-2xl font-bold">0</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="bg-blue-900 text-white p-6 rounded-2xl shadow-lg text-center">
+        <p class="text-sm opacity-80">Total Antrian</p>
+        <h2 id="totalTamu" class="text-4xl font-bold">0</h2>
       </div>
-      <div class="bg-yellow-500 text-white p-4 rounded-xl shadow text-center">
-        <p class="text-xs opacity-80">Dalam Proses</p>
-        <h2 id="totalProses" class="text-2xl font-bold">0</h2>
+      <div class="bg-yellow-500 text-white p-6 rounded-2xl shadow-lg text-center">
+        <p class="text-sm opacity-80">Sedang Diproses</p>
+        <h2 id="totalProses" class="text-4xl font-bold">0</h2>
       </div>
-      <div class="bg-green-600 text-white p-4 rounded-xl shadow text-center">
-        <p class="text-xs opacity-80">Selesai</p>
-        <h2 id="totalSelesai" class="text-2xl font-bold">0</h2>
+      <div class="bg-green-600 text-white p-6 rounded-2xl shadow-lg text-center">
+        <p class="text-sm opacity-80">Sudah Selesai</p>
+        <h2 id="totalSelesai" class="text-4xl font-bold">0</h2>
       </div>
     </div>
 
-    <!-- Tabel Daftar Tamu -->
     <div class="bg-white p-6 rounded-2xl shadow-lg overflow-x-auto">
+      <h2 class="text-xl font-bold mb-4 text-blue-900">Daftar Antrian Real-time</h2>
       <table class="w-full text-left">
         <thead>
           <tr class="border-b text-gray-500 text-xs uppercase">
             <th class="p-3">Antrian</th>
             <th class="p-3">Nama</th>
             <th class="p-3">Status</th>
+            <th class="p-3">Durasi</th>
             <th class="p-3">Aksi</th>
           </tr>
         </thead>
@@ -70,11 +71,21 @@
 
         let statusLabel = data.status === 'selesai' ? 'Selesai' : (data.status === 'proses' ? 'Sedang Diproses' : 'Menunggu');
         
+        // Kalkulasi Durasi
+        let durasi = "-";
+        if (data.status === 'selesai' && data.waktuSelesai && data.waktuProses) {
+          const diff = Math.round((data.waktuSelesai.toDate() - data.waktuProses.toDate()) / 60000);
+          durasi = diff + " Menit";
+        } else if (data.status === 'proses') {
+          durasi = "Berjalan...";
+        }
+
         tabel.innerHTML += `
           <tr class="border-b text-sm">
             <td class="p-3 font-bold">${data.nomorAntrian}</td>
             <td class="p-3">${data.nama}</td>
             <td class="p-3 font-semibold ${data.status === 'selesai' ? 'text-green-600' : (data.status === 'proses' ? 'text-yellow-600' : 'text-gray-500')}">${statusLabel}</td>
+            <td class="p-3">${durasi}</td>
             <td class="p-3 flex gap-2">
               ${data.status === 'menunggu' ? `<button onclick="updateStatus('${docSnap.id}', 'proses')" class="bg-yellow-500 text-white px-3 py-1 rounded">Proses</button>` : ''}
               ${data.status !== 'selesai' ? `<button onclick="updateStatus('${docSnap.id}', 'selesai')" class="bg-green-600 text-white px-3 py-1 rounded">Selesai</button>` : '✓'}
@@ -89,10 +100,10 @@
     });
 
     window.updateStatus = async (id, status) => {
-      await updateDoc(doc(db, "tamu", id), {
-        status: status,
-        waktuUpdate: serverTimestamp() // Catat waktu saat status berubah
-      });
+      const updateData = { status: status };
+      if (status === 'proses') updateData.waktuProses = serverTimestamp();
+      if (status === 'selesai') updateData.waktuSelesai = serverTimestamp();
+      await updateDoc(doc(db, "tamu", id), updateData);
     };
   </script>
 </body>
