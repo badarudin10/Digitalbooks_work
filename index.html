@@ -56,12 +56,28 @@
   </div>
 
   <script type="module">
-    // (Di sini Anda akan menaruh logika Firebase Anda nanti)
-    window.prosesSubmit = () => {
-      alert("Pastikan Anda sudah mengisi survei kepuasan di atas!");
-      // Logika Firebase akan kita pasang setelah Anda mengonfirmasi desain ini sudah OK
-    };
-  </script>
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw",
+    authDomain: "digital-books-d22c9.firebaseapp.com",
+    projectId: "digital-books-d22c9",
+    storageBucket: "digital-books-d22c9.firebasestorage.app",
+    messagingSenderId: "905407530155",
+    appId: "1:905407530155:web:dd90e18d4158ce42fae3ee",
+    measurementId: "G-LL7GF2RMF8"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 </body>
 </html>
 
