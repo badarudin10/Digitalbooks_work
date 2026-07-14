@@ -13,21 +13,23 @@
     <h2 class="text-sm text-center text-gray-600 mb-6 uppercase">Kota Tangerang Selatan</h2>
     <p class="italic text-center text-sm text-gray-500 mb-6">"Kami melayani dengan sepenuh hati, ramah, sopan santun dan cepat."</p>
 
-    <a href="edukasi.html" class="flex items-center justify-between bg-blue-50 p-4 rounded-xl border border-blue-200 mb-6 hover:bg-blue-100 transition">
-      <span class="font-bold text-blue-800">📚 Pojok Edukasi</span>
-      <span class="text-xs text-blue-600 bg-blue-200 px-2 py-1 rounded-full">Baca Info</span>
-    </a>
+    <!-- AREA EDUKASI (Real-time dari Firebase) -->
+    <div id="edukasiBox" class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-6">
+      <h3 id="judulEdukasi" class="font-bold text-blue-800 mb-1">📚 Memuat Edukasi...</h3>
+      <p id="isiEdukasi" class="text-xs text-blue-700"></p>
+    </div>
 
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank"
        class="block w-full bg-green-600 text-white text-center p-3 rounded-lg font-bold mb-6 hover:bg-green-700">
       Isi Survei Kepuasan Dulu
     </a>
 
+    <!-- AREA REGISTRASI -->
     <div class="space-y-4 border-t pt-6">
       <h3 class="font-bold text-gray-700">Registrasi Tamu</h3>
       <input id="nama" placeholder="Nama Lengkap" class="w-full p-3 border rounded-lg">
       <input id="instansi" placeholder="Instansi" class="w-full p-3 border rounded-lg">
-      <input id="hp" placeholder="No. Telepon" class="w-full p-3 border rounded-lg">
+      <input id="hp" placeholder="No. Telepon (Contoh: 08123456789)" class="w-full p-3 border rounded-lg">
       
       <select id="keperluan" class="w-full p-3 border rounded-lg">
         <option value="">Pilih Keperluan:</option>
@@ -46,23 +48,28 @@
         Check-In & Ambil Antrian
       </button>
     </div>
+
+    <!-- AREA GALERI FOTO (Real-time dari Firebase) -->
+    <div class="mt-8 border-t pt-6">
+      <h3 class="font-bold text-gray-700 mb-4">Galeri Kegiatan</h3>
+      <div id="galeriPublik" class="grid grid-cols-2 gap-3">
+        <!-- Foto akan muncul di sini secara otomatis -->
+      </div>
+    </div>
   </div>
 
+  <!-- Modal -->
   <div id="modalAntrian" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
-      <div class="text-green-600 mb-4">
-        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-      </div>
       <h2 class="text-xl font-bold text-gray-800">Check-In Berhasil!</h2>
-      <p class="text-gray-600 mt-2">Nomor antrian Anda adalah:</p>
-      <div id="nomorAntrianDisplay" class="text-5xl font-black text-blue-900 my-6 tracking-wider">A-000</div>
+      <div id="nomorAntrianDisplay" class="text-5xl font-black text-blue-900 my-6">A-000</div>
       <button onclick="tutupModal()" class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold">Tutup & Lanjut ke WA</button>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw",
@@ -74,58 +81,53 @@
       measurementId: "G-LL7GF2RMF8"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const db = getFirestore(initializeApp(firebaseConfig));
 
-    let dataPesanWA = "";
-    let nomorAdminWA = "";
+    // 1. Ambil Data Edukasi Real-time
+    onSnapshot(doc(db, "konten", "edukasi"), (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById("judulEdukasi").innerText = data.judul || "📚 Pojok Edukasi";
+        document.getElementById("isiEdukasi").innerText = data.isi || "";
+      }
+    });
 
+    // 2. Ambil Data Galeri Real-time
+    onSnapshot(collection(db, "galeri"), (snapshot) => {
+      const galeriContainer = document.getElementById("galeriPublik");
+      galeriContainer.innerHTML = "";
+      snapshot.forEach((doc) => {
+        galeriContainer.innerHTML += `
+          <img src="${doc.data().url}" class="w-full h-24 object-cover rounded-lg shadow-sm">
+        `;
+      });
+    });
+
+    // 3. Logika Antrian
+    let dataPesanWA = "", nomorAdminWA = "";
     document.getElementById("btnSubmit").addEventListener("click", async () => {
       const nama = document.getElementById("nama").value;
       const instansi = document.getElementById("instansi").value;
       const hp = document.getElementById("hp").value;
       const keperluan = document.getElementById("keperluan").value;
       
-      if (!nama || !keperluan) {
-        alert("Mohon isi Nama dan Keperluan!");
-        return;
-      }
-
-      const daftarNomor = {
-        "OBAT_PKD": "62881080698977",
-        "VAKSIN": "62881080698977",
-        "REAGEN": "62881080698977"
-      };
-
-      nomorAdminWA = daftarNomor[keperluan] || "62881080698977";
+      if (!nama || !keperluan) return alert("Mohon isi Nama dan Keperluan!");
 
       try {
         const querySnapshot = await getDocs(collection(db, "tamu"));
-        const antrianBaru = querySnapshot.size + 1;
-        const kodeAntrian = keperluan.substring(0, 1) + "-" + antrianBaru.toString().padStart(3, '0');
+        const kodeAntrian = keperluan.substring(0, 1) + "-" + (querySnapshot.size + 1).toString().padStart(3, '0');
 
-        // Menambahkan status "menunggu" ke Firestore
-        await addDoc(collection(db, "tamu"), {
-          nama: nama,
-          instansi: instansi,
-          hp: hp,
-          keperluan: keperluan,
-          nomorAntrian: kodeAntrian,
-          waktu: serverTimestamp(),
-          status: "menunggu" 
-        });
+        await addDoc(collection(db, "tamu"), { nama, instansi, hp, keperluan, nomorAntrian: kodeAntrian, waktu: serverTimestamp(), status: "menunggu" });
 
-        dataPesanWA = `Halo Admin, saya ingin Check-In.%0A%0A*No. Antrian:* ${kodeAntrian}%0A*Nama:* ${nama}%0A*Instansi:* ${instansi}%0A*Keperluan:* ${keperluan}%0A%0A---%0A*Mohon kirimkan file dokumen/surat permintaan Anda melalui chat ini.*`;
+        dataPesanWA = `Halo Admin, saya ingin Check-In.%0A%0A*No. Antrian:* ${kodeAntrian}%0A*Nama:* ${nama}%0A*Instansi:* ${instansi}%0A*Keperluan:* ${keperluan}`;
+        nomorAdminWA = "62881080698977";
         
         document.getElementById("nomorAntrianDisplay").innerText = kodeAntrian;
         document.getElementById("modalAntrian").classList.remove("hidden");
-      } catch (e) {
-        alert("Error: " + e.message);
-      }
+      } catch (e) { alert("Error: " + e.message); }
     });
 
     window.tutupModal = () => {
-      document.getElementById('modalAntrian').classList.add('hidden');
       window.open(`https://wa.me/${nomorAdminWA}?text=${dataPesanWA}`, '_blank');
       location.reload(); 
     };
