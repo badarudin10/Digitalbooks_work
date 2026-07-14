@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <title>Buku Tamu Digital - UPTD Farmasi Tangsel</title>
+  <title>Buku Tamu - UPTD Farmasi Tangsel</title>
 </head>
 <body class="bg-slate-50 font-sans p-4">
 
@@ -13,21 +13,24 @@
     <h2 class="text-sm text-center text-gray-600 mb-6 uppercase">Kota Tangerang Selatan</h2>
     <p class="italic text-center text-sm text-gray-500 mb-6">"Kami melayani dengan sepenuh hati, ramah, sopan santun dan cepat."</p>
 
+    <!-- Menu Edukasi & Galeri -->
     <div class="space-y-4 mb-8">
       <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
         <h3 class="font-bold text-blue-800">Edukasi Obat</h3>
         <p class="text-xs">Informasi seputar penyimpanan dan penggunaan obat yang benar.</p>
       </div>
       <div class="h-32 bg-gray-200 rounded-xl flex items-center justify-center text-gray-500">
-        [Area Galeri Foto Kegiatan]
+        Galeri Foto Kegiatan
       </div>
     </div>
 
+    <!-- Link Survei -->
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank"
        class="block w-full bg-green-600 text-white text-center p-3 rounded-lg font-bold mb-6 hover:bg-green-700">
       Isi Survei Kepuasan Dulu
     </a>
 
+    <!-- Form Registrasi -->
     <div class="space-y-4 border-t pt-6">
       <h3 class="font-bold text-gray-700">Registrasi Tamu</h3>
       <input id="nama" placeholder="Nama Lengkap" class="w-full p-3 border rounded-lg">
@@ -49,35 +52,52 @@
 
       <input type="file" id="surat" class="w-full text-sm text-gray-500 border p-2 rounded-lg">
       
-      <button onclick="prosesSubmit()" class="w-full bg-blue-900 text-white p-4 rounded-lg font-bold">
+      <button id="btnSubmit" class="w-full bg-blue-900 text-white p-4 rounded-lg font-bold">
         Check-In & Ambil Antrian
       </button>
     </div>
   </div>
 
   <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw",
-    authDomain: "digital-books-d22c9.firebaseapp.com",
-    projectId: "digital-books-d22c9",
-    storageBucket: "digital-books-d22c9.firebasestorage.app",
-    messagingSenderId: "905407530155",
-    appId: "1:905407530155:web:dd90e18d4158ce42fae3ee",
-    measurementId: "G-LL7GF2RMF8"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw",
+      authDomain: "digital-books-d22c9.firebaseapp.com",
+      projectId: "digital-books-d22c9",
+      storageBucket: "digital-books-d22c9.firebasestorage.app",
+      messagingSenderId: "905407530155",
+      appId: "1:905407530155:web:dd90e18d4158ce42fae3ee",
+      measurementId: "G-LL7GF2RMF8"
+    };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    document.getElementById("btnSubmit").addEventListener("click", async () => {
+      const nama = document.getElementById("nama").value;
+      const keperluan = document.getElementById("keperluan").value;
+      
+      if (!nama || !keperluan) {
+        alert("Mohon isi Nama dan Keperluan!");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "tamu"), {
+          nama: nama,
+          instansi: document.getElementById("instansi").value,
+          hp: document.getElementById("hp").value,
+          keperluan: keperluan,
+          waktu: serverTimestamp()
+        });
+        alert("Berhasil Check-In! Silakan tunggu antrian Anda.");
+      } catch (e) {
+        alert("Error: " + e.message);
+      }
+    });
+  </script>
 </body>
 </html>
 
