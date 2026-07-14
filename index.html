@@ -11,7 +11,26 @@
   <div class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-lg border-t-4 border-blue-900">
     <h1 class="text-2xl font-bold text-blue-900 text-center">UPTD FARMASI</h1>
     <h2 class="text-sm text-center text-gray-600 mb-6 uppercase">Kota Tangerang Selatan</h2>
-    
+    <p class="italic text-center text-sm text-gray-500 mb-6">"Kami melayani dengan sepenuh hati, ramah, sopan santun dan cepat."</p>
+
+    <!-- Menu Edukasi & Galeri -->
+    <div class="space-y-4 mb-8">
+      <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+        <h3 class="font-bold text-blue-800">Edukasi Obat</h3>
+        <p class="text-xs">Informasi seputar penyimpanan dan penggunaan obat yang benar.</p>
+      </div>
+      <div class="h-32 bg-gray-200 rounded-xl flex items-center justify-center text-gray-500">
+        Galeri Foto Kegiatan
+      </div>
+    </div>
+
+    <!-- Link Survei -->
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank"
+       class="block w-full bg-green-600 text-white text-center p-3 rounded-lg font-bold mb-6 hover:bg-green-700">
+      Isi Survei Kepuasan Dulu
+    </a>
+
+    <!-- Form Registrasi -->
     <div class="space-y-4 border-t pt-6">
       <h3 class="font-bold text-gray-700">Registrasi Tamu</h3>
       <input id="nama" placeholder="Nama Lengkap" class="w-full p-3 border rounded-lg">
@@ -23,18 +42,25 @@
         <option value="OBAT_PKD">A. OBAT PKD</option>
         <option value="VAKSIN">B. VAKSIN</option>
         <option value="REAGEN">C. REAGEN</option>
+        <option value="TB_KUSTA">D. TB dan KUSTA</option>
+        <option value="HIV_JIWA">E. HIV dan JIWA</option>
+        <option value="DBD_MALARIA">F. DBD dan MALARIA</option>
+        <option value="KECACINGAN">G. KECACINGAN</option>
+        <option value="HEPATITIS">H. HEPATITIS</option>
+        <option value="GIZI">I. GIZI</option>
       </select>
 
+      <input type="file" id="surat" class="w-full text-sm text-gray-500 border p-2 rounded-lg">
+      
       <button id="btnSubmit" class="w-full bg-blue-900 text-white p-4 rounded-lg font-bold">
         Check-In & Ambil Antrian
       </button>
     </div>
   </div>
 
-  <!-- Script diletakkan di paling bawah agar elemen HTML sudah siap saat script berjalan -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, query, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw",
@@ -49,9 +75,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const btn = document.getElementById("btnSubmit");
-    
-    btn.addEventListener("click", async () => {
+    window.prosesSubmit = async () => {
       const nama = document.getElementById("nama").value;
       const keperluan = document.getElementById("keperluan").value;
       
@@ -60,32 +84,27 @@
         return;
       }
 
-      btn.innerText = "Memproses...";
-      btn.disabled = true;
+      // Generate Nomor Antrian sederhana (Contoh: Berdasarkan total dokumen)
+      const querySnapshot = await getDocs(collection(db, "tamu"));
+      const antrianBaru = querySnapshot.size + 1;
+      const kodeAntrian = keperluan.substring(0, 1) + "-" + antrianBaru.toString().padStart(3, '0');
 
       try {
-        const querySnapshot = await getDocs(collection(db, "tamu"));
-        const antrianBaru = querySnapshot.size + 1;
-        const kodeAntrian = keperluan.substring(0, 1).toUpperCase() + "-" + antrianBaru.toString().padStart(3, '0');
-
         await addDoc(collection(db, "tamu"), {
           nama: nama,
           instansi: document.getElementById("instansi").value,
           hp: document.getElementById("hp").value,
           keperluan: keperluan,
-          nomorAntrian: kodeAntrian,
+          nomorAntrian: kodeAntrian, // Menyimpan nomor antrian
           waktu: serverTimestamp()
         });
         
         alert("Berhasil! Nomor antrian Anda: " + kodeAntrian);
-        location.reload(); 
+        location.reload(); // Refresh halaman setelah sukses
       } catch (e) {
         alert("Error: " + e.message);
-        btn.innerText = "Check-In & Ambil Antrian";
-        btn.disabled = false;
       }
-    });
+    };
   </script>
 </body>
 </html>
-
