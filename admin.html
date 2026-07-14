@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <title>Dashboard Admin - UPTD Farmasi</title>
 </head>
 <body class="bg-slate-100 min-h-screen">
@@ -17,6 +18,11 @@
   </div>
 
   <div id="dashboardAdmin" class="hidden p-4 max-w-6xl mx-auto">
+    <div class="bg-white p-6 rounded-2xl shadow-lg mb-6">
+      <h2 class="text-xl font-bold text-blue-900 mb-4">Grafik Tren Tamu (7 Hari Terakhir)</h2>
+      <canvas id="grafikPelayanan" height="80"></canvas>
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       <div class="bg-blue-900 text-white p-6 rounded-2xl shadow-lg text-center">
         <p class="text-sm opacity-80">Total Antrian</p>
@@ -72,22 +78,31 @@
     };
 
     const db = getFirestore(initializeApp(firebaseConfig));
+    let chart; // Variabel global untuk grafik
 
     window.onload = () => {
-      if (localStorage.getItem("adminLogedIn") === "true") {
-        tampilkanDashboard();
-      }
+      if (localStorage.getItem("adminLogedIn") === "true") tampilkanDashboard();
     };
 
     window.cekPassword = () => {
-      const pass = document.getElementById("passwordInput").value;
-      if (pass === "Badarudin1010") {
+      if (document.getElementById("passwordInput").value === "Badarudin1010") {
         localStorage.setItem("adminLogedIn", "true");
         tampilkanDashboard();
-      } else {
-        alert("Password Salah!");
-      }
+      } else alert("Password Salah!");
     };
+
+    function updateGrafik(dataPerHari) {
+      const ctx = document.getElementById('grafikPelayanan').getContext('2d');
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(dataPerHari),
+          datasets: [{ label: 'Jumlah Tamu', data: Object.values(dataPerHari), backgroundColor: '#1e3a8a' }]
+        },
+        options: { responsive: true }
+      });
+    }
 
     function tampilkanDashboard() {
       document.getElementById("loginScreen").classList.add("hidden");
@@ -96,6 +111,7 @@
       const q = query(collection(db, "tamu"), orderBy("waktu", "desc"));
       onSnapshot(q, (snapshot) => {
         let total = 0, proses = 0, selesai = 0;
+        let dataPerHari = {};
         const tabel = document.getElementById("tabelTamu");
         tabel.innerHTML = "";
 
@@ -104,6 +120,12 @@
           total++;
           if (data.status === "proses") proses++;
           else if (data.status === "selesai") selesai++;
+
+          // Pengolahan data untuk grafik
+          if (data.waktu) {
+            const tgl = data.waktu.toDate().toLocaleDateString('id-ID', {day: 'numeric', month: 'short'});
+            dataPerHari[tgl] = (dataPerHari[tgl] || 0) + 1;
+          }
 
           let durasi = "-";
           if (data.status === 'selesai' && data.waktuSelesai && data.waktuProses) {
@@ -123,6 +145,8 @@
             </tr>
           `;
         });
+        
+        updateGrafik(dataPerHari);
         document.getElementById("totalTamu").innerText = total;
         document.getElementById("totalProses").innerText = proses;
         document.getElementById("totalSelesai").innerText = selesai;
@@ -136,20 +160,14 @@
       await updateDoc(doc(db, "tamu", id), updateData);
     };
 
-    window.logout = () => {
-      localStorage.removeItem("adminLogedIn");
-      location.reload();
-    };
+    window.logout = () => { localStorage.removeItem("adminLogedIn"); location.reload(); };
 
-    // Fungsi Export Excel
     window.exportTableToCSV = (filename) => {
       var csv = [];
       var rows = document.querySelectorAll("#tabelTamuData tr");
       for (var i = 0; i < rows.length; i++) {
         var row = [], cols = rows[i].querySelectorAll("td, th");
-        for (var j = 0; j < cols.length - 1; j++) { 
-          row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');
-        }
+        for (var j = 0; j < cols.length - 1; j++) row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');
         csv.push(row.join(","));
       }
       var csvFile = new Blob([csv.join("\n")], {type: "text/csv"});
@@ -163,4 +181,3 @@
   </script>
 </body>
 </html>
-
