@@ -93,14 +93,14 @@
 
     const db = getFirestore(initializeApp(firebaseConfig));
 
-    // Edukasi dengan Zoom
+    // Edukasi dengan Zoom dan gambar utuh (object-contain)
     onSnapshot(doc(db, "konten", "edukasi"), (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
         document.getElementById("judulEdukasi").innerText = data.judul || "📚 Informasi Edukasi";
         document.getElementById("isiEdukasi").innerText = data.isi || "";
         const containerImg = document.getElementById("containerGambarEdukasi");
-        containerImg.innerHTML = data.imgUrl ? `<img src="${data.imgUrl}" onclick="bukaZoom('${data.imgUrl}')" class="w-full h-48 object-contain rounded-lg cursor-pointer hover:opacity-90 transition">` : "";
+        containerImg.innerHTML = data.imgUrl ? `<img src="${data.imgUrl}" onclick="bukaZoom('${data.imgUrl}')" class="w-full h-auto max-h-80 object-contain rounded-lg cursor-pointer hover:opacity-90 transition border bg-white">` : "";
       }
     });
 
@@ -123,7 +123,6 @@
       document.getElementById("modalGambar").classList.remove("hidden");
     };
 
-    // Logika Antrian (TIDAK BERUBAH)
     let dataPesanWA = "", nomorAdminWA = "62881080698977";
     document.getElementById("btnSubmit").addEventListener("click", async () => {
       const nama = document.getElementById("nama").value;
