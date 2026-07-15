@@ -98,13 +98,18 @@
       }
     });
 
+        // Load Foto Edukasi - Versi Fleksibel
     onSnapshot(query(collection(db, "edukasi_foto"), orderBy("waktuInput", "desc")), (snap) => {
       const container = document.getElementById("containerGambarEdukasi");
       container.innerHTML = "";
+      // Mengubah grid agar lebih fleksibel menyesuaikan gambar
+      container.className = "grid grid-cols-2 md:grid-cols-3 gap-3 mb-3"; 
+      
       snap.forEach((d) => {
         container.innerHTML += `
-          <div class="bg-slate-100 p-1 rounded-lg border cursor-pointer hover:scale-105 transition-transform duration-200">
-            <img src="${d.data().url}" onclick="bukaZoom('${d.data().url}')" class="w-full h-24 object-contain rounded">
+          <div class="bg-white p-1 rounded-lg border shadow-sm cursor-pointer hover:scale-[1.02] transition-transform duration-200">
+            <img src="${d.data().url}" onclick="bukaZoom('${d.data().url}')" 
+            class="w-full h-auto object-contain rounded">
           </div>`;
       });
     });
