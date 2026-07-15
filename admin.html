@@ -32,7 +32,7 @@
     <div class="bg-white p-6 rounded-2xl shadow-lg overflow-x-auto">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-bold text-blue-900">Daftar Antrian Real-time</h2>
-        <button onclick="exportTableToCSV('Laporan_Antrian_UPTD.csv')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 transition">Download Excel (.csv)</button>
+        <button onclick="exportTableToCSV('Laporan_Antrian_UPTD.csv')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700">Download Excel (.csv)</button>
       </div>
       <table class="w-full text-left" id="tabelTamuData">
         <thead><tr class="border-b text-gray-500 text-xs uppercase"><th class="p-3">Antrian</th><th class="p-3">Nama</th><th class="p-3">Status</th><th class="p-3">Durasi</th><th class="p-3">Aksi</th></tr></thead>
@@ -61,7 +61,7 @@
         </div>
       </div>
     </div>
-    <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700 transition">Keluar (Logout)</button>
+    <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700">Keluar (Logout)</button>
   </div>
 
   <script type="module">
@@ -76,26 +76,32 @@
     window.cekPassword = () => { if (document.getElementById("passwordInput").value === "Badarudin1010") { localStorage.setItem("adminLogedIn", "true"); tampilkanDashboard(); } else alert("Password Salah!"); };
     window.logout = () => { localStorage.removeItem("adminLogedIn"); location.reload(); };
 
+    function updateGrafik(dataPerHari) {
+      const ctx = document.getElementById('grafikPelayanan').getContext('2d');
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, { type: 'bar', data: { labels: Object.keys(dataPerHari), datasets: [{ label: 'Jumlah Tamu', data: Object.values(dataPerHari), backgroundColor: '#1e3a8a' }] }, options: { responsive: true } });
+    }
+
     function tampilkanDashboard() {
       document.getElementById("loginScreen").classList.add("hidden");
       document.getElementById("dashboardAdmin").classList.remove("hidden");
       
-      // Load Antrian
       onSnapshot(query(collection(db, "tamu"), orderBy("waktu", "desc")), (snapshot) => {
-        let total=0, proses=0, selesai=0; const tabel = document.getElementById("tabelTamu"); tabel.innerHTML = "";
+        let total=0, proses=0, selesai=0, dataPerHari = {}; const tabel = document.getElementById("tabelTamu"); tabel.innerHTML = "";
         snapshot.forEach((docSnap) => {
           const data = docSnap.data(); total++;
           if (data.status === "proses") proses++; else if (data.status === "selesai") selesai++;
+          if (data.waktu) { const tgl = data.waktu.toDate().toLocaleDateString('id-ID', {day: 'numeric', month: 'short'}); dataPerHari[tgl] = (dataPerHari[tgl] || 0) + 1; }
           let durasi = "-"; if (data.status === 'selesai' && data.waktuSelesai && data.waktuProses) durasi = Math.round((data.waktuSelesai.toDate() - data.waktuProses.toDate()) / 60000) + " Menit";
           tabel.innerHTML += `<tr class="border-b text-sm"><td class="p-3 font-bold">${data.nomorAntrian}</td><td class="p-3">${data.nama}</td><td class="p-3 text-${data.status === 'selesai' ? 'green' : 'yellow'}-600">${data.status || 'menunggu'}</td><td class="p-3">${durasi}</td><td class="p-3 flex gap-1">
             ${data.status !== 'selesai' && data.status !== 'proses' ? `<button onclick="updateStatus('${docSnap.id}', 'proses', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-yellow-500 text-white px-2 py-1 rounded text-xs">Proses</button>` : ''}
             ${data.status !== 'selesai' ? `<button onclick="updateStatus('${docSnap.id}', 'selesai', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-green-600 text-white px-2 py-1 rounded text-xs">Selesai</button>` : '✓'}
           </td></tr>`;
         });
+        updateGrafik(dataPerHari);
         document.getElementById("totalTamu").innerText = total; document.getElementById("totalProses").innerText = proses; document.getElementById("totalSelesai").innerText = selesai;
       });
 
-      // Load Galeri & Edukasi
       onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snap) => {
         const c = document.getElementById("listFotoGaleri"); c.innerHTML = "";
         snap.forEach(d => c.innerHTML += `<div class="relative h-16 border rounded overflow-hidden"><img src="${d.data().url}" class="w-full h-full object-cover"><button onclick="hapusFoto('galeri', '${d.id}')" class="absolute inset-0 bg-red-600/70 text-white text-[10px] opacity-0 hover:opacity-100">Hapus</button></div>`);
@@ -144,4 +150,3 @@
   </script>
 </body>
 </html>
-
