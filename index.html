@@ -13,21 +13,19 @@
     <h2 class="text-sm text-center text-gray-600 mb-6 uppercase">Kota Tangerang Selatan</h2>
     <p class="italic text-center text-sm text-gray-500 mb-6">"Kami melayani dengan sepenuh hati, ramah, sopan santun dan cepat."</p>
 
-    <!-- AREA EDUKASI (Real-time dari Firebase) -->
-<div id="edukasiBox" class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-6">
-  <h3 id="judulEdukasi" class="font-bold text-blue-800 mb-1 flex items-center gap-2">
-    <span>💊</span> Informasi/Edukasi seputar Obat
-  </h3>
-  <p id="isiEdukasi" class="text-xs text-blue-700">Memuat informasi...</p>
-</div>
-
+    <div id="edukasiBox" class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-6">
+      <h3 id="judulEdukasi" class="font-bold text-blue-800 mb-2 flex items-center gap-2">
+        <span>💊</span> Memuat...
+      </h3>
+      <div id="containerGambarEdukasi"></div>
+      <p id="isiEdukasi" class="text-xs text-blue-700 mt-2">Memuat informasi...</p>
+    </div>
 
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank"
        class="block w-full bg-green-600 text-white text-center p-3 rounded-lg font-bold mb-6 hover:bg-green-700">
       Isi Survei Kepuasan Dulu
     </a>
 
-    <!-- AREA REGISTRASI -->
     <div class="space-y-4 border-t pt-6">
       <h3 class="font-bold text-gray-700">Registrasi Tamu</h3>
       <input id="nama" placeholder="Nama Lengkap" class="w-full p-3 border rounded-lg">
@@ -52,22 +50,23 @@
       </button>
     </div>
 
-    <!-- AREA GALERI FOTO (Real-time dari Firebase) -->
     <div class="mt-8 border-t pt-6">
       <h3 class="font-bold text-gray-700 mb-4">Galeri Kegiatan</h3>
       <div id="galeriPublik" class="grid grid-cols-2 gap-3">
-        <!-- Foto akan muncul di sini secara otomatis -->
-      </div>
+        </div>
     </div>
   </div>
 
-  <!-- Modal -->
-  <div id="modalAntrian" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+  <div id="modalAntrian" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
     <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
       <h2 class="text-xl font-bold text-gray-800">Check-In Berhasil!</h2>
       <div id="nomorAntrianDisplay" class="text-5xl font-black text-blue-900 my-6">A-000</div>
       <button onclick="tutupModal()" class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold">Tutup & Lanjut ke WA</button>
     </div>
+  </div>
+
+  <div id="modalGambar" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4" onclick="this.classList.add('hidden')">
+    <img id="gambarBesar" src="" class="max-w-full max-h-full rounded-lg">
   </div>
 
   <script type="module">
@@ -86,28 +85,36 @@
 
     const db = getFirestore(initializeApp(firebaseConfig));
 
-    // 1. Ambil Data Edukasi Real-time
+    // 1. Data Edukasi + Gambar
     onSnapshot(doc(db, "konten", "edukasi"), (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
-        document.getElementById("judulEdukasi").innerText = data.judul || "📚 Pojok Edukasi";
+        document.getElementById("judulEdukasi").innerText = data.judul || "📚 Informasi Edukasi";
         document.getElementById("isiEdukasi").innerText = data.isi || "";
+        const containerImg = document.getElementById("containerGambarEdukasi");
+        containerImg.innerHTML = data.imgUrl ? `<img src="${data.imgUrl}" class="w-full h-40 object-cover rounded-lg mb-2">` : "";
       }
     });
 
-    // 2. Ambil Data Galeri Real-time
+    // 2. Data Galeri + Fungsi Zoom
     onSnapshot(collection(db, "galeri"), (snapshot) => {
       const galeriContainer = document.getElementById("galeriPublik");
       galeriContainer.innerHTML = "";
       snapshot.forEach((doc) => {
+        const url = doc.data().url;
         galeriContainer.innerHTML += `
-          <img src="${doc.data().url}" class="w-full h-24 object-cover rounded-lg shadow-sm">
+          <img src="${url}" onclick="bukaZoom('${url}')" class="w-full h-24 object-cover rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition">
         `;
       });
     });
 
+    window.bukaZoom = (url) => {
+      document.getElementById("gambarBesar").src = url;
+      document.getElementById("modalGambar").classList.remove("hidden");
+    };
+
     // 3. Logika Antrian
-    let dataPesanWA = "", nomorAdminWA = "";
+    let dataPesanWA = "", nomorAdminWA = "62881080698977";
     document.getElementById("btnSubmit").addEventListener("click", async () => {
       const nama = document.getElementById("nama").value;
       const instansi = document.getElementById("instansi").value;
@@ -119,12 +126,9 @@
       try {
         const querySnapshot = await getDocs(collection(db, "tamu"));
         const kodeAntrian = keperluan.substring(0, 1) + "-" + (querySnapshot.size + 1).toString().padStart(3, '0');
-
         await addDoc(collection(db, "tamu"), { nama, instansi, hp, keperluan, nomorAntrian: kodeAntrian, waktu: serverTimestamp(), status: "menunggu" });
 
         dataPesanWA = `Halo Admin, saya ingin Check-In.%0A%0A*No. Antrian:* ${kodeAntrian}%0A*Nama:* ${nama}%0A*Instansi:* ${instansi}%0A*Keperluan:* ${keperluan}`;
-        nomorAdminWA = "62881080698977";
-        
         document.getElementById("nomorAntrianDisplay").innerText = kodeAntrian;
         document.getElementById("modalAntrian").classList.remove("hidden");
       } catch (e) { alert("Error: " + e.message); }
