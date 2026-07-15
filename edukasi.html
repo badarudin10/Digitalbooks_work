@@ -4,36 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <title>Pusat Informasi - UPTD Farmasi</title>
+  <title>Edukasi - UPTD Farmasi Tangsel</title>
 </head>
-<body class="bg-slate-50 p-4 md:p-8">
-  <div class="max-w-4xl mx-auto">
-    <a href="index.html" class="text-blue-900 font-bold mb-6 block">&larr; Kembali ke Beranda</a>
-    <h1 class="text-3xl font-bold text-blue-900 mb-8 text-center">Pusat Informasi & Edukasi</h1>
-    <div id="gridMenu" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <p class="text-gray-500 col-span-2 text-center">Memuat menu...</p>
+<body class="bg-slate-50 font-sans p-4">
+
+  <div class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-lg border-t-4 border-blue-900">
+    <h1 class="text-2xl font-bold text-blue-900 text-center mb-6">Pojok Edukasi</h1>
+
+    <div class="space-y-6">
+      <div class="border-b pb-4">
+        <h3 class="font-bold text-blue-800 text-lg">Cara Penyimpanan Obat</h3>
+        <p class="text-sm text-gray-600 mt-1">Simpan obat di tempat yang sejuk, kering, dan terhindar dari sinar matahari langsung. Jauhkan dari jangkauan anak-anak.</p>
+      </div>
+
+      <div class="border-b pb-4">
+        <h3 class="font-bold text-blue-800 text-lg">Waktu Penggunaan</h3>
+        <p class="text-sm text-gray-600 mt-1">Pastikan membaca etiket pada kemasan obat. Jika tertulis 3x sehari, artinya setiap 8 jam sekali.</p>
+      </div>
+
+      <div class="border-b pb-4">
+        <h3 class="font-bold text-blue-800 text-lg">Cek KLIK</h3>
+        <p class="text-sm text-gray-600 mt-1">Sebelum menggunakan obat, pastikan: <b>K</b>emasan, <b>L</b>abel, <b>I</b>zin Edar, dan <b>K</b>adaluarsa dalam kondisi baik.</p>
+      </div>
     </div>
+
+    <a href="index.html" class="block mt-8 w-full bg-blue-900 text-white text-center p-4 rounded-lg font-bold">
+      Kembali ke Beranda
+    </a>
   </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-    
-    const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
-    const db = getFirestore(initializeApp(firebaseConfig));
-
-    onSnapshot(collection(db, "menu_edukasi"), (snap) => {
-      const grid = document.getElementById("gridMenu");
-      grid.innerHTML = "";
-      snap.forEach(doc => {
-        const data = doc.data();
-        grid.innerHTML += `
-          <a href="konten.html?id=${doc.id}" class="bg-white p-6 rounded-xl shadow border hover:border-blue-500 transition">
-            <h2 class="font-bold text-blue-900 text-lg">${data.judul}</h2>
-            <p class="text-sm text-gray-500">${data.deskripsi || ''}</p>
-          </a>`;
-      });
-    });
-  </script>
 </body>
 </html>
+
+
