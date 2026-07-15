@@ -75,8 +75,7 @@
         
         <div class="border-t pt-4 max-h-60 overflow-y-auto">
           <h3 class="text-sm font-bold text-gray-700 mb-2">Daftar Foto Aktif:</h3>
-          <div id="listFotoGaleri" class="grid grid-cols-3 gap-2">
-            </div>
+          <div id="listFotoGaleri" class="grid grid-cols-3 gap-2"></div>
         </div>
       </div>
 
@@ -86,7 +85,11 @@
           <div class="space-y-3">
             <div>
               <label class="text-xs font-bold text-gray-600 block mb-1">Judul Edukasi</label>
-              <input type="text" id="judulEdukasiInput" placeholder="Contoh: Tips Menyimpan Obat Yang Benar" class="w-full p-2 border rounded-lg text-sm">
+              <input type="text" id="judulEdukasiInput" placeholder="Contoh: Tips Menyimpan Obat" class="w-full p-2 border rounded-lg text-sm">
+            </div>
+            <div>
+              <label class="text-xs font-bold text-gray-600 block mb-1">Link Gambar Edukasi (Opsional)</label>
+              <input type="text" id="imgUrlEdukasiInput" placeholder="Tempel Direct Link Gambar..." class="w-full p-2 border rounded-lg text-sm">
             </div>
             <div>
               <label class="text-xs font-bold text-gray-600 block mb-1">Isi Edukasi</label>
@@ -211,6 +214,7 @@
         if (docSnap.exists()) {
           const data = docSnap.data();
           document.getElementById("judulEdukasiInput").value = data.judul || "";
+          document.getElementById("imgUrlEdukasiInput").value = data.imgUrl || "";
           document.getElementById("isiEdukasiInput").value = data.isi || "";
         }
       });
@@ -255,15 +259,13 @@
     };
 
     window.simpanEdukasi = async () => {
-      const judul = document.getElementById("judulEdukasiInput").value;
-      const isi = document.getElementById("isiEdukasiInput").value;
-      
       await setDoc(doc(db, "konten", "edukasi"), {
-        judul: judul,
-        isi: isi,
+        judul: document.getElementById("judulEdukasiInput").value,
+        imgUrl: document.getElementById("imgUrlEdukasiInput").value,
+        isi: document.getElementById("isiEdukasiInput").value,
         terakhirDiubah: serverTimestamp()
       });
-      alert("Informasi edukasi berhasil diperbarui!");
+      alert("Informasi edukasi & gambar berhasil diperbarui!");
     };
 
     window.logout = () => { localStorage.removeItem("adminLogedIn"); location.reload(); };
