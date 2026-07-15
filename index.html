@@ -20,18 +20,12 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       
-      <div>
-        <div id="edukasiBox" class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-6">
-          <h3 id="judulEdukasi" class="font-bold text-blue-800 mb-2 flex items-center gap-2">
-            <span>💊</span> Memuat...
-          </h3>
-          <div id="containerGambarEdukasi" class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3"></div>
-          <p id="isiEdukasi" class="text-xs text-blue-700 mt-2">Memuat informasi...</p>
-        </div>
-
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank"
-           class="block w-full bg-green-600 text-white text-center p-3 rounded-lg font-bold mb-6 hover:bg-green-700 transition">
-          Isi Survei Kepuasan Dulu
+      <!-- Bagian Edukasi (Telah diubah menjadi Tombol Navigasi) -->
+      <div class="bg-blue-50 p-8 rounded-2xl border border-blue-200 mb-6 flex flex-col justify-center items-center text-center">
+        <h3 class="font-bold text-blue-900 text-xl mb-3">Pusat Informasi & Edukasi</h3>
+        <p class="text-sm text-gray-600 mb-6">Klik tombol di bawah untuk melihat jadwal pelayanan, informasi obat, dan edukasi kesehatan.</p>
+        <a href="edukasi.html" class="block w-full max-w-xs bg-blue-900 text-white p-4 rounded-lg font-bold hover:bg-blue-800 transition">
+          Buka Menu Edukasi
         </a>
       </div>
 
@@ -68,6 +62,7 @@
     </div>
   </div>
 
+  <!-- Modal Antrian -->
   <div id="modalAntrian" class="hidden fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
     <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
       <h2 class="text-xl font-bold text-gray-800">Check-In Berhasil!</h2>
@@ -76,55 +71,20 @@
     </div>
   </div>
 
-  <div id="modalGambar" class="hidden fade-modal fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4">
-    <button onclick="document.getElementById('modalGambar').className = 'hidden fade-modal fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4'" 
-            class="absolute top-5 right-5 text-white text-5xl font-bold z-50 hover:text-red-500">&times;</button>
-    <img id="gambarBesar" src="" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">
-  </div>
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
     const db = getFirestore(initializeApp(firebaseConfig));
-
-    onSnapshot(doc(db, "konten", "edukasi"), (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        document.getElementById("judulEdukasi").innerText = data.judul || "📚 Informasi Edukasi";
-        document.getElementById("isiEdukasi").innerText = data.isi || "";
-      }
-    });
-
-    onSnapshot(query(collection(db, "edukasi_foto"), orderBy("waktuInput", "desc")), (snap) => {
-      const container = document.getElementById("containerGambarEdukasi");
-      container.innerHTML = "";
-      snap.forEach((d) => {
-        container.innerHTML += `
-          <div class="bg-white p-1 rounded-lg border shadow-sm cursor-pointer hover:scale-[1.02] transition-transform duration-200">
-            <img src="${d.data().url}" onclick="bukaZoom('${d.data().url}')" class="w-full h-auto object-contain rounded">
-          </div>`;
-      });
-    });
 
     onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snapshot) => {
       const galeriContainer = document.getElementById("galeriPublik");
       galeriContainer.innerHTML = "";
       snapshot.forEach((doc) => {
-        const url = doc.data().url;
-        galeriContainer.innerHTML += `
-          <div class="aspect-square overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition">
-             <img src="${url}" onclick="bukaZoom('${url}')" class="w-full h-full object-cover">
-          </div>
-        `;
+        galeriContainer.innerHTML += `<div class="aspect-square overflow-hidden rounded-lg cursor-pointer"><img src="${doc.data().url}" class="w-full h-full object-cover"></div>`;
       });
     });
-
-    window.bukaZoom = (url) => {
-      document.getElementById("gambarBesar").src = url;
-      document.getElementById("modalGambar").className = "visible fade-modal fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4";
-    };
 
     document.getElementById("btnSubmit").addEventListener("click", async () => {
       const nama = document.getElementById("nama").value;
@@ -143,7 +103,7 @@
 
       document.getElementById("btnLanjutWA").onclick = () => {
         const formatHP = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
-        const pesan = `Halo Admin, Saya Ingin Check-in.%0ANama: ${nama}%0AInstansi: ${instansi}%0AKeperluan: ${keperluan}%0ANomor Antrian: ${kode}`;
+        const pesan = `Halo admin, saya ingin check in.%0A%0A*Detail Tamu:*%0ANama: ${nama}%0AInstansi: ${instansi}%0AKeperluan: ${keperluan}%0ANomor Antrian: ${kode}`;
         window.open(`https://wa.me/62881080698977?text=${pesan}`, '_blank');
         location.reload();
       };
@@ -151,4 +111,3 @@
   </script>
 </body>
 </html>
-
