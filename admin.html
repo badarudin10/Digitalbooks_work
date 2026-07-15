@@ -61,58 +61,42 @@
     <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold">Keluar (Logout)</button>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy, updateDoc, doc, addDoc, deleteDoc, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-    const db = getFirestore(initializeApp({ apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" }));
-    let chart;
-
-    window.cekPassword = () => { if (document.getElementById("passwordInput").value === "Badarudin1010") { localStorage.setItem("adminLogedIn", "true"); location.reload(); } else alert("Password Salah!"); };
-    window.onload = () => { if (localStorage.getItem("adminLogedIn") === "true") { document.getElementById("loginScreen").classList.add("hidden"); document.getElementById("dashboardAdmin").classList.remove("hidden"); initDashboard(); } };
-    window.logout = () => { localStorage.removeItem("adminLogedIn"); location.reload(); };
-
+    <script type="module">
+    // (Simpan import dan inisialisasi db Anda yang lama di sini)
+    // ...
+    
+    // Perbaikan fungsi initDashboard untuk menyertakan tombol WA:
     function initDashboard() {
         onSnapshot(query(collection(db, "tamu"), orderBy("waktu", "desc")), (snap) => {
-            let total=0, p=0, s=0, dataPerHari = {}, tabel = document.getElementById("tabelTamu"); tabel.innerHTML = "";
+            let total=0, p=0, s=0, tabel = document.getElementById("tabelTamu"); tabel.innerHTML = "";
             snap.forEach(d => {
                 const data = d.data(); total++;
                 if(data.status=="proses") p++; else if(data.status=="selesai") s++;
-                if(data.waktu) { const t = data.waktu.toDate().toLocaleDateString(); dataPerHari[t] = (dataPerHari[t]||0)+1; }
-                tabel.innerHTML += `<tr class="border-b text-sm"><td>${data.nomorAntrian}</td><td>${data.nama}</td><td>${data.status}</td><td><button onclick="updateStatus('${d.id}', 'selesai')" class="bg-green-600 text-white px-2 py-1 rounded">Selesai</button></td></tr>`;
+                tabel.innerHTML += `<tr class="border-b text-sm">
+                    <td>${data.nomorAntrian}</td><td>${data.nama}</td><td>${data.status}</td>
+                    <td>
+                        <button onclick="kirimWA('${data.hp}', '${data.nama}', 'proses', '${d.id}')" class="bg-yellow-500 text-white px-2 py-1 rounded text-[10px] mr-1">Proses</button>
+                        <button onclick="kirimWA('${data.hp}', '${data.nama}', 'selesai', '${d.id}')" class="bg-green-600 text-white px-2 py-1 rounded text-[10px]">Selesai</button>
+                    </td>
+                </tr>`;
             });
             document.getElementById("totalTamu").innerText = total; document.getElementById("totalProses").innerText = p; document.getElementById("totalSelesai").innerText = s;
-            updateGrafik(dataPerHari);
         });
+    }
 
-        onSnapshot(collection(db, "menu_edukasi"), (snap) => {
-            const sel = document.getElementById("selectMenu");
-            const list = document.getElementById("listMenu");
-            sel.innerHTML = '<option value="">Pilih Menu...</option>';
-            list.innerHTML = "";
-            snap.forEach(d => {
-                sel.innerHTML += `<option value="${d.id}">${d.data().judul}</option>`;
-                list.innerHTML += `<div class="flex justify-between p-2 border-b text-sm"><span>${d.data().judul}</span><button onclick="hapusMenu('${d.id}')" class="text-red-600 font-bold">Hapus</button></div>`;
-            });
-        });
+    window.kirimWA = async (hp, nama, status, id) => {
+        const pesan = status === 'proses' 
+            ? `Halo ${nama}, antrian Anda sedang diproses. Mohon bersiap menuju loket. Terima kasih.`
+            : `Halo ${nama}, pelayanan Anda telah selesai. Terima kasih telah berkunjung ke UPTD Farmasi.`;
         
-        onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snap) => {
-            const c = document.getElementById("listFotoGaleri"); c.innerHTML = "";
-            snap.forEach(d => c.innerHTML += `<div class="relative h-16 border rounded"><img src="${d.data().url}" class="w-full h-full object-cover"><button onclick="hapusFoto('galeri', '${d.id}')" class="absolute inset-0 bg-red-600/70 text-white text-[10px]">Hapus</button></div>`);
-        });
-    }
+        const formatHP = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
+        window.open(`https://wa.me/${formatHP}?text=${encodeURIComponent(pesan)}`, '_blank');
+        
+        await updateDoc(doc(db, "tamu", id), { status: status, waktuSelesai: serverTimestamp() });
+    };
 
-    function updateGrafik(data) {
-        if(chart) chart.destroy();
-        chart = new Chart(document.getElementById('grafikPelayanan').getContext('2d'), { type: 'bar', data: { labels: Object.keys(data), datasets: [{ label: 'Tamu', data: Object.values(data), backgroundColor: '#1e3a8a' }] } });
-    }
-
-    window.updateStatus = async (id, status) => { await updateDoc(doc(db, "tamu", id), { status: status, waktuSelesai: serverTimestamp() }); };
-    window.tambahMenu = async () => { await addDoc(collection(db, "menu_edukasi"), { judul: document.getElementById("namaMenu").value, isi: "", url: "" }); alert("Menu ditambah"); };
-    window.updateKonten = async () => { const id = document.getElementById("selectMenu").value; if(id) { await updateDoc(doc(db, "menu_edukasi", id), { isi: document.getElementById("editIsi").value, url: document.getElementById("editUrl").value }); alert("Update!"); } };
-    window.hapusMenu = async (id) => { await deleteDoc(doc(db, "menu_edukasi", id)); };
-    window.tambahFoto = async (col, id) => { await addDoc(collection(db, col), { url: document.getElementById(id).value, waktuInput: serverTimestamp() }); };
-    window.hapusFoto = async (col, id) => { await deleteDoc(doc(db, col, id)); };
+    // (Biarkan fungsi lainnya seperti tambahMenu, hapusFoto, dll tetap di bawah ini)
   </script>
+
 </body>
 </html>
