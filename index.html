@@ -20,7 +20,6 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       
-      <!-- Kolom Kiri: Edukasi -->
       <div>
         <div id="edukasiBox" class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-6">
           <h3 id="judulEdukasi" class="font-bold text-blue-800 mb-2 flex items-center gap-2">
@@ -36,7 +35,6 @@
         </a>
       </div>
 
-      <!-- Kolom Kanan: Form -->
       <div class="space-y-4 border-t pt-6 lg:pt-0 lg:border-t-0">
         <h3 class="font-bold text-gray-700">Registrasi Tamu</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -70,7 +68,6 @@
     </div>
   </div>
 
-  <!-- Modal -->
   <div id="modalAntrian" class="hidden fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
     <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
       <h2 class="text-xl font-bold text-gray-800">Check-In Berhasil!</h2>
@@ -134,7 +131,7 @@
       const instansi = document.getElementById("instansi").value;
       const hp = document.getElementById("hp").value;
       const keperluan = document.getElementById("keperluan").value;
-      if (!nama || !keperluan) return alert("Mohon isi Nama dan Keperluan!");
+      if (!nama || !keperluan || !hp) return alert("Mohon isi Nama, No. HP, dan Keperluan!");
       
       const snap = await getDocs(collection(db, "tamu"));
       const kode = keperluan.substring(0, 1) + "-" + (snap.size + 1).toString().padStart(3, '0');
@@ -144,10 +141,10 @@
       document.getElementById("nomorAntrianDisplay").innerText = kode;
       document.getElementById("modalAntrian").className = "visible fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40";
 
-      // Integrasi WA kembali aktif
       document.getElementById("btnLanjutWA").onclick = () => {
+        const formatHP = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
         const pesan = `Halo Admin, saya tamu baru.%0ANama: ${nama}%0AInstansi: ${instansi}%0AKeperluan: ${keperluan}%0ANomor Antrian: ${kode}`;
-        window.open(`https://wa.me/628123456789?text=${pesan}`, '_blank');
+        window.open(`https://wa.me/62881080698977?text=${pesan}`, '_blank');
         location.reload();
       };
     });
