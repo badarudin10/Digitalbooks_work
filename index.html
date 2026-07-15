@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* CSS untuk transisi halus */
     .fade-modal { transition: opacity 0.3s ease, visibility 0.3s ease; }
     .hidden { opacity: 0; visibility: hidden; }
     .visible { opacity: 1; visibility: visible; }
@@ -21,12 +20,13 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       
+      <!-- Kolom Kiri: Edukasi -->
       <div>
         <div id="edukasiBox" class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-6">
           <h3 id="judulEdukasi" class="font-bold text-blue-800 mb-2 flex items-center gap-2">
             <span>💊</span> Memuat...
           </h3>
-          <div id="containerGambarEdukasi" class="grid grid-cols-2 gap-3 mb-3"></div>
+          <div id="containerGambarEdukasi" class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3"></div>
           <p id="isiEdukasi" class="text-xs text-blue-700 mt-2">Memuat informasi...</p>
         </div>
 
@@ -36,6 +36,7 @@
         </a>
       </div>
 
+      <!-- Kolom Kanan: Form -->
       <div class="space-y-4 border-t pt-6 lg:pt-0 lg:border-t-0">
         <h3 class="font-bold text-gray-700">Registrasi Tamu</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -69,11 +70,12 @@
     </div>
   </div>
 
+  <!-- Modal -->
   <div id="modalAntrian" class="hidden fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
     <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
       <h2 class="text-xl font-bold text-gray-800">Check-In Berhasil!</h2>
       <div id="nomorAntrianDisplay" class="text-5xl font-black text-blue-900 my-6">A-000</div>
-      <button onclick="tutupModal()" class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold">Tutup & Lanjut ke WA</button>
+      <button id="btnLanjutWA" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold">Tutup & Lanjut ke WA</button>
     </div>
   </div>
 
@@ -98,18 +100,13 @@
       }
     });
 
-        // Load Foto Edukasi - Versi Fleksibel
     onSnapshot(query(collection(db, "edukasi_foto"), orderBy("waktuInput", "desc")), (snap) => {
       const container = document.getElementById("containerGambarEdukasi");
       container.innerHTML = "";
-      // Mengubah grid agar lebih fleksibel menyesuaikan gambar
-      container.className = "grid grid-cols-2 md:grid-cols-3 gap-3 mb-3"; 
-      
       snap.forEach((d) => {
         container.innerHTML += `
           <div class="bg-white p-1 rounded-lg border shadow-sm cursor-pointer hover:scale-[1.02] transition-transform duration-200">
-            <img src="${d.data().url}" onclick="bukaZoom('${d.data().url}')" 
-            class="w-full h-auto object-contain rounded">
+            <img src="${d.data().url}" onclick="bukaZoom('${d.data().url}')" class="w-full h-auto object-contain rounded">
           </div>`;
       });
     });
@@ -128,23 +125,33 @@
     });
 
     window.bukaZoom = (url) => {
-      const modal = document.getElementById("modalGambar");
       document.getElementById("gambarBesar").src = url;
-      modal.className = "visible fade-modal fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4";
+      document.getElementById("modalGambar").className = "visible fade-modal fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4";
     };
 
     document.getElementById("btnSubmit").addEventListener("click", async () => {
       const nama = document.getElementById("nama").value;
+      const instansi = document.getElementById("instansi").value;
+      const hp = document.getElementById("hp").value;
       const keperluan = document.getElementById("keperluan").value;
       if (!nama || !keperluan) return alert("Mohon isi Nama dan Keperluan!");
+      
       const snap = await getDocs(collection(db, "tamu"));
       const kode = keperluan.substring(0, 1) + "-" + (snap.size + 1).toString().padStart(3, '0');
-      await addDoc(collection(db, "tamu"), { nama, instansi: document.getElementById("instansi").value, hp: document.getElementById("hp").value, keperluan, nomorAntrian: kode, waktu: serverTimestamp(), status: "menunggu" });
+      
+      await addDoc(collection(db, "tamu"), { nama, instansi, hp, keperluan, nomorAntrian: kode, waktu: serverTimestamp(), status: "menunggu" });
+      
       document.getElementById("nomorAntrianDisplay").innerText = kode;
       document.getElementById("modalAntrian").className = "visible fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40";
-    });
 
-    window.tutupModal = () => location.reload();
+      // Integrasi WA kembali aktif
+      document.getElementById("btnLanjutWA").onclick = () => {
+        const pesan = `Halo Admin, saya tamu baru.%0ANama: ${nama}%0AInstansi: ${instansi}%0AKeperluan: ${keperluan}%0ANomor Antrian: ${kode}`;
+        window.open(`https://wa.me/628123456789?text=${pesan}`, '_blank');
+        location.reload();
+      };
+    });
   </script>
 </body>
 </html>
+
