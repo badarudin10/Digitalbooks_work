@@ -2,30 +2,27 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <title>Pusat Edukasi - UPTD Farmasi</title>
+  <title>Pusat Informasi - UPTD Farmasi</title>
 </head>
 <body class="bg-slate-50 p-4 md:p-8">
   <div class="max-w-4xl mx-auto">
     <a href="index.html" class="text-blue-900 font-bold mb-6 block">&larr; Kembali ke Beranda</a>
-    <h1 class="text-3xl font-bold text-blue-900 mb-8">Pusat Informasi</h1>
-    
-    <!-- Menu akan dimuat secara dinamis dari database -->
+    <h1 class="text-3xl font-bold text-blue-900 mb-8 text-center">Pusat Informasi & Edukasi</h1>
     <div id="gridMenu" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <!-- Loading state -->
-      <p class="text-gray-500">Memuat menu edukasi...</p>
+      <p class="text-gray-500 col-span-2 text-center">Memuat menu...</p>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
     
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
     const db = getFirestore(initializeApp(firebaseConfig));
 
-    async function loadMenu() {
-      const snap = await getDocs(collection(db, "menu_edukasi"));
+    onSnapshot(collection(db, "menu_edukasi"), (snap) => {
       const grid = document.getElementById("gridMenu");
       grid.innerHTML = "";
       snap.forEach(doc => {
@@ -33,12 +30,10 @@
         grid.innerHTML += `
           <a href="konten.html?id=${doc.id}" class="bg-white p-6 rounded-xl shadow border hover:border-blue-500 transition">
             <h2 class="font-bold text-blue-900 text-lg">${data.judul}</h2>
-            <p class="text-sm text-gray-500">${data.deskripsi || 'Klik untuk melihat detail'}</p>
-          </a>
-        `;
+            <p class="text-sm text-gray-500">${data.deskripsi || ''}</p>
+          </a>`;
       });
-    }
-    loadMenu();
+    });
   </script>
 </body>
 </html>
