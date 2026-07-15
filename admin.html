@@ -21,6 +21,41 @@
     <div class="bg-white p-6 rounded-2xl shadow-lg">
       <h2 class="text-xl font-bold text-blue-900 mb-4">Grafik Tren Tamu (7 Hari Terakhir)</h2>
       <canvas id="grafikPelayanan" height="80"></canvas>
+      <!-- Modul Baru: Kelola Konten Menu -->
+<div class="bg-white p-6 rounded-2xl shadow-lg mt-6">
+  <h2 class="text-xl font-bold text-blue-900 mb-4">Edit Konten Menu</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <select id="selectMenu" class="p-2 border rounded-lg w-full mb-2">
+      <option value="">Pilih Menu untuk diedit...</option>
+    </select>
+    <input type="text" id="editUrl" placeholder="Link Gambar" class="p-2 border rounded-lg w-full">
+    <textarea id="editIsi" rows="4" placeholder="Isi Konten" class="p-2 border rounded-lg w-full col-span-2"></textarea>
+    <button onclick="updateKonten()" class="bg-green-600 text-white p-3 rounded-lg font-bold">Simpan Perubahan Konten</button>
+  </div>
+</div>
+
+<script type="module">
+  // Tambahkan fungsi ini di dalam script type="module" di admin.html
+  import { updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+  // Load menu ke select box
+  onSnapshot(collection(db, "menu_edukasi"), (snap) => {
+    const sel = document.getElementById("selectMenu");
+    sel.innerHTML = '<option value="">Pilih Menu...</option>';
+    snap.forEach(d => sel.innerHTML += `<option value="${d.id}">${d.data().judul}</option>`);
+  });
+
+  window.updateKonten = async () => {
+    const id = document.getElementById("selectMenu").value;
+    if(!id) return alert("Pilih menu dulu!");
+    await updateDoc(doc(db, "menu_edukasi", id), {
+      isi: document.getElementById("editIsi").value,
+      url: document.getElementById("editUrl").value
+    });
+    alert("Konten berhasil diperbarui!");
+  };
+</script>
+
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
