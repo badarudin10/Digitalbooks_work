@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* CSS untuk transisi halus */
+    .fade-modal { transition: opacity 0.3s ease, visibility 0.3s ease; }
+    .hidden { opacity: 0; visibility: hidden; }
+    .visible { opacity: 1; visibility: visible; }
+  </style>
   <title>Buku Tamu - UPTD Farmasi Tangsel</title>
 </head>
 <body class="bg-slate-50 font-sans p-4 md:p-8">
@@ -20,12 +26,12 @@
           <h3 id="judulEdukasi" class="font-bold text-blue-800 mb-2 flex items-center gap-2">
             <span>💊</span> Memuat...
           </h3>
-          <div id="containerGambarEdukasi" class="grid grid-cols-2 gap-2 mb-2"></div>
+          <div id="containerGambarEdukasi" class="grid grid-cols-2 gap-3 mb-3"></div>
           <p id="isiEdukasi" class="text-xs text-blue-700 mt-2">Memuat informasi...</p>
         </div>
 
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank"
-           class="block w-full bg-green-600 text-white text-center p-3 rounded-lg font-bold mb-6 hover:bg-green-700">
+           class="block w-full bg-green-600 text-white text-center p-3 rounded-lg font-bold mb-6 hover:bg-green-700 transition">
           Isi Survei Kepuasan Dulu
         </a>
       </div>
@@ -51,7 +57,7 @@
           <option value="GIZI">I. GIZI</option>
         </select>
         
-        <button id="btnSubmit" class="w-full bg-blue-900 text-white p-4 rounded-lg font-bold">
+        <button id="btnSubmit" class="w-full bg-blue-900 text-white p-4 rounded-lg font-bold hover:bg-blue-800 transition">
           Check-In & Ambil Antrian
         </button>
       </div>
@@ -63,7 +69,7 @@
     </div>
   </div>
 
-  <div id="modalAntrian" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
+  <div id="modalAntrian" class="hidden fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
     <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
       <h2 class="text-xl font-bold text-gray-800">Check-In Berhasil!</h2>
       <div id="nomorAntrianDisplay" class="text-5xl font-black text-blue-900 my-6">A-000</div>
@@ -71,29 +77,19 @@
     </div>
   </div>
 
-  <div id="modalGambar" class="hidden fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4">
-    <button onclick="document.getElementById('modalGambar').classList.add('hidden')" 
+  <div id="modalGambar" class="hidden fade-modal fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4">
+    <button onclick="document.getElementById('modalGambar').className = 'hidden fade-modal fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4'" 
             class="absolute top-5 right-5 text-white text-5xl font-bold z-50 hover:text-red-500">&times;</button>
-    <img id="gambarBesar" src="" class="max-w-full max-h-[90vh] rounded-lg">
+    <img id="gambarBesar" src="" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw",
-      authDomain: "digital-books-d22c9.firebaseapp.com",
-      projectId: "digital-books-d22c9",
-      storageBucket: "digital-books-d22c9.firebasestorage.app",
-      messagingSenderId: "905407530155",
-      appId: "1:905407530155:web:dd90e18d4158ce42fae3ee",
-      measurementId: "G-LL7GF2RMF8"
-    };
-
+    const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
     const db = getFirestore(initializeApp(firebaseConfig));
 
-    // Load Teks Edukasi
     onSnapshot(doc(db, "konten", "edukasi"), (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
@@ -102,16 +98,17 @@
       }
     });
 
-    // Load Foto Edukasi (Koleksi Baru)
     onSnapshot(query(collection(db, "edukasi_foto"), orderBy("waktuInput", "desc")), (snap) => {
       const container = document.getElementById("containerGambarEdukasi");
       container.innerHTML = "";
       snap.forEach((d) => {
-        container.innerHTML += `<img src="${d.data().url}" onclick="bukaZoom('${d.data().url}')" class="w-full h-20 object-cover rounded-lg cursor-pointer border">`;
+        container.innerHTML += `
+          <div class="bg-slate-100 p-1 rounded-lg border cursor-pointer hover:scale-105 transition-transform duration-200">
+            <img src="${d.data().url}" onclick="bukaZoom('${d.data().url}')" class="w-full h-24 object-contain rounded">
+          </div>`;
       });
     });
 
-    // Load Galeri
     onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snapshot) => {
       const galeriContainer = document.getElementById("galeriPublik");
       galeriContainer.innerHTML = "";
@@ -126,28 +123,23 @@
     });
 
     window.bukaZoom = (url) => {
+      const modal = document.getElementById("modalGambar");
       document.getElementById("gambarBesar").src = url;
-      document.getElementById("modalGambar").classList.remove("hidden");
+      modal.className = "visible fade-modal fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4";
     };
 
-    // --- FUNGSI SUBMIT TETAP SAMA ---
     document.getElementById("btnSubmit").addEventListener("click", async () => {
       const nama = document.getElementById("nama").value;
-      const instansi = document.getElementById("instansi").value;
-      const hp = document.getElementById("hp").value;
       const keperluan = document.getElementById("keperluan").value;
       if (!nama || !keperluan) return alert("Mohon isi Nama dan Keperluan!");
-      const querySnapshot = await getDocs(collection(db, "tamu"));
-      const kodeAntrian = keperluan.substring(0, 1) + "-" + (querySnapshot.size + 1).toString().padStart(3, '0');
-      await addDoc(collection(db, "tamu"), { nama, instansi, hp, keperluan, nomorAntrian: kodeAntrian, waktu: serverTimestamp(), status: "menunggu" });
-      document.getElementById("nomorAntrianDisplay").innerText = kodeAntrian;
-      document.getElementById("modalAntrian").classList.remove("hidden");
+      const snap = await getDocs(collection(db, "tamu"));
+      const kode = keperluan.substring(0, 1) + "-" + (snap.size + 1).toString().padStart(3, '0');
+      await addDoc(collection(db, "tamu"), { nama, instansi: document.getElementById("instansi").value, hp: document.getElementById("hp").value, keperluan, nomorAntrian: kode, waktu: serverTimestamp(), status: "menunggu" });
+      document.getElementById("nomorAntrianDisplay").innerText = kode;
+      document.getElementById("modalAntrian").className = "visible fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40";
     });
 
-    window.tutupModal = () => {
-      location.reload(); 
-    };
+    window.tutupModal = () => location.reload();
   </script>
 </body>
 </html>
-
