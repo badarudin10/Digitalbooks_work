@@ -18,33 +18,15 @@
   </div>
 
   <div id="dashboardAdmin" class="hidden p-4 max-w-6xl mx-auto space-y-6">
-    <div class="bg-white p-6 rounded-2xl shadow-lg">
-      <h2 class="text-xl font-bold text-blue-900 mb-4">Grafik Tren Tamu (7 Hari Terakhir)</h2>
-      <canvas id="grafikPelayanan" height="80"></canvas>
-    </div>
-
-    <div class="bg-white p-6 rounded-2xl shadow-lg">
-      <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Menu Informasi</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <input type="text" id="namaMenu" placeholder="Nama Menu (Contoh: Jadwal)" class="p-2 border rounded-lg text-sm">
-        <input type="text" id="deskripsiMenu" placeholder="Deskripsi Singkat" class="p-2 border rounded-lg text-sm">
-        <button onclick="tambahMenu()" class="bg-blue-900 text-white p-2 rounded-lg font-bold text-sm">Tambah Menu</button>
-      </div>
-      
-      <h2 class="text-lg font-bold text-blue-900 mb-2">Edit Konten Menu</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <select id="selectMenu" class="p-2 border rounded-lg w-full mb-2"><option value="">Pilih Menu...</option></select>
-        <input type="text" id="editUrl" placeholder="Link Gambar" class="p-2 border rounded-lg w-full">
-        <textarea id="editIsi" rows="4" placeholder="Isi Konten" class="p-2 border rounded-lg w-full col-span-2"></textarea>
-        <button onclick="updateKonten()" class="bg-green-600 text-white p-3 rounded-lg font-bold">Simpan Perubahan</button>
-      </div>
-      <div id="listMenu" class="mt-4 border-t pt-2 space-y-2"></div>
-    </div>
-
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div class="bg-blue-900 text-white p-6 rounded-2xl shadow-lg text-center"><p class="text-sm opacity-80">Total Antrian</p><h2 id="totalTamu" class="text-4xl font-bold">0</h2></div>
       <div class="bg-yellow-500 text-white p-6 rounded-2xl shadow-lg text-center"><p class="text-sm opacity-80">Sedang Diproses</p><h2 id="totalProses" class="text-4xl font-bold">0</h2></div>
       <div class="bg-green-600 text-white p-6 rounded-2xl shadow-lg text-center"><p class="text-sm opacity-80">Sudah Selesai</p><h2 id="totalSelesai" class="text-4xl font-bold">0</h2></div>
+    </div>
+
+    <div class="bg-white p-6 rounded-2xl shadow-lg">
+      <h2 class="text-xl font-bold text-blue-900 mb-4">Grafik Tren Tamu (7 Hari)</h2>
+      <canvas id="grafikPelayanan" height="80"></canvas>
     </div>
 
     <div class="bg-white p-6 rounded-2xl shadow-lg overflow-x-auto">
@@ -54,22 +36,55 @@
         <tbody id="tabelTamu"></tbody>
       </table>
     </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white p-6 rounded-2xl shadow-lg">
+        <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Galeri</h2>
+        <div class="flex gap-2 mb-4"><input type="text" id="urlFotoInput" placeholder="Link Foto..." class="flex-1 p-2 border rounded-lg text-sm"><button onclick="tambahFoto('galeri', 'urlFotoInput')" class="bg-blue-900 text-white px-4 py-2 rounded-lg text-sm font-bold">Tambah</button></div>
+        <div id="listFotoGaleri" class="grid grid-cols-3 gap-2 border-t pt-4"></div>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl shadow-lg">
+        <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Menu Informasi</h2>
+        <div class="grid grid-cols-1 gap-2 mb-4">
+            <input type="text" id="namaMenu" placeholder="Nama Menu (Contoh: Jadwal)" class="p-2 border rounded-lg text-sm">
+            <button onclick="tambahMenu()" class="bg-blue-900 text-white p-2 rounded-lg font-bold text-sm">Buat Menu Baru</button>
+        </div>
+        <select id="selectMenu" class="w-full p-2 border rounded-lg mb-2"><option value="">Pilih Menu untuk Edit...</option></select>
+        <input type="text" id="editUrl" placeholder="Link Gambar" class="w-full p-2 border rounded-lg mb-2">
+        <textarea id="editIsi" rows="3" placeholder="Isi Konten..." class="w-full p-2 border rounded-lg mb-2"></textarea>
+        <button onclick="updateKonten()" class="w-full bg-green-600 text-white p-2 rounded-lg font-bold">Simpan Perubahan</button>
+        <div id="listMenu" class="mt-4 border-t pt-2 space-y-2"></div>
+      </div>
+    </div>
     
     <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold">Keluar (Logout)</button>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy, updateDoc, doc, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, updateDoc, doc, addDoc, deleteDoc, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const db = getFirestore(initializeApp({ apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" }));
+    let chart;
 
     window.cekPassword = () => { if (document.getElementById("passwordInput").value === "Badarudin1010") { localStorage.setItem("adminLogedIn", "true"); location.reload(); } else alert("Password Salah!"); };
     window.onload = () => { if (localStorage.getItem("adminLogedIn") === "true") { document.getElementById("loginScreen").classList.add("hidden"); document.getElementById("dashboardAdmin").classList.remove("hidden"); initDashboard(); } };
     window.logout = () => { localStorage.removeItem("adminLogedIn"); location.reload(); };
 
     function initDashboard() {
-        // Load Menu untuk Edit
+        onSnapshot(query(collection(db, "tamu"), orderBy("waktu", "desc")), (snap) => {
+            let total=0, p=0, s=0, dataPerHari = {}, tabel = document.getElementById("tabelTamu"); tabel.innerHTML = "";
+            snap.forEach(d => {
+                const data = d.data(); total++;
+                if(data.status=="proses") p++; else if(data.status=="selesai") s++;
+                if(data.waktu) { const t = data.waktu.toDate().toLocaleDateString(); dataPerHari[t] = (dataPerHari[t]||0)+1; }
+                tabel.innerHTML += `<tr class="border-b text-sm"><td>${data.nomorAntrian}</td><td>${data.nama}</td><td>${data.status}</td><td><button onclick="updateStatus('${d.id}', 'selesai')" class="bg-green-600 text-white px-2 py-1 rounded">Selesai</button></td></tr>`;
+            });
+            document.getElementById("totalTamu").innerText = total; document.getElementById("totalProses").innerText = p; document.getElementById("totalSelesai").innerText = s;
+            updateGrafik(dataPerHari);
+        });
+
         onSnapshot(collection(db, "menu_edukasi"), (snap) => {
             const sel = document.getElementById("selectMenu");
             const list = document.getElementById("listMenu");
@@ -80,27 +95,24 @@
                 list.innerHTML += `<div class="flex justify-between p-2 border-b text-sm"><span>${d.data().judul}</span><button onclick="hapusMenu('${d.id}')" class="text-red-600 font-bold">Hapus</button></div>`;
             });
         });
+        
+        onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snap) => {
+            const c = document.getElementById("listFotoGaleri"); c.innerHTML = "";
+            snap.forEach(d => c.innerHTML += `<div class="relative h-16 border rounded"><img src="${d.data().url}" class="w-full h-full object-cover"><button onclick="hapusFoto('galeri', '${d.id}')" class="absolute inset-0 bg-red-600/70 text-white text-[10px]">Hapus</button></div>`);
+        });
     }
 
-    window.tambahMenu = async () => {
-        const judul = document.getElementById("namaMenu").value;
-        const deskripsi = document.getElementById("deskripsiMenu").value;
-        if(!judul) return alert("Isi nama menu!");
-        await addDoc(collection(db, "menu_edukasi"), { judul, deskripsi, isi: "", url: "" });
-        alert("Menu ditambahkan!");
-    };
+    function updateGrafik(data) {
+        if(chart) chart.destroy();
+        chart = new Chart(document.getElementById('grafikPelayanan').getContext('2d'), { type: 'bar', data: { labels: Object.keys(data), datasets: [{ label: 'Tamu', data: Object.values(data), backgroundColor: '#1e3a8a' }] } });
+    }
 
-    window.updateKonten = async () => {
-        const id = document.getElementById("selectMenu").value;
-        if(!id) return alert("Pilih menu dulu!");
-        await updateDoc(doc(db, "menu_edukasi", id), {
-            isi: document.getElementById("editIsi").value,
-            url: document.getElementById("editUrl").value
-        });
-        alert("Konten berhasil diperbarui!");
-    };
-
-    window.hapusMenu = async (id) => { if(confirm("Hapus menu ini?")) await deleteDoc(doc(db, "menu_edukasi", id)); };
+    window.updateStatus = async (id, status) => { await updateDoc(doc(db, "tamu", id), { status: status, waktuSelesai: serverTimestamp() }); };
+    window.tambahMenu = async () => { await addDoc(collection(db, "menu_edukasi"), { judul: document.getElementById("namaMenu").value, isi: "", url: "" }); alert("Menu ditambah"); };
+    window.updateKonten = async () => { const id = document.getElementById("selectMenu").value; if(id) { await updateDoc(doc(db, "menu_edukasi", id), { isi: document.getElementById("editIsi").value, url: document.getElementById("editUrl").value }); alert("Update!"); } };
+    window.hapusMenu = async (id) => { await deleteDoc(doc(db, "menu_edukasi", id)); };
+    window.tambahFoto = async (col, id) => { await addDoc(collection(db, col), { url: document.getElementById(id).value, waktuInput: serverTimestamp() }); };
+    window.hapusFoto = async (col, id) => { await deleteDoc(doc(db, col, id)); };
   </script>
 </body>
 </html>
