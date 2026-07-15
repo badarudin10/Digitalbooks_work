@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>.fade-modal { transition: opacity 0.3s ease, visibility 0.3s ease; } .hidden { opacity: 0; visibility: hidden; } .visible { opacity: 1; visibility: visible; }</style>
   <title>Buku Tamu - UPTD Farmasi Tangsel</title>
 </head>
 <body class="bg-slate-50 font-sans p-4 md:p-8">
@@ -14,22 +13,19 @@
     
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <div>
-        <!-- Tombol Edukasi Baru -->
         <div class="bg-blue-900 p-6 rounded-xl text-white text-center mb-6 shadow-lg">
           <h3 class="font-bold text-lg mb-2">Pusat Informasi & Edukasi</h3>
           <a href="edukasi.html" class="block w-full bg-white text-blue-900 p-2 rounded-lg font-bold hover:bg-gray-100 transition">Buka Menu Edukasi</a>
         </div>
-        <!-- Survei Kepuasan (Wajib) -->
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank"
            class="block w-full bg-green-600 text-white text-center p-3 rounded-lg font-bold mb-6 hover:bg-green-700 transition">Isi Survei Kepuasan Dulu</a>
       </div>
 
-      <!-- Registrasi -->
       <div class="space-y-4 border-t pt-6 lg:pt-0 lg:border-t-0">
         <h3 class="font-bold text-gray-700">Registrasi Tamu</h3>
         <input id="nama" placeholder="Nama Lengkap" class="w-full p-3 border rounded-lg">
         <input id="instansi" placeholder="Instansi" class="w-full p-3 border rounded-lg">
-        <input id="hp" placeholder="No. Telepon (Contoh: 08123456789)" class="w-full p-3 border rounded-lg">
+        <input id="hp" placeholder="No. Telepon (0812...)" class="w-full p-3 border rounded-lg">
         <select id="keperluan" class="w-full p-3 border rounded-lg">
           <option value="">Pilih Keperluan:</option>
           <option value="OBAT_PKD">OBAT PKD</option><option value="VAKSIN">VAKSIN</option><option value="REAGEN">REAGEN</option>
@@ -37,28 +33,16 @@
         <button id="btnSubmit" class="w-full bg-blue-900 text-white p-4 rounded-lg font-bold hover:bg-blue-800 transition">Check-In & Ambil Antrian</button>
       </div>
     </div>
-
-    <!-- Galeri -->
-    <div class="mt-8 border-t pt-6">
-      <h3 class="font-bold text-gray-700 mb-4">Galeri Kegiatan</h3>
-      <div id="galeriPublik" class="grid grid-cols-2 md:grid-cols-6 gap-3"></div>
-    </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
     const db = getFirestore(initializeApp({ apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" }));
-
-    // Galeri & Registrasi logic tetap sama seperti sebelumnya...
-    onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snap) => {
-      const container = document.getElementById("galeriPublik");
-      container.innerHTML = "";
-      snap.forEach(d => container.innerHTML += `<div class="aspect-square rounded-lg overflow-hidden"><img src="${d.data().url}" class="w-full h-full object-cover"></div>`);
-    });
 
     document.getElementById("btnSubmit").addEventListener("click", async () => {
       const nama = document.getElementById("nama").value;
+      const instansi = document.getElementById("instansi").value;
       const hp = document.getElementById("hp").value;
       const keperluan = document.getElementById("keperluan").value;
       if (!nama || !keperluan || !hp) return alert("Lengkapi data!");
@@ -66,10 +50,15 @@
       const snap = await getDocs(collection(db, "tamu"));
       const kode = keperluan.substring(0, 1) + "-" + (snap.size + 1).toString().padStart(3, '0');
       
-      await addDoc(collection(db, "tamu"), { nama, hp, keperluan, nomorAntrian: kode, waktu: serverTimestamp(), status: "menunggu" });
+      await addDoc(collection(db, "tamu"), { nama, instansi, hp, keperluan, nomorAntrian: kode, waktu: serverTimestamp(), status: "menunggu" });
+      
+      const pesanWA = `Halo Admin, ada tamu baru!%0A%0A*Nama:* ${nama}%0A*Instansi:* ${instansi}%0A*Keperluan:* ${keperluan}%0A*No Antrian:* ${kode}`;
+      window.open(`https://wa.me/62881080698977?text=${pesanWA}`, '_blank');
+      
       alert("Antrian Anda: " + kode);
       location.reload();
     });
   </script>
 </body>
 </html>
+
