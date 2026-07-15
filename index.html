@@ -143,7 +143,7 @@
 
       document.getElementById("btnLanjutWA").onclick = () => {
         const formatHP = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
-        const pesan = `Halo Admin, saya tamu baru.%0ANama: ${nama}%0AInstansi: ${instansi}%0AKeperluan: ${keperluan}%0ANomor Antrian: ${kode}`;
+        const pesan = `Halo Admin, Saya Ingin Check-in.%0ANama: ${nama}%0AInstansi: ${instansi}%0AKeperluan: ${keperluan}%0ANomor Antrian: ${kode}`;
         window.open(`https://wa.me/62881080698977?text=${pesan}`, '_blank');
         location.reload();
       };
