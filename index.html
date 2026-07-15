@@ -82,10 +82,17 @@
     </div>
   </div>
 
-  <div id="modalGambar" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4" onclick="this.classList.add('hidden')">
-    <img id="gambarBesar" src="" class="max-w-full max-h-full rounded-2xl">
-  </div>
-
+ <!-- Letakkan ini di posisi yang sama dengan modalGambar sebelumnya -->
+<div id="modalGambar" class="hidden fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4">
+  <!-- Tombol X -->
+  <button onclick="document.getElementById('modalGambar').classList.add('hidden')" 
+          class="absolute top-5 right-5 text-white text-4xl font-bold hover:text-red-500 z-50">
+    &times;
+  </button>
+  
+  <img id="gambarBesar" src="" class="max-w-full max-h-[90vh] rounded-xl shadow-2xl">
+</div>
+ 
   <script type="module">
     // (Logika JavaScript tetap sama seperti sebelumnya)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
@@ -113,16 +120,19 @@
       }
     });
 
-    onSnapshot(collection(db, "galeri"), (snapshot) => {
-      const galeriContainer = document.getElementById("galeriPublik");
-      galeriContainer.innerHTML = "";
-      snapshot.forEach((doc) => {
-        const url = doc.data().url;
-        galeriContainer.innerHTML += `
-          <img src="${url}" onclick="bukaZoom('${url}')" class="w-full h-32 object-cover rounded-xl shadow-md cursor-pointer hover:opacity-90 transition transform hover:scale-105">
-        `;
-      });
-    });
+    // Ganti bagian di dalam onSnapshot(collection(db, "galeri")...) menjadi:
+onSnapshot(collection(db, "galeri"), (snapshot) => {
+  const galeriContainer = document.getElementById("galeriPublik");
+  galeriContainer.innerHTML = "";
+  snapshot.forEach((doc) => {
+    const url = doc.data().url;
+    galeriContainer.innerHTML += `
+      <div class="aspect-square overflow-hidden rounded-xl shadow-md cursor-pointer hover:opacity-90 transition transform hover:scale-105">
+        <img src="${url}" onclick="bukaZoom('${url}')" class="w-full h-full object-cover">
+      </div>
+    `;
+  });
+});
 
     window.bukaZoom = (url) => {
       document.getElementById("gambarBesar").src = url;
