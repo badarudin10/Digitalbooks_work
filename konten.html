@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Detail Informasi</title>
+</head>
+<body class="bg-slate-50 p-4 md:p-8">
+  <div class="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
+    <a href="edukasi.html" class="text-blue-900 font-bold mb-6 block">&larr; Kembali</a>
+    
+    <div id="kontenArea" class="space-y-4">
+      <h1 id="judulKonten" class="text-3xl font-bold text-blue-900">Memuat...</h1>
+      <img id="gambarKonten" src="" class="w-full rounded-xl hidden">
+      <p id="isiKonten" class="text-gray-700 leading-relaxed"></p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    
+    const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
+    const db = getFirestore(initializeApp(firebaseConfig));
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+
+    async function loadKonten() {
+      const docSnap = await getDoc(doc(db, "menu_edukasi", id));
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById("judulKonten").innerText = data.judul;
+        document.getElementById("isiKonten").innerText = data.isi || "Belum ada informasi tersedia.";
+        if(data.url) {
+          const img = document.getElementById("gambarKonten");
+          img.src = data.url;
+          img.classList.remove("hidden");
+        }
+      }
+    }
+    loadKonten();
+  </script>
+</body>
+</html>
