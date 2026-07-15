@@ -6,13 +6,15 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <title>Buku Tamu - UPTD Farmasi Tangsel</title>
 </head>
-<body class="bg-slate-50 font-sans p-4">
+<body class="bg-slate-50 font-sans p-4 md:p-8">
 
-  <div class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-lg border-t-4 border-blue-900">
+  <!-- Wrapper: max-w-lg untuk desktop agar tidak terlalu lebar, mx-auto untuk center -->
+  <div class="max-w-lg mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-lg border-t-4 border-blue-900">
     <h1 class="text-2xl font-bold text-blue-900 text-center">UPTD FARMASI</h1>
     <h2 class="text-sm text-center text-gray-600 mb-6 uppercase">Kota Tangerang Selatan</h2>
     <p class="italic text-center text-sm text-gray-500 mb-6">"Kami melayani dengan sepenuh hati, ramah, sopan santun dan cepat."</p>
 
+    <!-- AREA EDUKASI -->
     <div id="edukasiBox" class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-6">
       <h3 id="judulEdukasi" class="font-bold text-blue-800 mb-2 flex items-center gap-2">
         <span>💊</span> Memuat...
@@ -22,14 +24,20 @@
     </div>
 
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank"
-       class="block w-full bg-green-600 text-white text-center p-3 rounded-lg font-bold mb-6 hover:bg-green-700">
+       class="block w-full bg-green-600 text-white text-center p-3 rounded-lg font-bold mb-6 hover:bg-green-700 transition">
       Isi Survei Kepuasan Dulu
     </a>
 
+    <!-- AREA REGISTRASI -->
     <div class="space-y-4 border-t pt-6">
       <h3 class="font-bold text-gray-700">Registrasi Tamu</h3>
-      <input id="nama" placeholder="Nama Lengkap" class="w-full p-3 border rounded-lg">
-      <input id="instansi" placeholder="Instansi" class="w-full p-3 border rounded-lg">
+      
+      <!-- Grid Desktop: 2 kolom untuk Nama & Instansi -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input id="nama" placeholder="Nama Lengkap" class="w-full p-3 border rounded-lg">
+        <input id="instansi" placeholder="Instansi" class="w-full p-3 border rounded-lg">
+      </div>
+      
       <input id="hp" placeholder="No. Telepon (Contoh: 08123456789)" class="w-full p-3 border rounded-lg">
       
       <select id="keperluan" class="w-full p-3 border rounded-lg">
@@ -45,18 +53,21 @@
         <option value="GIZI">I. GIZI</option>
       </select>
       
-      <button id="btnSubmit" class="w-full bg-blue-900 text-white p-4 rounded-lg font-bold">
+      <button id="btnSubmit" class="w-full bg-blue-900 text-white p-4 rounded-lg font-bold hover:bg-blue-800 transition">
         Check-In & Ambil Antrian
       </button>
     </div>
 
+    <!-- AREA GALERI -->
     <div class="mt-8 border-t pt-6">
       <h3 class="font-bold text-gray-700 mb-4">Galeri Kegiatan</h3>
-      <div id="galeriPublik" class="grid grid-cols-2 gap-3">
-        </div>
+      <!-- Grid Desktop: 3 kolom agar foto tidak terlalu besar -->
+      <div id="galeriPublik" class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      </div>
     </div>
   </div>
 
+  <!-- Modal Antrian -->
   <div id="modalAntrian" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
     <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
       <h2 class="text-xl font-bold text-gray-800">Check-In Berhasil!</h2>
@@ -65,6 +76,7 @@
     </div>
   </div>
 
+  <!-- Modal Zoom -->
   <div id="modalGambar" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4" onclick="this.classList.add('hidden')">
     <img id="gambarBesar" src="" class="max-w-full max-h-full rounded-lg">
   </div>
@@ -85,7 +97,6 @@
 
     const db = getFirestore(initializeApp(firebaseConfig));
 
-    // 1. Data Edukasi + Gambar
     onSnapshot(doc(db, "konten", "edukasi"), (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
@@ -96,7 +107,6 @@
       }
     });
 
-    // 2. Data Galeri + Fungsi Zoom
     onSnapshot(collection(db, "galeri"), (snapshot) => {
       const galeriContainer = document.getElementById("galeriPublik");
       galeriContainer.innerHTML = "";
@@ -113,7 +123,6 @@
       document.getElementById("modalGambar").classList.remove("hidden");
     };
 
-    // 3. Logika Antrian
     let dataPesanWA = "", nomorAdminWA = "62881080698977";
     document.getElementById("btnSubmit").addEventListener("click", async () => {
       const nama = document.getElementById("nama").value;
