@@ -6,82 +6,88 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <title>Buku Tamu - UPTD Farmasi Tangsel</title>
 </head>
-<body class="bg-slate-50 font-sans p-4 md:p-8">
+<body class="bg-slate-100 font-sans p-4 md:p-8">
 
-  <!-- Wrapper: max-w-lg untuk desktop agar tidak terlalu lebar, mx-auto untuk center -->
-  <div class="max-w-lg mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-lg border-t-4 border-blue-900">
-    <h1 class="text-2xl font-bold text-blue-900 text-center">UPTD FARMASI</h1>
-    <h2 class="text-sm text-center text-gray-600 mb-6 uppercase">Kota Tangerang Selatan</h2>
-    <p class="italic text-center text-sm text-gray-500 mb-6">"Kami melayani dengan sepenuh hati, ramah, sopan santun dan cepat."</p>
-
-    <!-- AREA EDUKASI -->
-    <div id="edukasiBox" class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-6">
-      <h3 id="judulEdukasi" class="font-bold text-blue-800 mb-2 flex items-center gap-2">
-        <span>💊</span> Memuat...
-      </h3>
-      <div id="containerGambarEdukasi"></div>
-      <p id="isiEdukasi" class="text-xs text-blue-700 mt-2">Memuat informasi...</p>
+  <!-- Menggunakan max-w-7xl agar memenuhi layar desktop -->
+  <div class="max-w-7xl mx-auto bg-white p-6 md:p-12 rounded-3xl shadow-2xl border-t-8 border-blue-900">
+    
+    <!-- HEADER -->
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-black text-blue-900">UPTD FARMASI</h1>
+      <h2 class="text-md font-bold text-gray-500 tracking-widest uppercase mt-2">Kota Tangerang Selatan</h2>
+      <p class="italic text-gray-500 mt-4 text-lg">"Kami melayani dengan sepenuh hati, ramah, sopan santun dan cepat."</p>
     </div>
 
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank"
-       class="block w-full bg-green-600 text-white text-center p-3 rounded-lg font-bold mb-6 hover:bg-green-700 transition">
-      Isi Survei Kepuasan Dulu
-    </a>
-
-    <!-- AREA REGISTRASI -->
-    <div class="space-y-4 border-t pt-6">
-      <h3 class="font-bold text-gray-700">Registrasi Tamu</h3>
+    <!-- MAIN GRID (Desktop: 2 kolom utama, Mobile: 1 kolom) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
       
-      <!-- Grid Desktop: 2 kolom untuk Nama & Instansi -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input id="nama" placeholder="Nama Lengkap" class="w-full p-3 border rounded-lg">
-        <input id="instansi" placeholder="Instansi" class="w-full p-3 border rounded-lg">
+      <!-- Kolom Kiri: Edukasi & Survei -->
+      <div class="space-y-8">
+        <div id="edukasiBox" class="bg-blue-50 p-6 rounded-2xl border border-blue-100 shadow-inner">
+          <h3 id="judulEdukasi" class="font-bold text-blue-900 text-xl mb-4 flex items-center gap-2">
+            <span>💊</span> Memuat...
+          </h3>
+          <div id="containerGambarEdukasi"></div>
+          <p id="isiEdukasi" class="text-blue-800">Memuat informasi...</p>
+        </div>
+
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank"
+           class="block w-full bg-green-600 text-white text-center p-5 rounded-2xl font-bold text-lg hover:bg-green-700 transition shadow-lg">
+          Isi Survei Kepuasan Dulu
+        </a>
       </div>
-      
-      <input id="hp" placeholder="No. Telepon (Contoh: 08123456789)" class="w-full p-3 border rounded-lg">
-      
-      <select id="keperluan" class="w-full p-3 border rounded-lg">
-        <option value="">Pilih Keperluan:</option>
-        <option value="OBAT_PKD">A. OBAT PKD</option>
-        <option value="VAKSIN">B. VAKSIN</option>
-        <option value="REAGEN">C. REAGEN</option>
-        <option value="TB_KUSTA">D. TB dan KUSTA</option>
-        <option value="HIV_JIWA">E. HIV dan JIWA</option>
-        <option value="DBD_MALARIA">F. DBD dan MALARIA</option>
-        <option value="KECACINGAN">G. KECACINGAN</option>
-        <option value="HEPATITIS">H. HEPATITIS</option>
-        <option value="GIZI">I. GIZI</option>
-      </select>
-      
-      <button id="btnSubmit" class="w-full bg-blue-900 text-white p-4 rounded-lg font-bold hover:bg-blue-800 transition">
-        Check-In & Ambil Antrian
-      </button>
+
+      <!-- Kolom Kanan: Registrasi -->
+      <div class="space-y-6 bg-slate-50 p-8 rounded-2xl border">
+        <h3 class="font-bold text-gray-700 text-xl">Registrasi Tamu</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input id="nama" placeholder="Nama Lengkap" class="w-full p-4 border rounded-xl">
+          <input id="instansi" placeholder="Instansi" class="w-full p-4 border rounded-xl">
+        </div>
+        <input id="hp" placeholder="No. Telepon (Contoh: 08123456789)" class="w-full p-4 border rounded-xl">
+        <select id="keperluan" class="w-full p-4 border rounded-xl">
+          <option value="">Pilih Keperluan:</option>
+          <option value="OBAT_PKD">A. OBAT PKD</option>
+          <option value="VAKSIN">B. VAKSIN</option>
+          <option value="REAGEN">C. REAGEN</option>
+          <option value="TB_KUSTA">D. TB dan KUSTA</option>
+          <option value="HIV_JIWA">E. HIV dan JIWA</option>
+          <option value="DBD_MALARIA">F. DBD dan MALARIA</option>
+          <option value="KECACINGAN">G. KECACINGAN</option>
+          <option value="HEPATITIS">H. HEPATITIS</option>
+          <option value="GIZI">I. GIZI</option>
+        </select>
+        <button id="btnSubmit" class="w-full bg-blue-900 text-white p-5 rounded-xl font-bold text-lg hover:bg-blue-800 transition shadow-xl">
+          Check-In & Ambil Antrian
+        </button>
+      </div>
+
     </div>
 
-    <!-- AREA GALERI -->
-    <div class="mt-8 border-t pt-6">
-      <h3 class="font-bold text-gray-700 mb-4">Galeri Kegiatan</h3>
-      <!-- Grid Desktop: 3 kolom agar foto tidak terlalu besar -->
-      <div id="galeriPublik" class="grid grid-cols-2 md:grid-cols-3 gap-3">
+    <!-- AREA GALERI (Full Width di bawah) -->
+    <div class="mt-16 border-t pt-10">
+      <h3 class="font-bold text-gray-700 text-2xl mb-6">Galeri Kegiatan</h3>
+      <div id="galeriPublik" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <!-- Foto akan menyesuaikan jumlah kolom secara otomatis -->
       </div>
     </div>
   </div>
 
-  <!-- Modal Antrian -->
+  <!-- MODALS (Tetap sama) -->
   <div id="modalAntrian" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
-    <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
-      <h2 class="text-xl font-bold text-gray-800">Check-In Berhasil!</h2>
-      <div id="nomorAntrianDisplay" class="text-5xl font-black text-blue-900 my-6">A-000</div>
-      <button onclick="tutupModal()" class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold">Tutup & Lanjut ke WA</button>
+    <div class="bg-white rounded-3xl p-10 max-w-sm w-full text-center shadow-2xl">
+      <h2 class="text-2xl font-bold text-gray-800">Check-In Berhasil!</h2>
+      <div id="nomorAntrianDisplay" class="text-6xl font-black text-blue-900 my-8">A-000</div>
+      <button onclick="tutupModal()" class="w-full bg-blue-900 text-white py-4 rounded-xl font-bold">Tutup & Lanjut ke WA</button>
     </div>
   </div>
 
-  <!-- Modal Zoom -->
   <div id="modalGambar" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4" onclick="this.classList.add('hidden')">
-    <img id="gambarBesar" src="" class="max-w-full max-h-full rounded-lg">
+    <img id="gambarBesar" src="" class="max-w-full max-h-full rounded-2xl">
   </div>
 
   <script type="module">
+    // (Logika JavaScript tetap sama seperti sebelumnya)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
@@ -103,7 +109,7 @@
         document.getElementById("judulEdukasi").innerText = data.judul || "📚 Informasi Edukasi";
         document.getElementById("isiEdukasi").innerText = data.isi || "";
         const containerImg = document.getElementById("containerGambarEdukasi");
-        containerImg.innerHTML = data.imgUrl ? `<img src="${data.imgUrl}" class="w-full h-40 object-cover rounded-lg mb-2">` : "";
+        containerImg.innerHTML = data.imgUrl ? `<img src="${data.imgUrl}" class="w-full h-64 object-cover rounded-xl mb-4">` : "";
       }
     });
 
@@ -113,7 +119,7 @@
       snapshot.forEach((doc) => {
         const url = doc.data().url;
         galeriContainer.innerHTML += `
-          <img src="${url}" onclick="bukaZoom('${url}')" class="w-full h-24 object-cover rounded-lg shadow-sm cursor-pointer hover:opacity-90 transition">
+          <img src="${url}" onclick="bukaZoom('${url}')" class="w-full h-32 object-cover rounded-xl shadow-md cursor-pointer hover:opacity-90 transition transform hover:scale-105">
         `;
       });
     });
