@@ -8,16 +8,13 @@
 </head>
 <body class="bg-slate-50 font-sans p-4 md:p-8">
 
-  <!-- Wrapper Utama (Dibuat lebar agar memenuhi desktop) -->
   <div class="max-w-7xl mx-auto bg-white p-6 md:p-10 rounded-2xl shadow-lg border-t-4 border-blue-900">
     <h1 class="text-3xl font-bold text-blue-900 text-center">UPTD FARMASI</h1>
     <h2 class="text-sm text-center text-gray-600 mb-6 uppercase">Kota Tangerang Selatan</h2>
     <p class="italic text-center text-sm text-gray-500 mb-6">"Kami melayani dengan sepenuh hati, ramah, sopan santun dan cepat."</p>
 
-    <!-- MAIN LAYOUT (Grid 2 kolom untuk desktop) -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       
-      <!-- Kolom Kiri: Edukasi -->
       <div>
         <div id="edukasiBox" class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-6">
           <h3 id="judulEdukasi" class="font-bold text-blue-800 mb-2 flex items-center gap-2">
@@ -33,7 +30,6 @@
         </a>
       </div>
 
-      <!-- Kolom Kanan: Registrasi -->
       <div class="space-y-4 border-t pt-6 lg:pt-0 lg:border-t-0">
         <h3 class="font-bold text-gray-700">Registrasi Tamu</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -61,16 +57,12 @@
       </div>
     </div>
 
-    <!-- AREA GALERI (Grid responsif) -->
     <div class="mt-8 border-t pt-6">
       <h3 class="font-bold text-gray-700 mb-4">Galeri Kegiatan</h3>
-      <div id="galeriPublik" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-        <!-- Foto muncul otomatis -->
-      </div>
+      <div id="galeriPublik" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3"></div>
     </div>
   </div>
 
-  <!-- Modal Antrian -->
   <div id="modalAntrian" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
     <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
       <h2 class="text-xl font-bold text-gray-800">Check-In Berhasil!</h2>
@@ -79,7 +71,6 @@
     </div>
   </div>
 
-  <!-- Modal Zoom dengan tombol X -->
   <div id="modalGambar" class="hidden fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4">
     <button onclick="document.getElementById('modalGambar').classList.add('hidden')" 
             class="absolute top-5 right-5 text-white text-5xl font-bold z-50 hover:text-red-500">&times;</button>
@@ -102,23 +93,25 @@
 
     const db = getFirestore(initializeApp(firebaseConfig));
 
+    // Edukasi dengan Zoom
     onSnapshot(doc(db, "konten", "edukasi"), (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
         document.getElementById("judulEdukasi").innerText = data.judul || "📚 Informasi Edukasi";
         document.getElementById("isiEdukasi").innerText = data.isi || "";
         const containerImg = document.getElementById("containerGambarEdukasi");
-        containerImg.innerHTML = data.imgUrl ? `<img src="${data.imgUrl}" class="w-full h-40 object-cover rounded-lg mb-2">` : "";
+        containerImg.innerHTML = data.imgUrl ? `<img src="${data.imgUrl}" onclick="bukaZoom('${data.imgUrl}')" class="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-90 transition">` : "";
       }
     });
 
+    // Galeri dengan Aspect Ratio konsisten
     onSnapshot(collection(db, "galeri"), (snapshot) => {
       const galeriContainer = document.getElementById("galeriPublik");
       galeriContainer.innerHTML = "";
       snapshot.forEach((doc) => {
         const url = doc.data().url;
         galeriContainer.innerHTML += `
-          <div class="aspect-square overflow-hidden rounded-lg cursor-pointer hover:opacity-90">
+          <div class="aspect-square overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition">
              <img src="${url}" onclick="bukaZoom('${url}')" class="w-full h-full object-cover">
           </div>
         `;
@@ -130,6 +123,7 @@
       document.getElementById("modalGambar").classList.remove("hidden");
     };
 
+    // Logika Antrian (TIDAK BERUBAH)
     let dataPesanWA = "", nomorAdminWA = "62881080698977";
     document.getElementById("btnSubmit").addEventListener("click", async () => {
       const nama = document.getElementById("nama").value;
