@@ -18,85 +18,136 @@
   </div>
 
   <div id="dashboardAdmin" class="hidden p-4 max-w-6xl mx-auto space-y-6">
+    <div class="bg-white p-6 rounded-2xl shadow-lg">
+      <h2 class="text-xl font-bold text-blue-900 mb-4">Grafik Tren Tamu (7 Hari Terakhir)</h2>
+      <canvas id="grafikPelayanan" height="80"></canvas>
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div class="bg-blue-900 text-white p-6 rounded-2xl shadow-lg text-center"><p class="text-sm opacity-80">Total Antrian</p><h2 id="totalTamu" class="text-4xl font-bold">0</h2></div>
       <div class="bg-yellow-500 text-white p-6 rounded-2xl shadow-lg text-center"><p class="text-sm opacity-80">Sedang Diproses</p><h2 id="totalProses" class="text-4xl font-bold">0</h2></div>
       <div class="bg-green-600 text-white p-6 rounded-2xl shadow-lg text-center"><p class="text-sm opacity-80">Sudah Selesai</p><h2 id="totalSelesai" class="text-4xl font-bold">0</h2></div>
     </div>
 
-    <div class="bg-white p-6 rounded-2xl shadow-lg">
-      <h2 class="text-xl font-bold text-blue-900 mb-4">Grafik Tren Tamu (7 Hari)</h2>
-      <canvas id="grafikPelayanan" height="80"></canvas>
-    </div>
-
     <div class="bg-white p-6 rounded-2xl shadow-lg overflow-x-auto">
-      <h2 class="text-xl font-bold text-blue-900 mb-4">Daftar Antrian Real-time</h2>
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-blue-900">Daftar Antrian Real-time</h2>
+        <button onclick="exportTableToCSV('Laporan_Antrian_UPTD.csv')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700">Download Excel (.csv)</button>
+      </div>
       <table class="w-full text-left" id="tabelTamuData">
-        <thead><tr class="border-b text-gray-500 text-xs uppercase"><th class="p-3">Antrian</th><th class="p-3">Nama</th><th class="p-3">Status</th><th class="p-3">Aksi</th></tr></thead>
+        <thead><tr class="border-b text-gray-500 text-xs uppercase"><th class="p-3">Antrian</th><th class="p-3">Nama</th><th class="p-3">Status</th><th class="p-3">Durasi</th><th class="p-3">Aksi</th></tr></thead>
         <tbody id="tabelTamu"></tbody>
       </table>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="bg-white p-6 rounded-2xl shadow-lg">
-        <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Galeri</h2>
+        <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Galeri Kegiatan</h2>
         <div class="flex gap-2 mb-4"><input type="text" id="urlFotoInput" placeholder="Link Foto..." class="flex-1 p-2 border rounded-lg text-sm"><button onclick="tambahFoto('galeri', 'urlFotoInput')" class="bg-blue-900 text-white px-4 py-2 rounded-lg text-sm font-bold">Tambah</button></div>
         <div id="listFotoGaleri" class="grid grid-cols-3 gap-2 border-t pt-4"></div>
       </div>
 
       <div class="bg-white p-6 rounded-2xl shadow-lg">
-        <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Menu Informasi</h2>
-        <div class="grid grid-cols-1 gap-2 mb-4">
-            <input type="text" id="namaMenu" placeholder="Nama Menu (Contoh: Jadwal)" class="p-2 border rounded-lg text-sm">
-            <button onclick="tambahMenu()" class="bg-blue-900 text-white p-2 rounded-lg font-bold text-sm">Buat Menu Baru</button>
+        <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Edukasi (Multi-Foto)</h2>
+        <div class="space-y-3 mb-4">
+          <input type="text" id="judulEdukasiInput" placeholder="Judul Edukasi" class="w-full p-2 border rounded-lg text-sm">
+          <textarea id="isiEdukasiInput" rows="3" placeholder="Isi edukasi..." class="w-full p-2 border rounded-lg text-sm"></textarea>
+          <button onclick="simpanTeksEdukasi()" class="w-full bg-blue-600 text-white p-2 rounded-lg font-bold text-sm">Simpan Teks Edukasi</button>
         </div>
-        <select id="selectMenu" class="w-full p-2 border rounded-lg mb-2"><option value="">Pilih Menu untuk Edit...</option></select>
-        <input type="text" id="editUrl" placeholder="Link Gambar" class="w-full p-2 border rounded-lg mb-2">
-        <textarea id="editIsi" rows="3" placeholder="Isi Konten..." class="w-full p-2 border rounded-lg mb-2"></textarea>
-        <button onclick="updateKonten()" class="w-full bg-green-600 text-white p-2 rounded-lg font-bold">Simpan Perubahan</button>
-        <div id="listMenu" class="mt-4 border-t pt-2 space-y-2"></div>
+        <div class="border-t pt-4">
+          <label class="text-xs font-bold text-gray-600">Tambah Foto Edukasi:</label>
+          <div class="flex gap-2 mt-1"><input type="text" id="urlEdukasiInput" placeholder="Link Foto..." class="flex-1 p-2 border rounded-lg text-sm"><button onclick="tambahFoto('edukasi_foto', 'urlEdukasiInput')" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold">Tambah</button></div>
+          <div id="listFotoEdukasi" class="grid grid-cols-3 gap-2 mt-4"></div>
+        </div>
       </div>
     </div>
-    
-    <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold">Keluar (Logout)</button>
+    <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700">Keluar (Logout)</button>
   </div>
 
-    <script type="module">
-    // (Simpan import dan inisialisasi db Anda yang lama di sini)
-    // ...
-    
-    // Perbaikan fungsi initDashboard untuk menyertakan tombol WA:
-    function initDashboard() {
-        onSnapshot(query(collection(db, "tamu"), orderBy("waktu", "desc")), (snap) => {
-            let total=0, p=0, s=0, tabel = document.getElementById("tabelTamu"); tabel.innerHTML = "";
-            snap.forEach(d => {
-                const data = d.data(); total++;
-                if(data.status=="proses") p++; else if(data.status=="selesai") s++;
-                tabel.innerHTML += `<tr class="border-b text-sm">
-                    <td>${data.nomorAntrian}</td><td>${data.nama}</td><td>${data.status}</td>
-                    <td>
-                        <button onclick="kirimWA('${data.hp}', '${data.nama}', 'proses', '${d.id}')" class="bg-yellow-500 text-white px-2 py-1 rounded text-[10px] mr-1">Proses</button>
-                        <button onclick="kirimWA('${data.hp}', '${data.nama}', 'selesai', '${d.id}')" class="bg-green-600 text-white px-2 py-1 rounded text-[10px]">Selesai</button>
-                    </td>
-                </tr>`;
-            });
-            document.getElementById("totalTamu").innerText = total; document.getElementById("totalProses").innerText = p; document.getElementById("totalSelesai").innerText = s;
-        });
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, updateDoc, doc, serverTimestamp, addDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
+    const db = getFirestore(initializeApp(firebaseConfig));
+    let chart;
+
+    window.onload = () => { if (localStorage.getItem("adminLogedIn") === "true") tampilkanDashboard(); };
+    window.cekPassword = () => { if (document.getElementById("passwordInput").value === "Badarudin1010") { localStorage.setItem("adminLogedIn", "true"); tampilkanDashboard(); } else alert("Password Salah!"); };
+    window.logout = () => { localStorage.removeItem("adminLogedIn"); location.reload(); };
+
+    function updateGrafik(dataPerHari) {
+      const ctx = document.getElementById('grafikPelayanan').getContext('2d');
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, { type: 'bar', data: { labels: Object.keys(dataPerHari), datasets: [{ label: 'Jumlah Tamu', data: Object.values(dataPerHari), backgroundColor: '#1e3a8a' }] }, options: { responsive: true } });
     }
 
-    window.kirimWA = async (hp, nama, status, id) => {
-        const pesan = status === 'proses' 
-            ? `Halo ${nama}, antrian Anda sedang diproses. Mohon bersiap menuju loket. Terima kasih.`
-            : `Halo ${nama}, pelayanan Anda telah selesai. Terima kasih telah berkunjung ke UPTD Farmasi.`;
-        
-        const formatHP = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
-        window.open(`https://wa.me/${formatHP}?text=${encodeURIComponent(pesan)}`, '_blank');
-        
-        await updateDoc(doc(db, "tamu", id), { status: status, waktuSelesai: serverTimestamp() });
+    function tampilkanDashboard() {
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("dashboardAdmin").classList.remove("hidden");
+      
+      onSnapshot(query(collection(db, "tamu"), orderBy("waktu", "desc")), (snapshot) => {
+        let total=0, proses=0, selesai=0, dataPerHari = {}; const tabel = document.getElementById("tabelTamu"); tabel.innerHTML = "";
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data(); total++;
+          if (data.status === "proses") proses++; else if (data.status === "selesai") selesai++;
+          if (data.waktu) { const tgl = data.waktu.toDate().toLocaleDateString('id-ID', {day: 'numeric', month: 'short'}); dataPerHari[tgl] = (dataPerHari[tgl] || 0) + 1; }
+          let durasi = "-"; if (data.status === 'selesai' && data.waktuSelesai && data.waktuProses) durasi = Math.round((data.waktuSelesai.toDate() - data.waktuProses.toDate()) / 60000) + " Menit";
+          tabel.innerHTML += `<tr class="border-b text-sm"><td class="p-3 font-bold">${data.nomorAntrian}</td><td class="p-3">${data.nama}</td><td class="p-3 text-${data.status === 'selesai' ? 'green' : 'yellow'}-600">${data.status || 'menunggu'}</td><td class="p-3">${durasi}</td><td class="p-3 flex gap-1">
+            ${data.status !== 'selesai' && data.status !== 'proses' ? `<button onclick="updateStatus('${docSnap.id}', 'proses', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-yellow-500 text-white px-2 py-1 rounded text-xs">Proses</button>` : ''}
+            ${data.status !== 'selesai' ? `<button onclick="updateStatus('${docSnap.id}', 'selesai', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-green-600 text-white px-2 py-1 rounded text-xs">Selesai</button>` : '✓'}
+          </td></tr>`;
+        });
+        updateGrafik(dataPerHari);
+        document.getElementById("totalTamu").innerText = total; document.getElementById("totalProses").innerText = proses; document.getElementById("totalSelesai").innerText = selesai;
+      });
+
+      onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snap) => {
+        const c = document.getElementById("listFotoGaleri"); c.innerHTML = "";
+        snap.forEach(d => c.innerHTML += `<div class="relative h-16 border rounded overflow-hidden"><img src="${d.data().url}" class="w-full h-full object-cover"><button onclick="hapusFoto('galeri', '${d.id}')" class="absolute inset-0 bg-red-600/70 text-white text-[10px] opacity-0 hover:opacity-100">Hapus</button></div>`);
+      });
+      onSnapshot(query(collection(db, "edukasi_foto"), orderBy("waktuInput", "desc")), (snap) => {
+        const c = document.getElementById("listFotoEdukasi"); c.innerHTML = "";
+        snap.forEach(d => c.innerHTML += `<div class="relative h-16 border rounded overflow-hidden"><img src="${d.data().url}" class="w-full h-full object-cover"><button onclick="hapusFoto('edukasi_foto', '${d.id}')" class="absolute inset-0 bg-red-600/70 text-white text-[10px] opacity-0 hover:opacity-100">Hapus</button></div>`);
+      });
+      onSnapshot(doc(db, "konten", "edukasi"), (docSnap) => {
+        if (docSnap.exists()) { const data = docSnap.data(); document.getElementById("judulEdukasiInput").value = data.judul || ""; document.getElementById("isiEdukasiInput").value = data.isi || ""; }
+      });
+    }
+
+    window.updateStatus = async (id, status, hp, nama, antrian) => {
+      await updateDoc(doc(db, "tamu", id), { status: status, [status === 'proses' ? 'waktuProses' : 'waktuSelesai']: serverTimestamp() });
+      const pesan = status === 'proses' ? `Halo ${nama}, antrian (${antrian}) Anda sedang diproses.` : `Halo ${nama}, antrian (${antrian}) Anda sudah selesai.`;
+      let phone = hp.startsWith('0') ? '62' + hp.substring(1) : (hp.startsWith('8') ? '62' + hp : hp);
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(pesan)}`, '_blank');
     };
-
-    // (Biarkan fungsi lainnya seperti tambahMenu, hapusFoto, dll tetap di bawah ini)
+    
+    window.tambahFoto = async (koleksi, inputId) => {
+      const url = document.getElementById(inputId).value.trim();
+      if (!url) return;
+      await addDoc(collection(db, koleksi), { url, waktuInput: serverTimestamp() });
+      document.getElementById(inputId).value = "";
+    };
+    window.hapusFoto = async (koleksi, id) => { if (confirm("Hapus foto ini?")) await deleteDoc(doc(db, koleksi, id)); };
+    window.simpanTeksEdukasi = async () => {
+      await setDoc(doc(db, "konten", "edukasi"), { judul: document.getElementById("judulEdukasiInput").value, isi: document.getElementById("isiEdukasiInput").value });
+      alert("Teks edukasi berhasil disimpan!");
+    };
+    window.exportTableToCSV = (filename) => {
+      var csv = []; var rows = document.querySelectorAll("#tabelTamuData tr");
+      for (var i = 0; i < rows.length; i++) {
+        var row = [], cols = rows[i].querySelectorAll("td, th");
+        for (var j = 0; j < cols.length - 1; j++) row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');
+        csv.push(row.join(","));
+      }
+      var csvFile = new Blob([csv.join("\n")], {type: "text/csv"});
+      var downloadLink = document.createElement("a");
+      downloadLink.download = filename;
+      downloadLink.href = window.URL.createObjectURL(csvFile);
+      downloadLink.style.display = "none";
+      document.body.appendChild(downloadLink); downloadLink.click();
+    };
   </script>
-
 </body>
 </html>
+
