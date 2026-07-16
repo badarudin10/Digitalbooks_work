@@ -150,14 +150,14 @@
     };
    window.tambahArtikel = async () => {
     const kategori = document.getElementById("pilihKategori").value;
-    const judul = document.getElementById("judulArtikelInput").value;
-    const url = document.getElementById("urlKategoriInput").value;
-    const isi = document.getElementById("isiKategoriInput").value;
+    const judul = document.getElementById("judulArtikelInput").value || "Tanpa Judul";
+    const url = document.getElementById("urlKategoriInput").value || "";
+    const isi = document.getElementById("isiKategoriInput").value || "Tidak ada isi.";
     
-    if(!judul || !url || !isi) return alert("Mohon isi semua kolom!");
-
+    // Tanpa validasi paksa (if-statement dihapus agar selalu bisa tambah)
     await addDoc(collection(db, kategori), { judul, url, isi, waktuInput: serverTimestamp() });
     alert("Artikel di " + kategori + " berhasil ditambah!");
+    
     // Reset form
     document.getElementById("judulArtikelInput").value = "";
     document.getElementById("urlKategoriInput").value = "";
