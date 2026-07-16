@@ -4,39 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .fade-in { animation: fadeIn 0.5s; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  </style>
-  <title>Artikel Farmasi - UPTD Farmasi</title>
+  <title>Informasi Farmasi</title>
 </head>
-<body class="bg-slate-50 font-sans p-4 md:p-8">
-
-  <div class="max-w-4xl mx-auto bg-white p-6 md:p-10 rounded-2xl shadow-lg border-t-4 border-blue-900 fade-in">
+<body class="bg-gray-50 p-4 md:p-8">
+  <div id="mainContent" class="max-w-3xl mx-auto bg-white p-6 md:p-10 rounded-2xl shadow-xl min-h-screen">
     
-    <div id="navMenu">
+    <div id="viewMenu">
       <h1 class="text-2xl font-bold text-blue-900 mb-6 text-center">Pilih Kategori</h1>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <button onclick="pilihKategori('Informasi')" class="p-4 border rounded-xl hover:bg-blue-900 hover:text-white font-bold transition">Informasi</button>
-        <button onclick="pilihKategori('Edukasi')" class="p-4 border rounded-xl hover:bg-blue-900 hover:text-white font-bold transition">Edukasi</button>
-        <button onclick="pilihKategori('Pelayanan')" class="p-4 border rounded-xl hover:bg-blue-900 hover:text-white font-bold transition">Pelayanan</button>
-        <button onclick="pilihKategori('Obat')" class="p-4 border rounded-xl hover:bg-blue-900 hover:text-white font-bold transition">Kategori Obat</button>
-        <button onclick="pilihKategori('Konsultasi')" class="p-4 border rounded-xl hover:bg-blue-900 hover:text-white font-bold transition">Konsultasi/Keluhan</button>
+      <div id="gridKategori" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <button onclick="bukaList('Informasi')" class="p-4 bg-blue-50 rounded-xl font-bold text-blue-900">Informasi</button>
+        <button onclick="bukaList('Edukasi')" class="p-4 bg-blue-50 rounded-xl font-bold text-blue-900">Edukasi</button>
+        <button onclick="bukaList('Pelayanan')" class="p-4 bg-blue-50 rounded-xl font-bold text-blue-900">Pelayanan</button>
+        <button onclick="bukaList('Obat')" class="p-4 bg-blue-50 rounded-xl font-bold text-blue-900">Kategori Obat</button>
+        <button onclick="bukaList('Konsultasi')" class="p-4 bg-blue-50 rounded-xl font-bold text-blue-900">Konsultasi/Keluhan</button>
       </div>
+      <div id="listArtikel" class="mt-6 space-y-3"></div>
     </div>
 
-    <div id="areaArtikel" class="hidden">
-      <button onclick="location.reload()" class="mb-4 text-blue-900 font-bold underline">← Kembali ke Kategori</button>
-      <div id="listArtikel" class="space-y-4"></div>
-    </div>
-  </div>
-
-  <div id="modalArtikel" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4">
-    <div class="bg-white max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 rounded-2xl relative">
-      <button onclick="document.getElementById('modalArtikel').classList.add('hidden')" class="float-right text-3xl font-bold hover:text-red-600">×</button>
-      <h2 id="modalJudul" class="text-2xl font-bold text-blue-900 mb-4"></h2>
-      <img id="modalGambar" src="" class="w-full h-auto object-contain mb-4 rounded-lg bg-gray-50">
-      <p id="modalIsi" class="text-gray-700 whitespace-pre-line leading-relaxed"></p>
+    <div id="viewArtikel" class="hidden">
+      <div id="isiArtikel"></div>
+      <div class="mt-10 pt-6 border-t flex justify-between">
+        <button onclick="window.location.href='index.html'" class="text-blue-900 font-bold">🏠 Beranda</button>
+        <button onclick="location.reload()" class="text-blue-900 font-bold">← Kembali ke Kategori</button>
+      </div>
     </div>
   </div>
 
@@ -44,35 +34,32 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
     
-    const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
-    const db = getFirestore(initializeApp(firebaseConfig));
+    const db = getFirestore(initializeApp({ apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app" }));
 
-    window.pilihKategori = async (kategori) => {
-      document.getElementById("navMenu").classList.add("hidden");
-      document.getElementById("areaArtikel").classList.remove("hidden");
-      const list = document.getElementById("listArtikel");
-      list.innerHTML = `<p class="text-blue-900 animate-pulse">Memuat data...</p>`;
-      
+    window.bukaList = async (kategori) => {
+      document.getElementById('gridKategori').classList.add('hidden');
+      const list = document.getElementById('listArtikel');
       const snap = await getDocs(query(collection(db, kategori), orderBy("waktuInput", "desc")));
-      list.innerHTML = `<h2 class="text-xl font-bold text-blue-900 mb-4 border-b pb-2">${kategori}</h2>`;
-      
+      list.innerHTML = `<h2 class="text-xl font-bold text-blue-900 mb-4">${kategori}</h2>`;
       snap.forEach(d => {
         const data = d.data();
-        const div = document.createElement("div");
-        div.className = "p-4 border rounded-xl hover:bg-blue-50 cursor-pointer transition";
-        div.innerHTML = `<h3 class="font-bold text-blue-800 text-lg">📄 ${data.judul}</h3>`;
-        div.onclick = () => bukaArtikel(data.judul, data.url, data.isi);
-        list.appendChild(div);
+        const btn = document.createElement('button');
+        btn.className = "w-full text-left p-4 border rounded-xl hover:bg-gray-100 font-bold";
+        btn.innerText = "📄 " + data.judul;
+        btn.onclick = () => renderArtikel(data);
+        list.appendChild(btn);
       });
     };
 
-    window.bukaArtikel = (judul, url, isi) => {
-      document.getElementById("modalJudul").innerText = judul;
-      document.getElementById("modalGambar").src = url;
-      document.getElementById("modalIsi").innerText = isi;
-      document.getElementById("modalArtikel").classList.remove("hidden");
+    window.renderArtikel = (data) => {
+      document.getElementById('viewMenu').classList.add('hidden');
+      document.getElementById('viewArtikel').classList.remove('hidden');
+      document.getElementById('isiArtikel').innerHTML = `
+        <h1 class="text-3xl font-bold text-blue-900 mb-4">${data.judul}</h1>
+        <img src="${data.url}" class="w-full h-auto rounded-xl shadow-lg mb-6 object-contain">
+        <article class="text-lg text-gray-800 leading-relaxed">${data.isi.replace(/\n/g, '<br>')}</article>
+      `;
     };
   </script>
 </body>
 </html>
-
