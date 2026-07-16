@@ -32,7 +32,7 @@
     <div class="bg-white p-6 rounded-2xl shadow-lg overflow-x-auto">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-bold text-blue-900">Daftar Antrian Real-time</h2>
-        <button onclick="exportTableToCSV('Laporan_Antrian_UPTD.csv')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700">Download Excel (.csv)</button>
+        <button onclick="exportTableToCSV()" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700">Download Excel (.csv)</button>
       </div>
       <table class="w-full text-left" id="tabelTamuData">
         <thead><tr class="border-b text-gray-500 text-xs uppercase"><th class="p-3">Antrian</th><th class="p-3">Nama</th><th class="p-3">Status</th><th class="p-3">Durasi</th><th class="p-3">Aksi</th></tr></thead>
@@ -43,20 +43,20 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="bg-white p-6 rounded-2xl shadow-lg">
         <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Galeri Kegiatan</h2>
-        <div class="flex gap-2 mb-4"><input type="text" id="urlFotoInput" placeholder="Link Foto..." class="flex-1 p-2 border rounded-lg text-sm"><button onclick="tambahFoto('galeri', 'urlFotoInput')" class="bg-blue-900 text-white px-4 py-2 rounded-lg text-sm font-bold">Tambah</button></div>
+        <div class="flex gap-2 mb-4"><input type="text" id="urlFotoInput" placeholder="Link Foto..." class="flex-1 p-2 border rounded-lg text-sm"><button onclick="tambahFoto()" class="bg-blue-900 text-white px-4 py-2 rounded-lg text-sm font-bold">Tambah</button></div>
         <div id="listFotoGaleri" class="grid grid-cols-3 gap-2 border-t pt-4"></div>
       </div>
 
-     <div class="bg-white p-6 rounded-2xl shadow-lg">
+      <div class="bg-white p-6 rounded-2xl shadow-lg">
         <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Artikel Menu</h2>
-        <div class="space-y-3 mb-4">
-            <select id="pilihKategori" class="w-full p-2 border rounded-lg text-sm font-bold bg-gray-50"><option>Informasi</option><option>Edukasi</option><option>Pelayanan</option><option>Obat</option><option>Konsultasi</option></select>
-            <input type="text" id="judulArtikelInput" placeholder="Judul..." class="w-full p-2 border rounded-lg text-sm">
-            <input type="text" id="urlKategoriInput" placeholder="Link Foto..." class="w-full p-2 border rounded-lg text-sm">
-            <textarea id="isiKategoriInput" rows="2" placeholder="Isi..." class="w-full p-2 border rounded-lg text-sm"></textarea>
-            <button onclick="tambahArtikel()" class="w-full bg-green-600 text-white p-3 rounded-lg font-bold">Tambah</button>
-        </div>
-     </div>
+        <select id="pilihKategori" class="w-full p-2 border rounded-lg text-sm font-bold bg-gray-50 mb-2">
+            <option value="Informasi">Informasi</option><option value="Edukasi">Edukasi</option><option value="Pelayanan">Pelayanan</option><option value="Obat">Kategori Obat</option><option value="Konsultasi">Konsultasi/Keluhan</option>
+        </select>
+        <input type="text" id="judulArtikelInput" placeholder="Judul..." class="w-full p-2 border rounded-lg text-sm mb-2">
+        <input type="text" id="urlKategoriInput" placeholder="Link Foto..." class="w-full p-2 border rounded-lg text-sm mb-2">
+        <textarea id="isiKategoriInput" rows="2" placeholder="Isi..." class="w-full p-2 border rounded-lg text-sm mb-2"></textarea>
+        <button onclick="tambahArtikel()" class="w-full bg-green-600 text-white p-2 rounded-lg font-bold">Tambah</button>
+      </div>
     </div>
     <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold">Keluar (Logout)</button>
   </div>
@@ -77,37 +77,35 @@
       document.getElementById("dashboardAdmin").classList.remove("hidden");
       
       // Load Antrian
-      onSnapshot(query(collection(db, "tamu"), orderBy("waktu", "desc")), (snapshot) => {
+      onSnapshot(query(collection(db, "tamu"), orderBy("waktu", "desc")), (snap) => {
         let total=0, p=0, s=0, dataPerHari = {}; const tabel = document.getElementById("tabelTamu"); tabel.innerHTML = "";
-        snapshot.forEach(d => {
+        snap.forEach(d => {
           const data = d.data(); total++; if(data.status==='proses') p++; if(data.status==='selesai') s++;
-          if(data.waktu) { const tgl = data.waktu.toDate().toLocaleDateString(); dataPerHari[tgl] = (dataPerHari[tgl]||0)+1; }
+          if(data.waktu) { const tgl = data.waktu.toDate().toLocaleDateString('id-ID'); dataPerHari[tgl] = (dataPerHari[tgl]||0)+1; }
           let durasi = data.status==='selesai' && data.waktuSelesai ? Math.round((data.waktuSelesai.toDate()-data.waktuProses.toDate())/60000)+" Menit" : "-";
-          tabel.innerHTML += `<tr class="border-b text-sm"><td>${data.nomorAntrian}</td><td>${data.nama}</td><td>${data.status}</td><td>${durasi}</td><td>
-            <button onclick="updateStatus('${d.id}', 'selesai', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-green-600 text-white px-2 py-1 rounded text-xs">Selesai</button>
-          </td></tr>`;
+          tabel.innerHTML += `<tr class="border-b text-sm"><td>${data.nomorAntrian}</td><td>${data.nama}</td><td>${data.status}</td><td>${durasi}</td><td><button onclick="updateStatus('${d.id}', 'selesai', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-green-600 text-white px-2 py-1 rounded text-xs">Selesai</button></td></tr>`;
         });
         document.getElementById("totalTamu").innerText = total; document.getElementById("totalProses").innerText = p; document.getElementById("totalSelesai").innerText = s;
         if(chart) chart.destroy(); chart = new Chart(document.getElementById('grafikPelayanan'), { type: 'bar', data: { labels: Object.keys(dataPerHari), datasets: [{ data: Object.values(dataPerHari), backgroundColor: '#1e3a8a' }] } });
       });
 
-      // Load Galeri (Normal)
+      // Load Galeri
       onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snap) => {
         const c = document.getElementById("listFotoGaleri"); c.innerHTML = "";
-        snap.forEach(d => c.innerHTML += `<div class="relative h-16 border rounded overflow-hidden cursor-pointer" onclick="hapusFoto('galeri', '${d.id}')"><img src="${d.data().url}" class="w-full h-full object-cover"></div>`);
+        snap.forEach(d => c.innerHTML += `<div class="relative h-16 border rounded overflow-hidden cursor-pointer" onclick="hapusFoto('${d.id}')"><img src="${d.data().url}" class="w-full h-full object-cover"></div>`);
       });
     }
 
-    window.updateStatus = async (id, status, hp, nama, antrian) => {
-      await updateDoc(doc(db, "tamu", id), { status: status, waktuSelesai: serverTimestamp() });
-      window.open(`https://wa.me/${hp.replace(/^0/, '62')}?text=Halo ${nama}, antrian ${antrian} Anda sudah selesai.`, '_blank');
+    window.updateStatus = async (id, s, hp, n, a) => {
+        await updateDoc(doc(db, "tamu", id), { status: s, waktuSelesai: serverTimestamp() });
+        window.open(`https://wa.me/${hp.replace(/^0/, '62')}?text=Halo ${n}, antrian ${a} Anda sudah selesai.`);
     };
-    window.tambahFoto = async (k, i) => { const url = document.getElementById(i).value.trim(); if (url) { await addDoc(collection(db, k), { url, waktuInput: serverTimestamp() }); document.getElementById(i).value = ""; } };
-    window.hapusFoto = async (k, id) => { if (confirm("Hapus foto ini?")) await deleteDoc(doc(db, k, id)); };
-    window.tambahArtikel = async () => { const k = document.getElementById("pilihKategori").value; await addDoc(collection(db, k), { judul: document.getElementById("judulArtikelInput").value, url: document.getElementById("urlKategoriInput").value, isi: document.getElementById("isiKategoriInput").value, waktuInput: serverTimestamp() }); alert("Artikel ditambah!"); location.reload(); };
+    window.tambahFoto = async () => { const u = document.getElementById("urlFotoInput").value; if(u) await addDoc(collection(db, "galeri"), { url: u, waktuInput: serverTimestamp() }); };
+    window.hapusFoto = async (id) => { if(confirm("Hapus foto ini?")) await deleteDoc(doc(db, "galeri", id)); };
+    window.tambahArtikel = async () => { const k = document.getElementById("pilihKategori").value; await addDoc(collection(db, k), { judul: document.getElementById("judulArtikelInput").value, url: document.getElementById("urlKategoriInput").value, isi: document.getElementById("isiKategoriInput").value, waktuInput: serverTimestamp() }); alert("Berhasil!"); location.reload(); };
     window.exportTableToCSV = () => {
-        let table = document.getElementById("tabelTamuData"); let csv = [];
-        for (let row of table.rows) { let cols = row.querySelectorAll("td, th"); let r = []; for (let col of cols) r.push('"' + col.innerText + '"'); csv.push(r.join(",")); }
+        let csv = []; let rows = document.querySelectorAll("#tabelTamuData tr");
+        for (let row of rows) { let cols = row.querySelectorAll("td, th"); let r = []; for (let col of cols) r.push('"' + col.innerText + '"'); csv.push(r.join(",")); }
         let a = document.createElement("a"); a.href = "data:text/csv," + encodeURIComponent(csv.join("\n")); a.download = "Data_Antrian.csv"; a.click();
     };
   </script>
