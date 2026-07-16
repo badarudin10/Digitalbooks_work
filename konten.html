@@ -24,40 +24,42 @@
       </div>
     </div>
 
-    <div id="areaArtikel" class="hidden">
-      <button onclick="location.reload()" class="mb-4 text-blue-900 font-bold">← Kembali ke Kategori</button>
-      <div id="listArtikel" class="space-y-6"></div>
-    </div>
+    <div id="modalArtikel" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4">
+  <div class="bg-white max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 rounded-2xl">
+    <button onclick="document.getElementById('modalArtikel').classList.add('hidden')" class="float-right text-2xl font-bold">×</button>
+    <h2 id="modalJudul" class="text-2xl font-bold text-blue-900 mb-4"></h2>
+    <img id="modalGambar" src="" class="w-full h-auto object-contain mb-4">
+    <p id="modalIsi" class="text-gray-700 whitespace-pre-line"></p>
   </div>
+</div>
 
-  <div id="modalGambar" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
-    <button onclick="document.getElementById('modalGambar').classList.add('hidden')" class="absolute top-5 right-5 text-white text-3xl font-bold">&times;</button>
-    <img id="gambarBesar" src="" class="max-w-full max-h-[90vh] rounded-lg">
-  </div>
+<script type="module">
+  // ... (import dan inisialisasi sama seperti sebelumnya)
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-    
-    const db = getFirestore(initializeApp({ apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" }));
-
-    window.pilihKategori = async (kategori) => {
+  window.pilihKategori = async (kategori) => {
       document.getElementById("navMenu").classList.add("hidden");
       document.getElementById("areaArtikel").classList.remove("hidden");
       const snap = await getDocs(query(collection(db, kategori), orderBy("waktuInput", "desc")));
       const list = document.getElementById("listArtikel");
       list.innerHTML = `<h2 class="text-xl font-bold text-blue-900 mb-4">${kategori}</h2>`;
+      
       snap.forEach(d => {
         const data = d.data();
         list.innerHTML += `
-          <div class="border-b pb-4 fade-in">
-            <h3 class="text-lg font-bold text-blue-800">${data.judul}</h3>
-            <img src="${data.url}" onclick="zoom('${data.url}')" class="zoom-img w-full h-48 object-cover rounded-lg my-2 cursor-pointer">
-            <p class="text-gray-700 whitespace-pre-line">${data.isi}</p>
+          <div class="p-4 border rounded-xl hover:bg-gray-50 cursor-pointer" 
+               onclick="bukaArtikel('${data.judul.replace(/'/g, "\\'")}', '${data.url}', '${data.isi.replace(/\n/g, '\\n').replace(/'/g, "\\'")}')">
+            <h3 class="font-bold text-blue-800 text-lg">📄 ${data.judul}</h3>
           </div>`;
       });
-    };
-    window.zoom = (url) => { document.getElementById("gambarBesar").src = url; document.getElementById("modalGambar").classList.remove("hidden"); };
-  </script>
+  };
+
+  window.bukaArtikel = (judul, url, isi) => {
+    document.getElementById("modalJudul").innerText = judul;
+    document.getElementById("modalGambar").src = url;
+    document.getElementById("modalIsi").innerText = isi;
+    document.getElementById("modalArtikel").classList.remove("hidden");
+  };
+</script>
+
 </body>
 </html>
