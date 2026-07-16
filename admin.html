@@ -143,11 +143,21 @@
             document.getElementById("isiKategoriInput").value = "";
         }
     };
-    window.simpanKontenMenu = async () => {
-        const kategori = document.getElementById("pilihKategori").value;
-        await setDoc(doc(db, "konten", kategori), { url: document.getElementById("urlKategoriInput").value, isi: document.getElementById("isiKategoriInput").value });
-        alert("Konten " + kategori + " berhasil disimpan!");
-    };
+    // Mengganti fungsi lama dengan ini agar bisa menambah artikel baru
+window.tambahArtikel = async () => {
+    const kategori = document.getElementById("pilihKategori").value;
+    const judul = document.getElementById("judulArtikelInput").value; // Anda perlu tambah input judul
+    const url = document.getElementById("urlKategoriInput").value;
+    const isi = document.getElementById("isiKategoriInput").value;
+    
+    if(!judul || !url || !isi) return alert("Mohon isi semua kolom!");
+
+    await addDoc(collection(db, kategori), {
+        judul, url, isi, waktuInput: serverTimestamp()
+    });
+    alert("Artikel di " + kategori + " berhasil ditambah!");
+};
+
   </script>
 </body>
 </html>
