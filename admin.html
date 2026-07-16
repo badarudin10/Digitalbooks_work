@@ -47,29 +47,29 @@
         <div id="listFotoGaleri" class="grid grid-cols-3 gap-2 border-t pt-4"></div>
       </div>
 
-      <div class="bg-white p-6 rounded-2xl shadow-lg">
-        <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Artikel Menu</h2>
-        <div class="space-y-3 mb-4">
-          <select id="pilihKategori" class="w-full p-2 border rounded-lg text-sm font-bold bg-gray-50">
-            <option value="Informasi">Informasi</option><option value="Edukasi">Edukasi</option><option value="Pelayanan">Pelayanan</option><option value="Obat">Kategori Obat</option><option value="Konsultasi">Konsultasi/Keluhan</option>
-          </select>
-          <input type="text" id="judulArtikelInput" placeholder="Judul Artikel..." class="w-full p-2 border rounded-lg text-sm">
-          <input type="text" id="urlKategoriInput" placeholder="Link Foto Artikel..." class="w-full p-2 border rounded-lg text-sm">
-          <textarea id="isiKategoriInput" rows="3" placeholder="Isi artikel..." class="w-full p-2 border rounded-lg text-sm"></textarea>
-          <button onclick="tambahArtikel()" class="w-full bg-green-600 text-white p-3 rounded-lg font-bold">Tambah Artikel Baru</button>
-        </div>
-        <div id="containerDaftarArtikel" class="mt-4 border-t pt-4 max-h-60 overflow-y-auto">
-           <h3 class="font-bold text-sm text-gray-600 mb-2">Daftar Artikel (Klik untuk Hapus):</h3>
-        </div>
-      </div>
-    </div>
+     <div class="bg-white p-6 rounded-2xl shadow-lg">
+  <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Artikel Menu</h2>
+  <div class="space-y-3 mb-4">
+    <select id="pilihKategori" class="w-full p-2 border rounded-lg text-sm font-bold bg-gray-50">
+      <option value="Informasi">Informasi</option>
+      <option value="Edukasi">Edukasi</option>
+      <option value="Pelayanan">Pelayanan</option>
+      <option value="Obat">Kategori Obat</option>
+      <option value="Konsultasi">Konsultasi/Keluhan</option>
+    </select>
+    <input type="text" id="judulArtikelInput" placeholder="Judul Artikel..." class="w-full p-2 border rounded-lg text-sm">
+    <input type="text" id="urlKategoriInput" placeholder="Link Foto Artikel..." class="w-full p-2 border rounded-lg text-sm">
+    <textarea id="isiKategoriInput" rows="3" placeholder="Isi artikel..." class="w-full p-2 border rounded-lg text-sm"></textarea>
+    <button onclick="tambahArtikel()" class="w-full bg-green-600 text-white p-3 rounded-lg font-bold">Tambah Artikel Baru</button>
+  </div>
+</div>
  
     <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700">Keluar (Logout)</button>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy, updateDoc, doc, serverTimestamp, addDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, updateDoc, doc, serverTimestamp, addDoc, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
     const db = getFirestore(initializeApp(firebaseConfig));
@@ -79,25 +79,15 @@
     window.cekPassword = () => { if (document.getElementById("passwordInput").value === "Badarudin1010") { localStorage.setItem("adminLogedIn", "true"); tampilkanDashboard(); } else alert("Password Salah!"); };
     window.logout = () => { localStorage.removeItem("adminLogedIn"); location.reload(); };
 
+    function updateGrafik(dataPerHari) {
+      const ctx = document.getElementById('grafikPelayanan').getContext('2d');
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, { type: 'bar', data: { labels: Object.keys(dataPerHari), datasets: [{ label: 'Jumlah Tamu', data: Object.values(dataPerHari), backgroundColor: '#1e3a8a' }] }, options: { responsive: true } });
+    }
+
     function tampilkanDashboard() {
       document.getElementById("loginScreen").classList.add("hidden");
       document.getElementById("dashboardAdmin").classList.remove("hidden");
-      
-      // Load Daftar Artikel untuk dihapus
-      const kategoriList = ['Informasi', 'Edukasi', 'Pelayanan', 'Obat', 'Konsultasi'];
-      const container = document.getElementById("containerDaftarArtikel");
-      kategoriList.forEach(kat => {
-        onSnapshot(query(collection(db, kat), orderBy("waktuInput", "desc")), (snap) => {
-           snap.forEach(d => {
-             const item = document.createElement("div");
-             item.className = "flex justify-between items-center bg-gray-50 p-2 rounded text-xs mb-1";
-             item.innerHTML = `<span><b>${kat}</b>: ${d.data().judul}</span> <button onclick="hapusArtikel('${kat}', '${d.id}')" class="text-red-600 font-bold">Hapus</button>`;
-             container.appendChild(item);
-           });
-        });
-      });
-
-      // Fungsi Antrian (Tetap sama)
       onSnapshot(query(collection(db, "tamu"), orderBy("waktu", "desc")), (snapshot) => {
         let total=0, proses=0, selesai=0, dataPerHari = {}; const tabel = document.getElementById("tabelTamu"); tabel.innerHTML = "";
         snapshot.forEach((docSnap) => {
@@ -110,27 +100,70 @@
             ${data.status !== 'selesai' ? `<button onclick="updateStatus('${docSnap.id}', 'selesai', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-green-600 text-white px-2 py-1 rounded text-xs">Selesai</button>` : '✓'}
           </td></tr>`;
         });
+        updateGrafik(dataPerHari);
         document.getElementById("totalTamu").innerText = total; document.getElementById("totalProses").innerText = proses; document.getElementById("totalSelesai").innerText = selesai;
+      });
+      onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snap) => {
+        const c = document.getElementById("listFotoGaleri"); c.innerHTML = "";
+        snap.forEach(d => c.innerHTML += `<div class="relative h-16 border rounded overflow-hidden"><img src="${d.data().url}" class="w-full h-full object-cover"><button onclick="hapusFoto('galeri', '${d.id}')" class="absolute inset-0 bg-red-600/70 text-white text-[10px] opacity-0 hover:opacity-100">Hapus</button></div>`);
       });
     }
 
-    window.tambahArtikel = async () => {
-      const kategori = document.getElementById("pilihKategori").value;
-      const judul = document.getElementById("judulArtikelInput").value || "Tanpa Judul";
-      const url = document.getElementById("urlKategoriInput").value || "";
-      const isi = document.getElementById("isiKategoriInput").value || "Tidak ada isi.";
-      await addDoc(collection(db, kategori), { judul, url, isi, waktuInput: serverTimestamp() });
-      alert("Berhasil!");
-      location.reload();
+    window.updateStatus = async (id, status, hp, nama, antrian) => {
+      await updateDoc(doc(db, "tamu", id), { status: status, [status === 'proses' ? 'waktuProses' : 'waktuSelesai']: serverTimestamp() });
+      const pesan = status === 'proses' ? `Halo ${nama}, antrian (${antrian}) Anda sedang diproses.` : `Halo ${nama}, antrian (${antrian}) Anda sudah selesai.`;
+      let phone = hp.startsWith('0') ? '62' + hp.substring(1) : (hp.startsWith('8') ? '62' + hp : hp);
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(pesan)}`, '_blank');
+    };
+    window.tambahFoto = async (koleksi, inputId) => {
+      const url = document.getElementById(inputId).value.trim();
+      if (!url) return;
+      await addDoc(collection(db, koleksi), { url, waktuInput: serverTimestamp() });
+      document.getElementById(inputId).value = "";
+    };
+    window.hapusFoto = async (koleksi, id) => { if (confirm("Hapus foto ini?")) await deleteDoc(doc(db, koleksi, id)); };
+    window.exportTableToCSV = (filename) => {
+      var csv = []; var rows = document.querySelectorAll("#tabelTamuData tr");
+      for (var i = 0; i < rows.length; i++) {
+        var row = [], cols = rows[i].querySelectorAll("td, th");
+        for (var j = 0; j < cols.length - 1; j++) row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');
+        csv.push(row.join(","));
+      }
+      var csvFile = new Blob([csv.join("\n")], {type: "text/csv"});
+      var downloadLink = document.createElement("a");
+      downloadLink.download = filename;
+      downloadLink.href = window.URL.createObjectURL(csvFile);
+      downloadLink.style.display = "none";
+      document.body.appendChild(downloadLink); downloadLink.click();
     };
 
-    window.hapusArtikel = async (kategori, id) => {
-      if(confirm("Hapus artikel ini?")) { await deleteDoc(doc(db, kategori, id)); location.reload(); }
+    window.loadKontenMenu = async () => {
+        const kategori = document.getElementById("pilihKategori").value;
+        const docSnap = await getDoc(doc(db, "konten", kategori));
+        if (docSnap.exists()) {
+            document.getElementById("urlKategoriInput").value = docSnap.data().url || "";
+            document.getElementById("isiKategoriInput").value = docSnap.data().isi || "";
+        } else {
+            document.getElementById("urlKategoriInput").value = "";
+            document.getElementById("isiKategoriInput").value = "";
+        }
     };
+   window.tambahArtikel = async () => {
+    const kategori = document.getElementById("pilihKategori").value;
+    const judul = document.getElementById("judulArtikelInput").value || "Tanpa Judul";
+    const url = document.getElementById("urlKategoriInput").value || "";
+    const isi = document.getElementById("isiKategoriInput").value || "Tidak ada isi.";
     
-    // Fungsi pembantu lainnya tetap sama...
-    window.tambahFoto = async (koleksi, inputId) => { const url = document.getElementById(inputId).value.trim(); if (!url) return; await addDoc(collection(db, koleksi), { url, waktuInput: serverTimestamp() }); document.getElementById(inputId).value = ""; location.reload(); };
-    window.updateStatus = async (id, status, hp, nama, antrian) => { await updateDoc(doc(db, "tamu", id), { status: status, [status === 'proses' ? 'waktuProses' : 'waktuSelesai']: serverTimestamp() }); window.open(`https://wa.me/${hp.replace(/^0/, '62')}?text=Antrian ${antrian} ${status}`, '_blank'); };
+    // Tanpa validasi paksa (if-statement dihapus agar selalu bisa tambah)
+    await addDoc(collection(db, kategori), { judul, url, isi, waktuInput: serverTimestamp() });
+    alert("Artikel di " + kategori + " berhasil ditambah!");
+    
+    // Reset form
+    document.getElementById("judulArtikelInput").value = "";
+    document.getElementById("urlKategoriInput").value = "";
+    document.getElementById("isiKategoriInput").value = "";
+};
+
   </script>
 </body>
 </html>
