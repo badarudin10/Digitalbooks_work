@@ -8,19 +8,45 @@
 </head>
 <body class="bg-slate-50 font-sans p-4 md:p-8">
   <div class="max-w-4xl mx-auto bg-white p-6 md:p-10 rounded-2xl shadow-lg border-t-4 border-blue-900">
-    <h1 class="text-2xl font-bold text-blue-900 mb-6 text-center">Pilih Menu Informasi</h1>
+    <h1 id="judulMenu" class="text-2xl font-bold text-blue-900 mb-6 text-center uppercase">Pilih Menu</h1>
     
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <a href="?kategori=Informasi" class="p-6 border-2 border-blue-100 rounded-xl hover:bg-blue-50 transition text-center font-bold text-blue-900">Informasi</a>
-      <a href="?kategori=Edukasi" class="p-6 border-2 border-blue-100 rounded-xl hover:bg-blue-50 transition text-center font-bold text-blue-900">Edukasi</a>
-      <a href="?kategori=Pelayanan" class="p-6 border-2 border-blue-100 rounded-xl hover:bg-blue-50 transition text-center font-bold text-blue-900">Pelayanan</a>
-      <a href="?kategori=Obat" class="p-6 border-2 border-blue-100 rounded-xl hover:bg-blue-50 transition text-center font-bold text-blue-900">Kategori Obat</a>
-      <a href="?kategori=Konsultasi" class="p-6 border-2 border-blue-100 rounded-xl hover:bg-blue-50 transition text-center font-bold text-blue-900">Konsultasi/Keluhan</a>
+    <div id="navMenu" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      <button onclick="tampilKonten('Informasi')" class="p-4 border-2 border-blue-100 rounded-xl hover:bg-blue-50 font-bold text-blue-900">Informasi</button>
+      <button onclick="tampilKonten('Edukasi')" class="p-4 border-2 border-blue-100 rounded-xl hover:bg-blue-50 font-bold text-blue-900">Edukasi</button>
+      <button onclick="tampilKonten('Pelayanan')" class="p-4 border-2 border-blue-100 rounded-xl hover:bg-blue-50 font-bold text-blue-900">Pelayanan</button>
+      <button onclick="tampilKonten('Obat')" class="p-4 border-2 border-blue-100 rounded-xl hover:bg-blue-50 font-bold text-blue-900">Kategori Obat</button>
+      <button onclick="tampilKonten('Konsultasi')" class="p-4 border-2 border-blue-100 rounded-xl hover:bg-blue-50 font-bold text-blue-900">Konsultasi/Keluhan</button>
     </div>
 
-    <div class="mt-8 text-center">
-      <a href="index.html" class="text-blue-900 font-bold underline">Kembali ke Beranda</a>
+    <div id="areaKonten" class="hidden border-t pt-6">
+      <img id="fotoKonten" src="" class="w-full h-64 object-cover rounded-xl mb-4 shadow-md">
+      <p id="isiKonten" class="text-gray-700 leading-relaxed"></p>
+      <button onclick="location.reload()" class="mt-6 text-blue-900 font-bold underline">Kembali ke Pilihan Menu</button>
+    </div>
+
+    <div class="mt-8 text-center border-t pt-4">
+      <a href="index.html" class="text-gray-500 hover:text-blue-900">← Kembali ke Beranda</a>
     </div>
   </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    
+    const db = getFirestore(initializeApp({ apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" }));
+
+    window.tampilKonten = async (kategori) => {
+      const docSnap = await getDoc(doc(db, "konten", kategori));
+      if (docSnap.exists()) {
+        document.getElementById("navMenu").classList.add("hidden");
+        document.getElementById("areaKonten").classList.remove("hidden");
+        document.getElementById("judulMenu").innerText = kategori;
+        document.getElementById("fotoKonten").src = docSnap.data().url || "";
+        document.getElementById("isiKonten").innerText = docSnap.data().isi || "Belum ada konten untuk menu ini.";
+      } else {
+        alert("Konten belum tersedia.");
+      }
+    };
+  </script>
 </body>
 </html>
