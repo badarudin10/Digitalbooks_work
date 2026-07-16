@@ -18,30 +18,28 @@
   </div>
 
   <div id="dashboardAdmin" class="hidden p-4 max-w-6xl mx-auto space-y-6">
-    <!-- Statistik & Grafik -->
     <div class="bg-white p-6 rounded-2xl shadow-lg">
       <h2 class="text-xl font-bold text-blue-900 mb-4">Grafik Tren Tamu (7 Hari Terakhir)</h2>
       <canvas id="grafikPelayanan" height="80"></canvas>
     </div>
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div class="bg-blue-900 text-white p-6 rounded-2xl shadow-lg text-center"><p class="text-sm opacity-80">Total Antrian</p><h2 id="totalTamu" class="text-4xl font-bold">0</h2></div>
       <div class="bg-yellow-500 text-white p-6 rounded-2xl shadow-lg text-center"><p class="text-sm opacity-80">Sedang Diproses</p><h2 id="totalProses" class="text-4xl font-bold">0</h2></div>
       <div class="bg-green-600 text-white p-6 rounded-2xl shadow-lg text-center"><p class="text-sm opacity-80">Sudah Selesai</p><h2 id="totalSelesai" class="text-4xl font-bold">0</h2></div>
     </div>
 
-    <!-- Tabel Antrian -->
     <div class="bg-white p-6 rounded-2xl shadow-lg overflow-x-auto">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-bold text-blue-900">Daftar Antrian Real-time</h2>
         <button onclick="exportTableToCSV('Laporan_Antrian_UPTD.csv')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700">Download Excel (.csv)</button>
       </div>
       <table class="w-full text-left" id="tabelTamuData">
-        <thead><tr class="border-b text-gray-500 text-xs uppercase"><th class="p-3">Antrian</th><th class="p-3">Nama</th><th class="p-3">Status</th><th class="p-3">Aksi</th></tr></thead>
+        <thead><tr class="border-b text-gray-500 text-xs uppercase"><th class="p-3">Antrian</th><th class="p-3">Nama</th><th class="p-3">Status</th><th class="p-3">Durasi</th><th class="p-3">Aksi</th></tr></thead>
         <tbody id="tabelTamu"></tbody>
       </table>
     </div>
 
-    <!-- Kelola Galeri & Artikel -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="bg-white p-6 rounded-2xl shadow-lg">
         <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Galeri Kegiatan</h2>
@@ -49,17 +47,16 @@
         <div id="listFotoGaleri" class="grid grid-cols-3 gap-2 border-t pt-4"></div>
       </div>
 
-      <div class="bg-white p-6 rounded-2xl shadow-lg">
+     <div class="bg-white p-6 rounded-2xl shadow-lg">
         <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Artikel Menu</h2>
-        <select id="pilihKategori" class="w-full p-2 border rounded-lg text-sm font-bold bg-gray-50 mb-2">
-            <option value="Informasi">Informasi</option><option value="Edukasi">Edukasi</option><option value="Pelayanan">Pelayanan</option><option value="Obat">Kategori Obat</option><option value="Konsultasi">Konsultasi/Keluhan</option>
-        </select>
-        <input type="text" id="judulArtikelInput" placeholder="Judul..." class="w-full p-2 border rounded-lg text-sm mb-2">
-        <input type="text" id="urlKategoriInput" placeholder="Link Foto..." class="w-full p-2 border rounded-lg text-sm mb-2">
-        <textarea id="isiKategoriInput" rows="2" placeholder="Isi..." class="w-full p-2 border rounded-lg text-sm mb-2"></textarea>
-        <button onclick="tambahArtikel()" class="w-full bg-green-600 text-white p-2 rounded-lg font-bold">Tambah</button>
-        <div id="containerDaftarArtikel" class="mt-4 border-t pt-2 max-h-40 overflow-y-auto"></div>
-      </div>
+        <div class="space-y-3 mb-4">
+            <select id="pilihKategori" class="w-full p-2 border rounded-lg text-sm font-bold bg-gray-50"><option>Informasi</option><option>Edukasi</option><option>Pelayanan</option><option>Obat</option><option>Konsultasi</option></select>
+            <input type="text" id="judulArtikelInput" placeholder="Judul..." class="w-full p-2 border rounded-lg text-sm">
+            <input type="text" id="urlKategoriInput" placeholder="Link Foto..." class="w-full p-2 border rounded-lg text-sm">
+            <textarea id="isiKategoriInput" rows="2" placeholder="Isi..." class="w-full p-2 border rounded-lg text-sm"></textarea>
+            <button onclick="tambahArtikel()" class="w-full bg-green-600 text-white p-3 rounded-lg font-bold">Tambah</button>
+        </div>
+     </div>
     </div>
     <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold">Keluar (Logout)</button>
   </div>
@@ -85,37 +82,34 @@
         snapshot.forEach(d => {
           const data = d.data(); total++; if(data.status==='proses') p++; if(data.status==='selesai') s++;
           if(data.waktu) { const tgl = data.waktu.toDate().toLocaleDateString(); dataPerHari[tgl] = (dataPerHari[tgl]||0)+1; }
-          tabel.innerHTML += `<tr class="border-b text-sm"><td>${data.nomorAntrian}</td><td>${data.nama}</td><td>${data.status}</td><td><button onclick="updateStatus('${d.id}', 'selesai', '${data.hp}')" class="bg-green-600 text-white px-2 py-1 rounded text-xs">Selesai</button></td></tr>`;
+          let durasi = data.status==='selesai' && data.waktuSelesai ? Math.round((data.waktuSelesai.toDate()-data.waktuProses.toDate())/60000)+" Menit" : "-";
+          tabel.innerHTML += `<tr class="border-b text-sm"><td>${data.nomorAntrian}</td><td>${data.nama}</td><td>${data.status}</td><td>${durasi}</td><td>
+            <button onclick="updateStatus('${d.id}', 'selesai', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-green-600 text-white px-2 py-1 rounded text-xs">Selesai</button>
+          </td></tr>`;
         });
         document.getElementById("totalTamu").innerText = total; document.getElementById("totalProses").innerText = p; document.getElementById("totalSelesai").innerText = s;
         if(chart) chart.destroy(); chart = new Chart(document.getElementById('grafikPelayanan'), { type: 'bar', data: { labels: Object.keys(dataPerHari), datasets: [{ data: Object.values(dataPerHari), backgroundColor: '#1e3a8a' }] } });
       });
 
-      // Load Galeri
+      // Load Galeri (Normal)
       onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snap) => {
         const c = document.getElementById("listFotoGaleri"); c.innerHTML = "";
-        snap.forEach(d => c.innerHTML += `<div class="relative h-16 border rounded overflow-hidden"><img src="${d.data().url}" class="w-full h-full object-cover"><button onclick="hapusFoto('galeri', '${d.id}')" class="absolute inset-0 bg-red-600/70 text-white text-[10px]">X</button></div>`);
-      });
-
-      // Load Daftar Artikel untuk Hapus
-      const katList = ['Informasi', 'Edukasi', 'Pelayanan', 'Obat', 'Konsultasi'];
-      const cont = document.getElementById("containerDaftarArtikel"); cont.innerHTML = "";
-      katList.forEach(k => {
-        onSnapshot(query(collection(db, k), orderBy("waktuInput", "desc")), (snap) => {
-           snap.forEach(d => {
-             cont.innerHTML += `<div class="flex justify-between p-1 border-b text-[10px]"><span>${k}: ${d.data().judul}</span><button onclick="hapusArtikel('${k}', '${d.id}')" class="text-red-600 font-bold">X</button></div>`;
-           });
-        });
+        snap.forEach(d => c.innerHTML += `<div class="relative h-16 border rounded overflow-hidden cursor-pointer" onclick="hapusFoto('galeri', '${d.id}')"><img src="${d.data().url}" class="w-full h-full object-cover"></div>`);
       });
     }
 
+    window.updateStatus = async (id, status, hp, nama, antrian) => {
+      await updateDoc(doc(db, "tamu", id), { status: status, waktuSelesai: serverTimestamp() });
+      window.open(`https://wa.me/${hp.replace(/^0/, '62')}?text=Halo ${nama}, antrian ${antrian} Anda sudah selesai.`, '_blank');
+    };
     window.tambahFoto = async (k, i) => { const url = document.getElementById(i).value.trim(); if (url) { await addDoc(collection(db, k), { url, waktuInput: serverTimestamp() }); document.getElementById(i).value = ""; } };
-    window.hapusFoto = async (k, id) => { await deleteDoc(doc(db, k, id)); };
-    window.tambahArtikel = async () => { const k = document.getElementById("pilihKategori").value; await addDoc(collection(db, k), { judul: document.getElementById("judulArtikelInput").value, url: document.getElementById("urlKategoriInput").value, isi: document.getElementById("isiKategoriInput").value, waktuInput: serverTimestamp() }); location.reload(); };
-    window.hapusArtikel = async (k, id) => { await deleteDoc(doc(db, k, id)); location.reload(); };
-    window.updateStatus = async (id, s, hp) => { await updateDoc(doc(db, "tamu", id), { status: s }); window.open(`https://wa.me/${hp.replace(/^0/, '62')}`); };
-    window.exportTableToCSV = () => { /* Logika download CSV Anda tetap sama */ };
+    window.hapusFoto = async (k, id) => { if (confirm("Hapus foto ini?")) await deleteDoc(doc(db, k, id)); };
+    window.tambahArtikel = async () => { const k = document.getElementById("pilihKategori").value; await addDoc(collection(db, k), { judul: document.getElementById("judulArtikelInput").value, url: document.getElementById("urlKategoriInput").value, isi: document.getElementById("isiKategoriInput").value, waktuInput: serverTimestamp() }); alert("Artikel ditambah!"); location.reload(); };
+    window.exportTableToCSV = () => {
+        let table = document.getElementById("tabelTamuData"); let csv = [];
+        for (let row of table.rows) { let cols = row.querySelectorAll("td, th"); let r = []; for (let col of cols) r.push('"' + col.innerText + '"'); csv.push(r.join(",")); }
+        let a = document.createElement("a"); a.href = "data:text/csv," + encodeURIComponent(csv.join("\n")); a.download = "Data_Antrian.csv"; a.click();
+    };
   </script>
 </body>
 </html>
-
