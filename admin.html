@@ -47,22 +47,21 @@
         <div id="listFotoGaleri" class="grid grid-cols-3 gap-2 border-t pt-4"></div>
       </div>
 
-      <div class="bg-white p-6 rounded-2xl shadow-lg">
-        <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Edukasi (Multi-Foto)</h2>
-        <div class="space-y-3 mb-4">
-          <input type="text" id="judulEdukasiInput" placeholder="Judul Edukasi" class="w-full p-2 border rounded-lg text-sm">
-          <textarea id="isiEdukasiInput" rows="3" placeholder="Isi edukasi..." class="w-full p-2 border rounded-lg text-sm"></textarea>
-          <button onclick="simpanTeksEdukasi()" class="w-full bg-blue-600 text-white p-2 rounded-lg font-bold text-sm">Simpan Teks Edukasi</button>
-        </div>
-        <div class="border-t pt-4">
-          <label class="text-xs font-bold text-gray-600">Tambah Foto Edukasi:</label>
-          <div class="flex gap-2 mt-1"><input type="text" id="urlEdukasiInput" placeholder="Link Foto..." class="flex-1 p-2 border rounded-lg text-sm"><button onclick="tambahFoto('edukasi_foto', 'urlEdukasiInput')" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold">Tambah</button></div>
-          <div id="listFotoEdukasi" class="grid grid-cols-3 gap-2 mt-4"></div>
-        </div>
-      </div>
-    </div>
-    <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700">Keluar (Logout)</button>
+    <div class="bg-white p-6 rounded-2xl shadow-lg">
+  <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Menu Informasi</h2>
+  <div class="space-y-3 mb-4">
+    <select id="pilihKategori" onchange="loadKontenMenu()" class="w-full p-2 border rounded-lg text-sm font-bold bg-gray-50">
+      <option value="Informasi">Informasi</option>
+      <option value="Edukasi">Edukasi</option>
+      <option value="Pelayanan">Pelayanan</option>
+      <option value="Obat">Kategori Obat</option>
+      <option value="Konsultasi">Konsultasi/Keluhan</option>
+    </select>
+    <input type="text" id="urlKategoriInput" placeholder="Link Foto Kategori..." class="w-full p-2 border rounded-lg text-sm">
+    <textarea id="isiKategoriInput" rows="3" placeholder="Isi konten..." class="w-full p-2 border rounded-lg text-sm"></textarea>
+    <button onclick="simpanKontenMenu()" class="w-full bg-blue-600 text-white p-2 rounded-lg font-bold text-sm">Simpan Perubahan Menu</button>
   </div>
+</div>  
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
@@ -147,6 +146,28 @@
       downloadLink.style.display = "none";
       document.body.appendChild(downloadLink); downloadLink.click();
     };
+    // Fungsi untuk memuat konten saat kategori dipilih
+window.loadKontenMenu = async () => {
+    const kategori = document.getElementById("pilihKategori").value;
+    const docSnap = await getDoc(doc(db, "konten", kategori));
+    if (docSnap.exists()) {
+        document.getElementById("urlKategoriInput").value = docSnap.data().url || "";
+        document.getElementById("isiKategoriInput").value = docSnap.data().isi || "";
+    } else {
+        document.getElementById("urlKategoriInput").value = "";
+        document.getElementById("isiKategoriInput").value = "";
+    }
+};
+
+// Fungsi untuk menyimpan konten
+window.simpanKontenMenu = async () => {
+    const kategori = document.getElementById("pilihKategori").value;
+    await setDoc(doc(db, "konten", kategori), {
+        url: document.getElementById("urlKategoriInput").value,
+        isi: document.getElementById("isiKategoriInput").value
+    });
+    alert("Konten " + kategori + " berhasil disimpan!");
+};
   </script>
 </body>
 </html>
