@@ -47,18 +47,23 @@
         <div id="listFotoGaleri" class="grid grid-cols-3 gap-2 border-t pt-4"></div>
       </div>
 
-      <div class="bg-white p-6 rounded-2xl shadow-lg">
-        <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Menu Informasi</h2>
-        <div class="space-y-3 mb-4">
-          <select id="pilihKategori" onchange="loadKontenMenu()" class="w-full p-2 border rounded-lg text-sm font-bold bg-gray-50">
-            <option value="Informasi">Informasi</option><option value="Edukasi">Edukasi</option><option value="Pelayanan">Pelayanan</option><option value="Obat">Kategori Obat</option><option value="Konsultasi">Konsultasi/Keluhan</option>
-          </select>
-          <input type="text" id="urlKategoriInput" placeholder="Link Foto Kategori..." class="w-full p-2 border rounded-lg text-sm">
-          <textarea id="isiKategoriInput" rows="3" placeholder="Isi konten..." class="w-full p-2 border rounded-lg text-sm"></textarea>
-          <button onclick="simpanKontenMenu()" class="w-full bg-blue-600 text-white p-2 rounded-lg font-bold text-sm">Simpan Perubahan Menu</button>
-        </div>
-      </div>
-    </div>
+     <div class="bg-white p-6 rounded-2xl shadow-lg">
+  <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Artikel Menu</h2>
+  <div class="space-y-3 mb-4">
+    <select id="pilihKategori" class="w-full p-2 border rounded-lg text-sm font-bold bg-gray-50">
+      <option value="Informasi">Informasi</option>
+      <option value="Edukasi">Edukasi</option>
+      <option value="Pelayanan">Pelayanan</option>
+      <option value="Obat">Kategori Obat</option>
+      <option value="Konsultasi">Konsultasi/Keluhan</option>
+    </select>
+    <input type="text" id="judulArtikelInput" placeholder="Judul Artikel..." class="w-full p-2 border rounded-lg text-sm">
+    <input type="text" id="urlKategoriInput" placeholder="Link Foto Artikel..." class="w-full p-2 border rounded-lg text-sm">
+    <textarea id="isiKategoriInput" rows="3" placeholder="Isi artikel..." class="w-full p-2 border rounded-lg text-sm"></textarea>
+    <button onclick="tambahArtikel()" class="w-full bg-green-600 text-white p-3 rounded-lg font-bold">Tambah Artikel Baru</button>
+  </div>
+</div>
+ 
     <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700">Keluar (Logout)</button>
   </div>
 
@@ -143,19 +148,20 @@
             document.getElementById("isiKategoriInput").value = "";
         }
     };
-    // Mengganti fungsi lama dengan ini agar bisa menambah artikel baru
-window.tambahArtikel = async () => {
+   window.tambahArtikel = async () => {
     const kategori = document.getElementById("pilihKategori").value;
-    const judul = document.getElementById("judulArtikelInput").value; // Anda perlu tambah input judul
+    const judul = document.getElementById("judulArtikelInput").value;
     const url = document.getElementById("urlKategoriInput").value;
     const isi = document.getElementById("isiKategoriInput").value;
     
     if(!judul || !url || !isi) return alert("Mohon isi semua kolom!");
 
-    await addDoc(collection(db, kategori), {
-        judul, url, isi, waktuInput: serverTimestamp()
-    });
+    await addDoc(collection(db, kategori), { judul, url, isi, waktuInput: serverTimestamp() });
     alert("Artikel di " + kategori + " berhasil ditambah!");
+    // Reset form
+    document.getElementById("judulArtikelInput").value = "";
+    document.getElementById("urlKategoriInput").value = "";
+    document.getElementById("isiKategoriInput").value = "";
 };
 
   </script>
