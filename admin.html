@@ -7,7 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <title>Dashboard Admin - UPTD Farmasi</title>
 </head>
-<body class="bg-slate-100 min-h-screen">
+<body class="bg-[#d1e7dd] min-h-screen">
 
   <div id="loginScreen" class="flex items-center justify-center min-h-screen p-4">
     <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm text-center">
@@ -47,27 +47,28 @@
         <div id="listFotoGaleri" class="grid grid-cols-3 gap-2 border-t pt-4"></div>
       </div>
 
-     <div class="bg-white p-6 rounded-2xl shadow-lg">
-  <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Artikel Menu</h2>
-  <div class="space-y-3 mb-4">
-    <select id="pilihKategori" class="w-full p-2 border rounded-lg text-sm font-bold bg-gray-50">
-      <option value="Informasi">Informasi</option>
-      <option value="Edukasi">Edukasi</option>
-      <option value="Pelayanan">Pelayanan</option>
-      <option value="Obat">Kategori Obat</option>
-      <option value="Konsultasi">Konsultasi/Keluhan</option>
-    </select>
-    <input type="text" id="judulArtikelInput" placeholder="Judul Artikel..." class="w-full p-2 border rounded-lg text-sm">
-    <input type="text" id="urlKategoriInput" placeholder="Link Foto Artikel..." class="w-full p-2 border rounded-lg text-sm">
-    <textarea id="isiKategoriInput" rows="3" placeholder="Isi artikel..." class="w-full p-2 border rounded-lg text-sm"></textarea>
-    <button onclick="tambahArtikel()" class="w-full bg-green-600 text-white p-3 rounded-lg font-bold">Tambah Artikel Baru</button>
-    <!-- Bagian yang ditambahkan -->
-<div id="listDaftarArtikel" class="mt-6 border-t pt-4 max-h-60 overflow-y-auto">
-  <h3 class="font-bold text-sm text-blue-900 mb-2">Daftar Artikel (Klik untuk Hapus):</h3>
-  <div id="containerDaftarArtikel" class="space-y-1"></div>
-</div>
- 
-    <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700">Keluar (Logout)</button>
+      <div class="bg-white p-6 rounded-2xl shadow-lg">
+        <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Artikel Menu</h2>
+        <div class="space-y-3 mb-4">
+          <select id="pilihKategori" class="w-full p-2 border rounded-lg text-sm font-bold bg-gray-50">
+            <option value="Informasi">Informasi</option>
+            <option value="Edukasi">Edukasi</option>
+            <option value="Pelayanan">Pelayanan</option>
+            <option value="Obat">Kategori Obat</option>
+            <option value="Konsultasi">Konsultasi/Keluhan</option>
+          </select>
+          <input type="text" id="judulArtikelInput" placeholder="Judul Artikel..." class="w-full p-2 border rounded-lg text-sm">
+          <input type="text" id="urlKategoriInput" placeholder="Link Foto Artikel..." class="w-full p-2 border rounded-lg text-sm">
+          <textarea id="isiKategoriInput" rows="3" placeholder="Isi artikel..." class="w-full p-2 border rounded-lg text-sm"></textarea>
+          <button onclick="tambahArtikel()" class="w-full bg-green-600 text-white p-3 rounded-lg font-bold">Tambah Artikel Baru</button>
+          <div id="listDaftarArtikel" class="mt-6 border-t pt-4 max-h-60 overflow-y-auto">
+            <h3 class="font-bold text-sm text-blue-900 mb-2">Daftar Artikel (Klik untuk Hapus):</h3>
+            <div id="containerDaftarArtikel" class="space-y-1"></div>
+          </div>
+          <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700">Keluar (Logout)</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script type="module">
@@ -140,55 +141,38 @@
       document.body.appendChild(downloadLink); downloadLink.click();
     };
 
-    window.loadKontenMenu = async () => {
-        const kategori = document.getElementById("pilihKategori").value;
-        const docSnap = await getDoc(doc(db, "konten", kategori));
-        if (docSnap.exists()) {
-            document.getElementById("urlKategoriInput").value = docSnap.data().url || "";
-            document.getElementById("isiKategoriInput").value = docSnap.data().isi || "";
-        } else {
-            document.getElementById("urlKategoriInput").value = "";
-            document.getElementById("isiKategoriInput").value = "";
-        }
+    window.tambahArtikel = async () => {
+      const kategori = document.getElementById("pilihKategori").value;
+      const judul = document.getElementById("judulArtikelInput").value || "Tanpa Judul";
+      const url = document.getElementById("urlKategoriInput").value || "";
+      const isi = document.getElementById("isiKategoriInput").value || "Tidak ada isi.";
+      await addDoc(collection(db, kategori), { judul, url, isi, waktuInput: serverTimestamp() });
+      alert("Artikel di " + kategori + " berhasil ditambah!");
+      document.getElementById("judulArtikelInput").value = "";
+      document.getElementById("urlKategoriInput").value = "";
+      document.getElementById("isiKategoriInput").value = "";
     };
-   window.tambahArtikel = async () => {
-    const kategori = document.getElementById("pilihKategori").value;
-    const judul = document.getElementById("judulArtikelInput").value || "Tanpa Judul";
-    const url = document.getElementById("urlKategoriInput").value || "";
-    const isi = document.getElementById("isiKategoriInput").value || "Tidak ada isi.";
-    
-    // Tanpa validasi paksa (if-statement dihapus agar selalu bisa tambah)
-    await addDoc(collection(db, kategori), { judul, url, isi, waktuInput: serverTimestamp() });
-    alert("Artikel di " + kategori + " berhasil ditambah!");
-    
-    // Reset form
-    document.getElementById("judulArtikelInput").value = "";
-    document.getElementById("urlKategoriInput").value = "";
-    document.getElementById("isiKategoriInput").value = "";
-};
-// Fungsi untuk memantau artikel agar muncul di daftar hapus
-const kategoriList = ['Informasi', 'Edukasi', 'Pelayanan', 'Obat', 'Konsultasi'];
-kategoriList.forEach(kat => {
-    onSnapshot(query(collection(db, kat), orderBy("waktuInput", "desc")), (snap) => {
-        const container = document.getElementById("containerDaftarArtikel");
-        // Clear dan rebuild daftar agar sinkron
-        snap.forEach(d => {
-            const div = document.createElement("div");
-            div.className = "flex justify-between items-center bg-gray-50 p-2 rounded text-[11px]";
-            div.innerHTML = `<span><b>${kat}</b>: ${d.data().judul}</span> 
-                             <button onclick="hapusArtikel('${kat}', '${d.id}')" class="text-red-600 font-bold hover:underline">Hapus</button>`;
-            container.appendChild(div);
-        });
-    });
-});
 
-window.hapusArtikel = async (kategori, id) => {
-    if(confirm("Yakin ingin menghapus artikel ini?")) {
+    const kategoriList = ['Informasi', 'Edukasi', 'Pelayanan', 'Obat', 'Konsultasi'];
+    kategoriList.forEach(kat => {
+      onSnapshot(query(collection(db, kat), orderBy("waktuInput", "desc")), (snap) => {
+        const container = document.getElementById("containerDaftarArtikel");
+        snap.forEach(d => {
+          const div = document.createElement("div");
+          div.className = "flex justify-between items-center bg-gray-50 p-2 rounded text-[11px]";
+          div.innerHTML = `<span><b>${kat}</b>: ${d.data().judul}</span> 
+                           <button onclick="hapusArtikel('${kat}', '${d.id}')" class="text-red-600 font-bold hover:underline">Hapus</button>`;
+          container.appendChild(div);
+        });
+      });
+    });
+
+    window.hapusArtikel = async (kategori, id) => {
+      if(confirm("Yakin ingin menghapus artikel ini?")) {
         await deleteDoc(doc(db, kategori, id));
         alert("Artikel berhasil dihapus");
-    }
-};
+      }
+    };
   </script>
 </body>
 </html>
-
