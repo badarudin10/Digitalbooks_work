@@ -61,7 +61,10 @@
     <input type="text" id="urlKategoriInput" placeholder="Link Foto Artikel..." class="w-full p-2 border rounded-lg text-sm">
     <textarea id="isiKategoriInput" rows="3" placeholder="Isi artikel..." class="w-full p-2 border rounded-lg text-sm"></textarea>
     <button onclick="tambahArtikel()" class="w-full bg-green-600 text-white p-3 rounded-lg font-bold">Tambah Artikel Baru</button>
-  </div>
+    <!-- Bagian yang ditambahkan -->
+<div id="listDaftarArtikel" class="mt-6 border-t pt-4 max-h-60 overflow-y-auto">
+  <h3 class="font-bold text-sm text-blue-900 mb-2">Daftar Artikel (Klik untuk Hapus):</h3>
+  <div id="containerDaftarArtikel" class="space-y-1"></div>
 </div>
  
     <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700">Keluar (Logout)</button>
@@ -163,7 +166,28 @@
     document.getElementById("urlKategoriInput").value = "";
     document.getElementById("isiKategoriInput").value = "";
 };
+// Fungsi untuk memantau artikel agar muncul di daftar hapus
+const kategoriList = ['Informasi', 'Edukasi', 'Pelayanan', 'Obat', 'Konsultasi'];
+kategoriList.forEach(kat => {
+    onSnapshot(query(collection(db, kat), orderBy("waktuInput", "desc")), (snap) => {
+        const container = document.getElementById("containerDaftarArtikel");
+        // Clear dan rebuild daftar agar sinkron
+        snap.forEach(d => {
+            const div = document.createElement("div");
+            div.className = "flex justify-between items-center bg-gray-50 p-2 rounded text-[11px]";
+            div.innerHTML = `<span><b>${kat}</b>: ${d.data().judul}</span> 
+                             <button onclick="hapusArtikel('${kat}', '${d.id}')" class="text-red-600 font-bold hover:underline">Hapus</button>`;
+            container.appendChild(div);
+        });
+    });
+});
 
+window.hapusArtikel = async (kategori, id) => {
+    if(confirm("Yakin ingin menghapus artikel ini?")) {
+        await deleteDoc(doc(db, kategori, id));
+        alert("Artikel berhasil dihapus");
+    }
+};
   </script>
 </body>
 </html>
