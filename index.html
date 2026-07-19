@@ -17,7 +17,7 @@
 <div class="flex items-center justify-center gap-4 mb-2">
   <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-16 w-16 object-contain">
   <div class="text-center">
-    <h1 class="text-3xl font-bold text-blue-900">UPTD FARMASI</h1>
+    <h1 class="text-3xl font-extrabold text-blue-900">UPTD FARMASI</h1>
     <h2 class="text-sm text-gray-600 uppercase">Kota Tangerang Selatan</h2>
   </div>
 </div>
@@ -57,7 +57,6 @@
 
       <!-- Kolom Kanan: Tombol Menu & Jam Operasional -->
       <div class="flex flex-col gap-4">
-        <!-- Tombol Menu -->
         <a href="konten.html" class="bg-blue-900 text-white p-4 rounded-xl text-center font-bold shadow-lg hover:bg-blue-800 transition">
           Buka Menu Informasi & Layanan
         </a>
@@ -82,7 +81,7 @@
     </div>
   </div>
 
-  <!-- Modal & Script -->
+  <!-- Modal -->
   <div id="modalAntrian" class="hidden fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
     <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
       <h2 class="text-xl font-bold text-gray-800">Check-In Berhasil!</h2>
@@ -100,6 +99,19 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    // Konfigurasi nomor WhatsApp per kategori
+    const daftarWA = {
+      "OBAT_PKD": "62881080698977",    // Ganti nomor ini
+      "VAKSIN": "62881080698977",      // Ganti nomor ini
+      "REAGEN": "62881080698977",      // Ganti nomor ini
+      "TB_KUSTA": "62881080698977",    // Ganti nomor ini
+      "HIV_JIWA": "62881080698977",    // Ganti nomor ini
+      "DBD_MALARIA": "62881080698977", // Ganti nomor ini
+      "KECACINGAN": "62881080698977",  // Ganti nomor ini
+      "HEPATITIS": "62881080698977",   // Ganti nomor ini
+      "GIZI": "62881080698977"         // Ganti nomor ini
+    };
 
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
     const db = getFirestore(initializeApp(firebaseConfig));
@@ -138,14 +150,13 @@
       document.getElementById("modalAntrian").className = "visible fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40";
 
       document.getElementById("btnLanjutWA").onclick = () => {
-        const formatHP = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
+        // Ambil nomor dari daftarWA, jika tidak ada pakai nomor admin default
+        const tujuanWA = daftarWA[keperluan] || "62881080698977";
         const pesan = `Halo Admin, Saya Ingin Check-in.%0ANama: ${nama}%0AInstansi: ${instansi}%0AKeperluan: ${keperluan}%0ANomor Antrian: ${kode}`;
-        window.open(`https://wa.me/62881080698977?text=${pesan}`, '_blank');
+        window.open(`https://wa.me/${tujuanWA}?text=${pesan}`, '_blank');
         location.reload();
       };
     });
   </script>
 </body>
 </html>
-
-
