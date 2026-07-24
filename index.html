@@ -11,18 +11,19 @@
   </style>
   <title>Buku Tamu - UPTD Farmasi Tangsel</title>
 </head>
-<body class="bg-[#d1e7dd] font-sans p-4 md:p-8">
+<body class="bg-[#d1e7dd] font-sans p-4 md:p-8 min-h-screen flex flex-col justify-between">
 
- <!-- Judul Utama dengan Logo -->
-<div class="flex items-center justify-center gap-4 mb-2">
-  <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-16 w-16 object-contain">
-  <div class="text-center">
-    <h1 class="text-3xl font-extrabold text-blue-900">UPTD FARMASI</h1>
-    <h2 class="text-sm text-gray-600 uppercase">Kota Tangerang Selatan</h2>
-  </div>
-</div>
-<p class="italic text-center text-sm text-gray-500 mb-6">"Kami melayani dengan sepenuh hati, sesuai dengan standar, ramah, sopan santun, serta melakukan yang terbaik."</p>
-    
+  <div>
+    <!-- Judul Utama dengan Logo -->
+    <div class="flex items-center justify-center gap-4 mb-2">
+      <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-16 w-16 object-contain">
+      <div class="text-center">
+        <h1 class="text-3xl font-extrabold text-blue-900">UPTD FARMASI</h1>
+        <h2 class="text-sm text-gray-600 uppercase">Kota Tangerang Selatan</h2>
+      </div>
+    </div>
+    <p class="italic text-center text-sm text-gray-500 mb-6">"Kami melayani dengan sepenuh hati, sesuai dengan standar, ramah, sopan santun, serta melakukan yang terbaik."</p>
+        
     <!-- Grid Layout: Registrasi (Kiri), Menu (Kanan) -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
       
@@ -63,6 +64,11 @@
           Wajib Isi Survei Kepuasan Masyarakat
         </a>
 
+        <!-- Tombol Kegiatan UPTD Farmasi menuju konten.html -->
+        <a href="konten.html" class="bg-emerald-800 text-white p-4 rounded-xl text-center font-bold shadow-lg hover:bg-emerald-900 transition">
+          Kegiatan UPTD Farmasi
+        </a>
+
         <!-- Jam Operasional -->
         <div class="bg-white p-6 rounded-xl shadow-lg border border-emerald-200">
           <h3 class="font-bold text-gray-700 text-sm mb-2">Jam Operasional:</h3>
@@ -71,13 +77,25 @@
         </div>
       </div>
     </div>
-
-    <!-- Galeri -->
-    <div class="mt-8 border-t pt-6">
-      <h3 class="font-bold text-gray-700 mb-4">Kegiatan UPTD FARMASI</h3>
-      <div id="galeriPublik" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3"></div>
-    </div>
   </div>
+
+  <!-- Footer Kontak & Media Sosial -->
+  <footer class="mt-12 border-t border-emerald-300 pt-6 pb-4 text-center text-gray-700 text-sm">
+    <div class="max-w-4xl mx-auto space-y-3">
+      <p class="font-bold text-blue-900 text-base">UPTD Farmasi Kota Tangerang Selatan</p>
+      <p>Jl. Contoh Alamat No. 123, Tangerang Selatan</p>
+      <div class="flex flex-wrap justify-center gap-4 text-sm font-medium">
+        <span>📞 Telp/WA: 0881-0806-98977</span>
+        <span>•</span>
+        <a href="https://instagram.com" target="_blank" class="hover:text-blue-900 underline">Instagram</a>
+        <span>•</span>
+        <a href="https://tiktok.com" target="_blank" class="hover:text-blue-900 underline">TikTok</a>
+        <span>•</span>
+        <a href="https://youtube.com" target="_blank" class="hover:text-blue-900 underline">YouTube</a>
+      </div>
+      <p class="text-xs text-gray-500 mt-2">&copy; 2026 UPTD Farmasi Tangsel. All rights reserved.</p>
+    </div>
+  </footer>
 
   <!-- Modal -->
   <div id="modalAntrian" class="hidden fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
@@ -96,39 +114,21 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    // Konfigurasi nomor WhatsApp per kategori
+    // Konfigurasi nomor WhatsApp per kategori terbaru
     const daftarWA = {
-      "OBAT_PKD": "6281214090200",    // Ganti nomor ini
-      "VAKSIN": "628126449487",      // Ganti nomor ini
-      "REAGEN": "62881080698977",      // Ganti nomor ini
-      "TB_KUSTA": "6285311642234",    // Ganti nomor ini
-      "HIV_PKG": "628989979798",    // Ganti nomor ini
-      "DBD_MALARIA": "628568838556", // Ganti nomor ini
-      "HEPATITIS_VAKSIN_PROGRAM": "6287829700205",   // Ganti nomor ini
+      "OBAT_PKD": "6281214090200",
+      "VAKSIN": "628126449487",
+      "REAGEN": "62881080698977",
+      "TB_KUSTA": "6285311642234",
+      "HIV_PKG": "628989979798",
+      "DBD_MALARIA": "628568838556",
+      "HEPATITIS_VAKSIN_PROGRAM": "6287829700205"
     };
 
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
     const db = getFirestore(initializeApp(firebaseConfig));
-
-    onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snapshot) => {
-      const galeriContainer = document.getElementById("galeriPublik");
-      galeriContainer.innerHTML = "";
-      snapshot.forEach((doc) => {
-        const url = doc.data().url;
-        galeriContainer.innerHTML += `
-          <div class="aspect-square overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition">
-             <img src="${url}" onclick="bukaZoom('${url}')" class="w-full h-full object-cover">
-          </div>
-        `;
-      });
-    });
-
-    window.bukaZoom = (url) => {
-      document.getElementById("gambarBesar").src = url;
-      document.getElementById("modalGambar").className = "visible fade-modal fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4";
-    };
 
     document.getElementById("btnSubmit").addEventListener("click", async () => {
       const nama = document.getElementById("nama").value;
@@ -146,7 +146,6 @@
       document.getElementById("modalAntrian").className = "visible fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40";
 
       document.getElementById("btnLanjutWA").onclick = () => {
-        // Ambil nomor dari daftarWA, jika tidak ada pakai nomor admin default
         const tujuanWA = daftarWA[keperluan] || "62881080698977";
         const pesan = `Halo Admin, Saya Ingin Check-in.%0ANama: ${nama}%0AInstansi: ${instansi}%0AKeperluan: ${keperluan}%0ANomor Antrian: ${kode}`;
         window.open(`https://wa.me/${tujuanWA}?text=${pesan}`, '_blank');
@@ -156,3 +155,4 @@
   </script>
 </body>
 </html>
+
