@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .fade-modal { transition: opacity 0.3s ease, visibility 0.3s ease; }
     .hidden-custom { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
     .visible-custom { opacity: 1; visibility: visible; pointer-events: auto; display: block; }
   </style>
@@ -22,7 +21,10 @@
         <p class="text-[10px] text-gray-600 font-semibold uppercase tracking-wider">Kota Tangerang Selatan</p>
       </div>
     </div>
-    <div></div>
+    <!-- Foto Profil Kecil di Kanan Header ala MyASN -->
+    <a href="profil.html" class="h-9 w-9 rounded-full overflow-hidden border-2 border-blue-900 shadow-sm block">
+      <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="h-full w-full object-cover">
+    </a>
   </header>
 
   <!-- KONTEN UTAMA -->
@@ -42,52 +44,57 @@
       </div>
     </a>
 
-    <!-- 2. Kotak Aksi Cepat (Logo Besar & Tanpa Background Kotak) -->
+    <!-- 2. Kotak Aksi Cepat (Ukuran Ikon & Tata Letak Proporsional seperti MyASN) -->
     <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
       <div class="flex items-center gap-2 mb-3 text-gray-700 font-bold text-xs">
-        <span>🔄</span> Aksi Cepat
+        <span class="text-blue-900">⇄</span> Aksi Cepat
       </div>
       <div class="grid grid-cols-2 gap-3">
+        
         <!-- Informasi -->
-        <button onclick="bukaDaftar('Informasi')" class="p-4 rounded-xl border border-blue-100 bg-blue-50/40 hover:bg-blue-50 transition text-left flex flex-col justify-between h-36">
-          <div class="w-12 h-12 flex items-center justify-center bg-transparent">
-            <img src="https://i.ibb.co.com/fzWd1Sq6/Picsart-26-07-24-23-03-05-634.png" class="w-12 h-12 object-contain">
+        <button onclick="bukaDaftar('Informasi')" class="p-4 rounded-xl border border-blue-100 bg-[#f4f8fb] hover:bg-blue-50 transition text-left flex flex-col justify-between h-32">
+          <div class="w-8 h-8 flex items-center justify-center bg-transparent">
+            <img src="https://i.ibb.co.com/fzWd1Sq6/Picsart-26-07-24-23-03-05-634.png" class="w-7 h-7 object-contain">
           </div>
           <div>
             <p class="text-xs font-bold text-gray-800">Informasi</p>
             <p class="text-[10px] text-gray-500">Update Arsip & Berita</p>
           </div>
         </button>
+
         <!-- Edukasi -->
-        <button onclick="bukaDaftar('Edukasi')" class="p-4 rounded-xl border border-emerald-100 bg-emerald-50/40 hover:bg-emerald-50 transition text-left flex flex-col justify-between h-36">
-          <div class="w-12 h-12 flex items-center justify-center bg-transparent">
-            <img src="https://i.ibb.co.com/SWQXc7m/Picsart-26-07-24-23-05-58-799.png" class="w-12 h-12 object-contain">
+        <button onclick="bukaDaftar('Edukasi')" class="p-4 rounded-xl border border-emerald-100 bg-[#f2faf5] hover:bg-emerald-50 transition text-left flex flex-col justify-between h-32">
+          <div class="w-8 h-8 flex items-center justify-center bg-transparent">
+            <img src="https://i.ibb.co.com/SWQXc7m/Picsart-26-07-24-23-05-58-799.png" class="w-7 h-7 object-contain">
           </div>
           <div>
             <p class="text-xs font-bold text-gray-800">Edukasi</p>
             <p class="text-[10px] text-gray-500">Materi & Panduan</p>
           </div>
         </button>
-        <!-- Layanan -->
-        <button onclick="bukaDaftar('Pelayanan')" class="p-4 rounded-xl border border-purple-100 bg-purple-50/40 hover:bg-purple-50 transition text-left flex flex-col justify-between h-36">
-          <div class="w-12 h-12 flex items-center justify-center bg-transparent">
-            <img src="https://i.ibb.co.com/N6WBWsJT/Picsart-26-07-24-23-01-12-888.png" class="w-12 h-12 object-contain">
+
+        <!-- Layanan ASN -->
+        <button onclick="bukaDaftar('Pelayanan')" class="p-4 rounded-xl border border-purple-100 bg-[#faf5fb] hover:bg-purple-50 transition text-left flex flex-col justify-between h-32">
+          <div class="w-8 h-8 flex items-center justify-center bg-transparent">
+            <img src="https://i.ibb.co.com/N6WBWsJT/Picsart-26-07-24-23-01-12-888.png" class="w-7 h-7 object-contain">
           </div>
           <div>
             <p class="text-xs font-bold text-gray-800">Layanan ASN</p>
             <p class="text-[10px] text-gray-500">Distribusi & Logistik</p>
           </div>
         </button>
+
         <!-- Kategori Obat -->
-        <button onclick="bukaDaftar('Obat')" class="p-4 rounded-xl border border-amber-100 bg-amber-50/40 hover:bg-amber-50 transition text-left flex flex-col justify-between h-36">
-          <div class="w-12 h-12 flex items-center justify-center bg-transparent">
-            <img src="https://i.ibb.co.com/8QzyGR8/Picsart-26-07-24-23-04-30-680.png" class="w-12 h-12 object-contain">
+        <button onclick="bukaDaftar('Obat')" class="p-4 rounded-xl border border-amber-100 bg-[#fdfaf2] hover:bg-amber-50 transition text-left flex flex-col justify-between h-32">
+          <div class="w-8 h-8 flex items-center justify-center bg-transparent">
+            <img src="https://i.ibb.co.com/8QzyGR8/Picsart-26-07-24-23-04-30-680.png" class="w-7 h-7 object-contain">
           </div>
           <div>
             <p class="text-xs font-bold text-gray-800">Kategori Obat</p>
             <p class="text-[10px] text-gray-500">Data Perbekalan</p>
           </div>
         </button>
+
       </div>
     </div>
 
@@ -95,15 +102,15 @@
     <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
       <div class="flex justify-between items-center mb-2">
         <div class="flex items-center gap-2">
-          <span class="font-black text-blue-900 tracking-wider">DMS</span>
-          <span class="text-[10px] text-gray-400">DOCUMENT MANAGEMENT SYSTEM</span>
+          <span class="font-black text-blue-900 tracking-wider text-sm">DMS</span>
+          <span class="text-[9px] text-gray-400 font-semibold">DOCUMENT MANAGEMENT SYSTEM</span>
         </div>
         <button onclick="location.reload()" class="text-blue-900 text-sm">🔄</button>
       </div>
       <div class="text-center py-2">
         <p class="text-xs text-gray-500">Skor Arsip Digital</p>
         <p class="text-4xl font-black text-emerald-600 my-1">85</p>
-        <span class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2.5 py-0.5 rounded-full">Lengkap</span>
+        <span class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-3 py-0.5 rounded-full">Lengkap</span>
       </div>
     </div>
   </main>
@@ -119,19 +126,19 @@
     <div id="areaBaca" class="bg-white p-5 rounded-2xl shadow-sm"></div>
   </div>
 
-  <!-- Bottom Navigation Bar -->
+  <!-- Bottom Navigation Bar (Desain ala Referensi) -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg py-2 px-4 flex justify-around items-center z-40 max-w-lg mx-auto">
     
     <!-- Dashboard -->
     <a href="#dashboard" onclick="kembaliKeDashboard()" class="flex flex-col items-center text-blue-900">
-      <img src="https://i.ibb.co.com/9mj7jgbg/Picsart-26-07-24-23-34-54-674.png" class="w-8 h-8 object-contain bg-transparent">
-      <span class="text-[10px] font-bold mt-1">Dashboard</span>
+      <span class="text-lg">🗂️</span>
+      <span class="text-[10px] font-bold mt-0.5">Dashboard</span>
     </a>
 
     <!-- Layanan -->
     <a href="#" onclick="bukaDaftar('Pelayanan')" class="flex flex-col items-center text-gray-500 hover:text-blue-900">
-      <img src="https://i.ibb.co.com/N6WBWsJT/Picsart-26-07-24-23-01-12-888.png" class="w-8 h-8 object-contain bg-transparent">
-      <span class="text-[10px] font-medium mt-1">Layanan</span>
+      <span class="text-lg">👤</span>
+      <span class="text-[10px] font-medium mt-0.5">Layanan</span>
     </a>
     
     <!-- Tombol Bulat Tengah (Profil) -->
@@ -141,16 +148,16 @@
       </a>
     </div>
 
-    <!-- Buku Tamu -->
+    <!-- Edit Profil / Buku Tamu -->
     <a href="index.html" class="flex flex-col items-center text-gray-500 hover:text-blue-900">
-      <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-8 h-8 object-contain bg-transparent">
-      <span class="text-[10px] font-medium mt-1">Buku Tamu</span>
+      <span class="text-lg">✏️</span>
+      <span class="text-[10px] font-medium mt-0.5">Edit Profil</span>
     </a>
 
     <!-- Lainnya -->
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex flex-col items-center text-gray-500 hover:text-blue-900">
-      <img src="https://i.ibb.co.com/SXPG746X/Picsart-26-07-24-23-36-23-677.png" class="w-8 h-8 object-contain bg-transparent">
-      <span class="text-[10px] font-medium mt-1">Lainnya</span>
+      <span class="text-lg">⋯</span>
+      <span class="text-[10px] font-medium mt-0.5">Lainnya</span>
     </a>
   </nav>
 
@@ -216,3 +223,4 @@
   </script>
 </body>
 </html>
+
