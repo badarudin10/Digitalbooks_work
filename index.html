@@ -11,33 +11,32 @@
   </style>
   <title>Buku Tamu - UPTD Farmasi Tangsel</title>
 </head>
-<body class="bg-[#d1e7dd] font-sans p-4 md:p-8 min-h-screen flex flex-col justify-between">
+<body class="bg-[#d1e7dd] font-sans p-4 md:p-8">
 
-  <div>
-    <!-- Judul Utama dengan Logo -->
-    <div class="flex items-center justify-center gap-4 mb-2">
-      <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-16 w-16 object-contain">
-      <div class="text-center">
-        <h1 class="text-3xl font-extrabold text-[#006687]">UPTD FARMASI</h1>
-        <h2 class="text-sm text-[#00526a] uppercase font-semibold">Kota Tangerang Selatan</h2>
-      </div>
-    </div>
-    <p class="italic text-center text-sm text-[#0d7377] mb-6">"Kami melayani dengan sepenuh hati, sesuai dengan standar, ramah, sopan santun, serta melakukan yang terbaik."</p>
-        
+ <!-- Judul Utama dengan Logo -->
+<div class="flex items-center justify-center gap-4 mb-2">
+  <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-16 w-16 object-contain">
+  <div class="text-center">
+    <h1 class="text-3xl font-extrabold text-blue-900">UPTD FARMASI</h1>
+    <h2 class="text-sm text-gray-600 uppercase">Kota Tangerang Selatan</h2>
+  </div>
+</div>
+<p class="italic text-center text-sm text-gray-500 mb-6">"Kami melayani dengan sepenuh hati, sesuai dengan standar, ramah, sopan santun, serta melakukan yang terbaik."</p>
+    
     <!-- Grid Layout: Registrasi (Kiri), Menu (Kanan) -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
       
       <!-- Kolom Kiri: Registrasi Tamu -->
-      <div class="bg-white/95 backdrop-blur p-6 rounded-2xl shadow-lg border border-[#a2d2ce]">
-        <h3 class="font-bold text-[#00526a] mb-4">Registrasi Tamu</h3>
+      <div class="bg-white p-6 rounded-2xl shadow-lg border">
+        <h3 class="font-bold text-gray-700 mb-4">Registrasi Tamu</h3>
         <div class="space-y-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input id="nama" placeholder="Nama Lengkap" class="w-full p-3 border border-[#a2d2ce] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00839b] bg-white">
-            <input id="instansi" placeholder="Instansi" class="w-full p-3 border border-[#a2d2ce] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00839b] bg-white">
+            <input id="nama" placeholder="Nama Lengkap" class="w-full p-3 border rounded-lg">
+            <input id="instansi" placeholder="Instansi" class="w-full p-3 border rounded-lg">
           </div>
-          <input id="hp" placeholder="No. Telepon (Contoh: 08123456789)" class="w-full p-3 border border-[#a2d2ce] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00839b] bg-white">
+          <input id="hp" placeholder="No. Telepon (Contoh: 08123456789)" class="w-full p-3 border rounded-lg">
           
-          <select id="keperluan" class="w-full p-3 border border-[#a2d2ce] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00839b] bg-white">
+          <select id="keperluan" class="w-full p-3 border rounded-lg">
             <option value="">Pilih Keperluan:</option>
             <option value="OBAT_PKD">A. OBAT PKD</option>
             <option value="VAKSIN">B. VAKSIN</option>
@@ -48,8 +47,7 @@
             <option value="HEPATITIS_VAKSIN_PROGRAM">G. HEPATITIS_VAKSIN_PROGRAM</option>
           </select>
           
-          <!-- Tombol Check-In: Menggunakan warna Biru Toska Gelap elegan dari sampel gambar -->
-          <button id="btnSubmit" class="w-full bg-[#006687] text-white p-4 rounded-lg font-bold hover:bg-[#00526a] transition shadow-md">
+          <button id="btnSubmit" class="w-full bg-blue-900 text-white p-4 rounded-lg font-bold hover:bg-blue-900 transition">
             Check-In & Ambil Antrian
           </button>
         </div>
@@ -57,75 +55,80 @@
 
       <!-- Kolom Kanan: Tombol Menu & Jam Operasional -->
       <div class="flex flex-col gap-4">
-        <!-- Tombol Menu 1: Menggunakan warna Teal/Biru-Kehijauan dari sampel gambar -->
-        <a href="konten.html" class="bg-[#00839b] text-white p-4 rounded-xl text-center font-bold shadow-md hover:bg-[#006687] transition">
+        <a href="konten.html" class="bg-blue-900 text-white p-4 rounded-xl text-center font-bold shadow-lg hover:bg-blue-800 transition">
           Buka Menu Informasi & Layanan
         </a>
-        
-        <!-- Tombol Survei: Menggunakan warna Toska terang yang selaras -->
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank"
-            class="block w-full bg-[#00a896] text-white text-center p-4 rounded-xl font-bold hover:bg-[#028b7c] transition shadow-md">
+            class="block w-full bg-green-600 text-white text-center p-4 rounded-xl font-bold hover:bg-green-700 transition">
           Wajib Isi Survei Kepuasan Masyarakat
         </a>
 
-        <!-- Tombol Kegiatan: Menggunakan warna Hijau Daun segar dari sampel gambar -->
-        <a href="konten.html" class="bg-[#02c39a] text-white p-4 rounded-xl text-center font-bold shadow-md hover:bg-[#02a382] transition">
-          Kegiatan UPTD Farmasi
-        </a>
-
         <!-- Jam Operasional -->
-        <div class="bg-white/95 backdrop-blur p-6 rounded-xl shadow-lg border border-[#a2d2ce]">
-          <h3 class="font-bold text-[#00526a] text-sm mb-2">Jam Operasional:</h3>
-          <p class="text-gray-700 text-sm">SENIN - KAMIS: 08.00 - 16.00</p>
-          <p class="text-gray-700 text-sm">JUMAT: 08.30 - 16.30</p>
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-emerald-200">
+          <h3 class="font-bold text-gray-700 text-sm mb-2">Jam Operasional:</h3>
+          <p class="text-gray-800 text-sm">SENIN - KAMIS: 08.00 - 16.00</p>
+          <p class="text-gray-800 text-sm">JUMAT: 08.30 - 16.30</p>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Footer Kontak & Media Sosial -->
-  <footer class="mt-12 border-t border-[#a2d2ce] pt-6 pb-4 text-center text-[#00526a] text-sm">
-    <div class="max-w-4xl mx-auto space-y-3">
-      <p class="font-bold text-base">UPTD Farmasi Kota Tangerang Selatan</p>
-      <p class="text-gray-700">Jl. Contoh Alamat No. 123, Tangerang Selatan</p>
-      <div class="flex flex-wrap justify-center gap-4 text-sm font-medium">
-        <span>📞 Telp/WA: 0881-0806-98977</span>
-        <span>•</span>
-        <a href="https://instagram.com" target="_blank" class="hover:text-[#006687] underline">Instagram</a>
-        <span>•</span>
-        <a href="https://tiktok.com" target="_blank" class="hover:text-[#006687] underline">TikTok</a>
-        <span>•</span>
-        <a href="https://youtube.com" target="_blank" class="hover:text-[#006687] underline">YouTube</a>
-      </div>
-      <p class="text-xs text-gray-500 mt-2">&copy; 2026 UPTD Farmasi Tangsel. All rights reserved.</p>
+    <!-- Galeri -->
+    <div class="mt-8 border-t pt-6">
+      <h3 class="font-bold text-gray-700 mb-4">Kegiatan UPTD FARMASI</h3>
+      <div id="galeriPublik" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3"></div>
     </div>
-  </footer>
+  </div>
 
   <!-- Modal -->
   <div id="modalAntrian" class="hidden fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
     <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
       <h2 class="text-xl font-bold text-gray-800">Check-In Berhasil!</h2>
-      <div id="nomorAntrianDisplay" class="text-5xl font-black text-[#006687] my-6">A-000</div>
-      <button id="btnLanjutWA" class="w-full bg-[#006687] text-white py-3 rounded-lg font-bold hover:bg-[#00526a] transition">Tutup & Lanjut ke WA</button>
+      <div id="nomorAntrianDisplay" class="text-5xl font-black text-blue-900 my-6">A-000</div>
+      <button id="btnLanjutWA" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold">Tutup & Lanjut ke WA</button>
     </div>
+  </div>
+
+  <div id="modalGambar" class="hidden fade-modal fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4">
+    <button onclick="document.getElementById('modalGambar').className = 'hidden fade-modal fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4'" 
+            class="absolute top-5 right-5 text-white text-5xl font-bold z-50 hover:text-red-500">&times;</button>
+    <img id="gambarBesar" src="" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
+    // Konfigurasi nomor WhatsApp per kategori
     const daftarWA = {
-      "OBAT_PKD": "6281214090200",
-      "VAKSIN": "628126449487",
-      "REAGEN": "62881080698977",
-      "TB_KUSTA": "6285311642234",
-      "HIV_PKG": "628989979798",
-      "DBD_MALARIA": "628568838556",
-      "HEPATITIS_VAKSIN_PROGRAM": "6287829700205"
+      "OBAT_PKD": "6281214090200",    // Ganti nomor ini
+      "VAKSIN": "628126449487",      // Ganti nomor ini
+      "REAGEN": "62881080698977",      // Ganti nomor ini
+      "TB_KUSTA": "6285311642234",    // Ganti nomor ini
+      "HIV_PKG": "628989979798",    // Ganti nomor ini
+      "DBD_MALARIA": "628568838556", // Ganti nomor ini
+      "HEPATITIS_VAKSIN_PROGRAM": "6287829700205",   // Ganti nomor ini
     };
 
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
     const db = getFirestore(initializeApp(firebaseConfig));
+
+    onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snapshot) => {
+      const galeriContainer = document.getElementById("galeriPublik");
+      galeriContainer.innerHTML = "";
+      snapshot.forEach((doc) => {
+        const url = doc.data().url;
+        galeriContainer.innerHTML += `
+          <div class="aspect-square overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition">
+             <img src="${url}" onclick="bukaZoom('${url}')" class="w-full h-full object-cover">
+          </div>
+        `;
+      });
+    });
+
+    window.bukaZoom = (url) => {
+      document.getElementById("gambarBesar").src = url;
+      document.getElementById("modalGambar").className = "visible fade-modal fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4";
+    };
 
     document.getElementById("btnSubmit").addEventListener("click", async () => {
       const nama = document.getElementById("nama").value;
@@ -143,6 +146,7 @@
       document.getElementById("modalAntrian").className = "visible fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40";
 
       document.getElementById("btnLanjutWA").onclick = () => {
+        // Ambil nomor dari daftarWA, jika tidak ada pakai nomor admin default
         const tujuanWA = daftarWA[keperluan] || "62881080698977";
         const pesan = `Halo Admin, Saya Ingin Check-in.%0ANama: ${nama}%0AInstansi: ${instansi}%0AKeperluan: ${keperluan}%0ANomor Antrian: ${kode}`;
         window.open(`https://wa.me/${tujuanWA}?text=${pesan}`, '_blank');
