@@ -14,17 +14,19 @@
 
   <!-- Header Atas -->
   <header class="bg-white px-4 py-3 shadow-sm sticky top-0 z-30 flex items-center justify-between border-b">
-    <div class="flex items-center gap-3">
-      <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-10 w-10 object-contain">
-      <div>
-        <h1 class="font-extrabold text-blue-900 text-sm tracking-wide leading-tight">UPTD FARMASI</h1>
-        <p class="text-[10px] text-gray-600 font-semibold uppercase tracking-wider">Kota Tangerang Selatan</p>
+    <div class="max-w-4xl mx-auto w-full flex items-center justify-between px-2">
+      <div class="flex items-center gap-3">
+        <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-10 w-10 object-contain">
+        <div>
+          <h1 class="font-extrabold text-blue-900 text-sm tracking-wide leading-tight">UPTD FARMASI</h1>
+          <p class="text-[10px] text-gray-600 font-semibold uppercase tracking-wider">Kota Tangerang Selatan</p>
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- KONTEN UTAMA -->
-  <main id="mainDashboard" class="max-w-md mx-auto p-4 space-y-4">
+  <!-- KONTEN UTAMA (Responsif HP & Desktop) -->
+  <main id="mainDashboard" class="max-w-md md:max-w-3xl mx-auto p-4 space-y-4">
     
     <!-- 1. Kartu Profil Pegawai -->
     <a href="profil.html" class="block bg-white p-4 rounded-2xl shadow-sm border border-gray-100 relative hover:border-blue-300 transition">
@@ -40,16 +42,16 @@
       </div>
     </a>
 
-    <!-- 2. Kotak Aksi Cepat (Ikon Diperbesar Menyamai Galeri & Posisi Tengah) -->
+    <!-- 2. Kotak Aksi Cepat (Card Diperkecil & Responsif Grid Desktop) -->
     <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
       <div class="flex items-center gap-2 mb-3 text-gray-700 font-bold text-xs">
         <span class="text-blue-900">⇄</span> Aksi Cepat
       </div>
-      <div class="grid grid-cols-2 gap-3">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
         
         <!-- Informasi -->
-        <button onclick="bukaDaftar('Informasi')" class="p-4 rounded-2xl border border-blue-100 bg-[#f4f8fb] hover:bg-blue-50 transition flex flex-col items-center justify-center text-center gap-2">
-          <div class="w-20 h-20 flex items-center justify-center bg-transparent">
+        <button onclick="bukaDaftar('Informasi')" class="p-3 rounded-2xl border border-blue-100 bg-[#f4f8fb] hover:bg-blue-50 transition flex flex-col items-center justify-center text-center gap-1.5">
+          <div class="w-14 h-14 flex items-center justify-center bg-transparent">
             <img src="https://i.ibb.co.com/fzWd1Sq6/Picsart-26-07-24-23-03-05-634.png" class="w-full h-full object-contain">
           </div>
           <div>
@@ -59,8 +61,8 @@
         </button>
 
         <!-- Edukasi -->
-        <button onclick="bukaDaftar('Edukasi')" class="p-4 rounded-2xl border border-emerald-100 bg-[#f2faf5] hover:bg-emerald-50 transition flex flex-col items-center justify-center text-center gap-2">
-          <div class="w-20 h-20 flex items-center justify-center bg-transparent">
+        <button onclick="bukaDaftar('Edukasi')" class="p-3 rounded-2xl border border-emerald-100 bg-[#f2faf5] hover:bg-emerald-50 transition flex flex-col items-center justify-center text-center gap-1.5">
+          <div class="w-14 h-14 flex items-center justify-center bg-transparent">
             <img src="https://i.ibb.co.com/SWQXc7m/Picsart-26-07-24-23-05-58-799.png" class="w-full h-full object-contain">
           </div>
           <div>
@@ -70,8 +72,8 @@
         </button>
 
         <!-- Layanan ASN -->
-        <button onclick="bukaDaftar('Pelayanan')" class="p-4 rounded-2xl border border-purple-100 bg-[#faf5fb] hover:bg-purple-50 transition flex flex-col items-center justify-center text-center gap-2">
-          <div class="w-20 h-20 flex items-center justify-center bg-transparent">
+        <button onclick="bukaDaftar('Pelayanan')" class="p-3 rounded-2xl border border-purple-100 bg-[#faf5fb] hover:bg-purple-50 transition flex flex-col items-center justify-center text-center gap-1.5">
+          <div class="w-14 h-14 flex items-center justify-center bg-transparent">
             <img src="https://i.ibb.co.com/N6WBWsJT/Picsart-26-07-24-23-01-12-888.png" class="w-full h-full object-contain">
           </div>
           <div>
@@ -81,8 +83,8 @@
         </button>
 
         <!-- Kategori Obat -->
-        <button onclick="bukaDaftar('Obat')" class="p-4 rounded-2xl border border-amber-100 bg-[#fdfaf2] hover:bg-amber-50 transition flex flex-col items-center justify-center text-center gap-2">
-          <div class="w-20 h-20 flex items-center justify-center bg-transparent">
+        <button onclick="bukaDaftar('Obat')" class="p-3 rounded-2xl border border-amber-100 bg-[#fdfaf2] hover:bg-amber-50 transition flex flex-col items-center justify-center text-center gap-1.5">
+          <div class="w-14 h-14 flex items-center justify-center bg-transparent">
             <img src="https://i.ibb.co.com/8QzyGR8/Picsart-26-07-24-23-04-30-680.png" class="w-full h-full object-contain">
           </div>
           <div>
@@ -119,28 +121,28 @@
   </main>
 
   <!-- KONTEN DINAMIS -->
-  <div id="pageDaftar" class="hidden-custom max-w-md mx-auto p-4">
+  <div id="pageDaftar" class="hidden-custom max-w-md md:max-w-3xl mx-auto p-4">
     <button onclick="kembaliKeDashboard()" class="text-blue-900 font-bold mb-4 text-xs inline-flex items-center gap-1">← Kembali ke Dashboard</button>
     <div id="areaDaftar" class="bg-white p-4 rounded-2xl shadow-sm"></div>
   </div>
 
-  <div id="pageBaca" class="hidden-custom max-w-md mx-auto p-4">
+  <div id="pageBaca" class="hidden-custom max-w-md md:max-w-3xl mx-auto p-4">
     <button onclick="kembaliKeDaftar()" class="text-blue-900 font-bold mb-4 text-xs inline-flex items-center gap-1">← Kembali ke Daftar</button>
     <div id="areaBaca" class="bg-white p-5 rounded-2xl shadow-sm"></div>
   </div>
 
-  <!-- Bottom Navigation Bar (Ikon Diperbesar & Posisi Tengah) -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-[#e3ede6] border-t border-emerald-300 shadow-lg py-2.5 px-4 flex justify-around items-center z-40 max-w-lg mx-auto">
+  <!-- Bottom Navigation Bar (Ikon Menu Bawah Disamakan Besar & Posisi Tengah) -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-[#e3ede6] border-t border-emerald-300 shadow-lg py-2.5 px-4 flex justify-around items-center z-40 max-w-lg md:max-w-3xl mx-auto">
     
     <!-- Dashboard -->
     <a href="#dashboard" onclick="kembaliKeDashboard()" class="flex flex-col items-center justify-center text-emerald-950 font-bold">
-      <img src="https://i.ibb.co.com/9mj7jgbg/Picsart-26-07-24-23-34-54-674.png" class="w-8 h-8 object-contain bg-transparent">
+      <img src="https://i.ibb.co.com/9mj7jgbg/Picsart-26-07-24-23-34-54-674.png" class="w-9 h-9 object-contain bg-transparent">
       <span class="text-[10px] mt-1 font-extrabold tracking-tight text-center">Dashboard</span>
     </a>
 
     <!-- Layanan -->
     <a href="#" onclick="bukaDaftar('Pelayanan')" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
-      <img src="https://i.ibb.co.com/N6WBWsJT/Picsart-26-07-24-23-01-12-888.png" class="w-8 h-8 object-contain bg-transparent">
+      <img src="https://i.ibb.co.com/N6WBWsJT/Picsart-26-07-24-23-01-12-888.png" class="w-9 h-9 object-contain bg-transparent">
       <span class="text-[10px] mt-1 font-bold tracking-tight text-center">Layanan</span>
     </a>
     
@@ -153,13 +155,13 @@
 
     <!-- Buku Tamu -->
     <a href="index.html" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
-      <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-8 h-8 object-contain bg-transparent">
+      <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-9 h-9 object-contain bg-transparent">
       <span class="text-[10px] mt-1 font-bold tracking-tight text-center">Buku Tamu</span>
     </a>
 
     <!-- Lainnya -->
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
-      <img src="https://i.ibb.co.com/SXPG746X/Picsart-26-07-24-23-36-23-677.png" class="w-8 h-8 object-contain bg-transparent">
+      <img src="https://i.ibb.co.com/SXPG746X/Picsart-26-07-24-23-36-23-677.png" class="w-9 h-9 object-contain bg-transparent">
       <span class="text-[10px] mt-1 font-bold tracking-tight text-center">Lainnya</span>
     </a>
   </nav>
@@ -174,7 +176,7 @@
 
     window.bukaDaftar = async (kategori) => {
       document.getElementById('mainDashboard').className = 'hidden-custom';
-      document.getElementById('pageDaftar').className = 'visible-custom max-w-md mx-auto p-4';
+      document.getElementById('pageDaftar').className = 'visible-custom max-w-md md:max-w-3xl mx-auto p-4';
       const area = document.getElementById('areaDaftar');
       area.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">Memuat data ${kategori}...</p>`;
       
@@ -205,7 +207,7 @@
 
     window.bukaArtikel = (data) => {
       document.getElementById('pageDaftar').className = 'hidden-custom';
-      document.getElementById('pageBaca').className = 'visible-custom max-w-md mx-auto p-4';
+      document.getElementById('pageBaca').className = 'visible-custom max-w-md md:max-w-3xl mx-auto p-4';
       document.getElementById('areaBaca').innerHTML = `
         <h2 class="text-xl font-extrabold text-blue-900 mb-3">${data.judul}</h2>
         ${data.url ? `<img src="${data.url}" class="w-full h-auto rounded-xl mb-4 shadow-sm object-cover max-h-64">` : ''}
@@ -216,12 +218,12 @@
     window.kembaliKeDashboard = () => {
       document.getElementById('pageDaftar').className = 'hidden-custom';
       document.getElementById('pageBaca').className = 'hidden-custom';
-      document.getElementById('mainDashboard').className = 'visible-custom max-w-md mx-auto p-4 space-y-4';
+      document.getElementById('mainDashboard').className = 'visible-custom max-w-md md:max-w-3xl mx-auto p-4 space-y-4';
     };
 
     window.kembaliKeDaftar = () => {
       document.getElementById('pageBaca').className = 'hidden-custom';
-      document.getElementById('pageDaftar').className = 'visible-custom max-w-md mx-auto p-4';
+      document.getElementById('pageDaftar').className = 'visible-custom max-w-md md:max-w-3xl mx-auto p-4';
     };
   </script>
 </body>
