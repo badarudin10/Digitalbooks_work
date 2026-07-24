@@ -25,7 +25,7 @@
     </div>
   </header>
 
-  <!-- KONTEN UTAMA (Responsif Mobile & Desktop) -->
+  <!-- KONTEN UTAMA (Responsif Mobile & Desktop yang Rapi) -->
   <main id="mainDashboard" class="max-w-md md:max-w-4xl mx-auto p-4 space-y-4">
     
     <!-- 1. Kartu Profil Pegawai -->
@@ -42,7 +42,7 @@
       </div>
     </a>
 
-    <!-- 2. Kotak Aksi Cepat (Kotak Diperkecil agar Galeri Terlihat, Ikon Tetap Besar) -->
+    <!-- 2. Kotak Aksi Cepat (Kotak Diperkecil Agar Galeri Terlihat, Ikon Tetap Besar) -->
     <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
       <div class="flex items-center gap-2 mb-3 text-gray-700 font-bold text-xs">
         <span class="text-blue-900">⇄</span> Aksi Cepat
@@ -105,15 +105,15 @@
         </div>
         <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md font-bold">Dokumentasi</span>
       </div>
-      <!-- Grid Foto Kegiatan -->
+      <!-- Grid Foto Kegiatan (Responsif di Desktop Menjadi 3 Kolom) -->
       <div class="grid grid-cols-3 gap-2">
-        <div class="rounded-xl overflow-hidden h-24 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2">
+        <div class="rounded-xl overflow-hidden h-24 md:h-36 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2">
           <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain hover:scale-105 transition">
         </div>
-        <div class="rounded-xl overflow-hidden h-24 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2">
+        <div class="rounded-xl overflow-hidden h-24 md:h-36 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2">
           <img src="https://i.ibb.co.com/SWQXc7m/Picsart-26-07-24-23-05-58-799.png" class="w-full h-full object-contain hover:scale-105 transition">
         </div>
-        <div class="rounded-xl overflow-hidden h-24 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2">
+        <div class="rounded-xl overflow-hidden h-24 md:h-36 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2">
           <img src="https://i.ibb.co.com/fzWd1Sq6/Picsart-26-07-24-23-03-05-634.png" class="w-full h-full object-contain hover:scale-105 transition">
         </div>
       </div>
@@ -131,18 +131,18 @@
     <div id="areaBaca" class="bg-white p-5 rounded-2xl shadow-sm"></div>
   </div>
 
-  <!-- Bottom Navigation Bar (Ikon Bawah Dikembalikan Seperti Semula & Posisi Tengah) -->
+  <!-- Bottom Navigation Bar (Ukuran Ikon Disamakan Besar & Posisi Tengah Tanpa Berubah) -->
   <nav class="fixed bottom-0 left-0 right-0 bg-[#e3ede6] border-t border-emerald-300 shadow-lg py-2.5 px-4 flex justify-around items-center z-40 max-w-lg md:max-w-4xl mx-auto">
     
     <!-- Dashboard -->
     <a href="#dashboard" onclick="kembaliKeDashboard()" class="flex flex-col items-center justify-center text-emerald-950 font-bold">
-      <img src="https://i.ibb.co.com/9mj7jgbg/Picsart-26-07-24-23-34-54-674.png" class="w-7 h-7 object-contain bg-transparent">
+      <img src="https://i.ibb.co.com/9mj7jgbg/Picsart-26-07-24-23-34-54-674.png" class="w-8 h-8 object-contain bg-transparent">
       <span class="text-[10px] mt-1 font-extrabold tracking-tight text-center">Dashboard</span>
     </a>
 
     <!-- Layanan -->
     <a href="#" onclick="bukaDaftar('Pelayanan')" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
-      <img src="https://i.ibb.co.com/N6WBWsJT/Picsart-26-07-24-23-01-12-888.png" class="w-7 h-7 object-contain bg-transparent">
+      <img src="https://i.ibb.co.com/N6WBWsJT/Picsart-26-07-24-23-01-12-888.png" class="w-8 h-8 object-contain bg-transparent">
       <span class="text-[10px] mt-1 font-bold tracking-tight text-center">Layanan</span>
     </a>
     
@@ -155,13 +155,13 @@
 
     <!-- Buku Tamu -->
     <a href="index.html" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
-      <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-7 h-7 object-contain bg-transparent">
+      <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-8 h-8 object-contain bg-transparent">
       <span class="text-[10px] mt-1 font-bold tracking-tight text-center">Buku Tamu</span>
     </a>
 
     <!-- Lainnya -->
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
-      <img src="https://i.ibb.co.com/SXPG746X/Picsart-26-07-24-23-36-23-677.png" class="w-7 h-7 object-contain bg-transparent">
+      <img src="https://i.ibb.co.com/SXPG746X/Picsart-26-07-24-23-36-23-677.png" class="w-8 h-8 object-contain bg-transparent">
       <span class="text-[10px] mt-1 font-bold tracking-tight text-center">Lainnya</span>
     </a>
   </nav>
@@ -228,3 +228,4 @@
   </script>
 </body>
 </html>
+
