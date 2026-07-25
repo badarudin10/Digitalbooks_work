@@ -5,127 +5,164 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* CSS Tambahan Murni untuk Kestabilan Fleksibel (Tanpa Merubah Desain Asli Anda) */
     .hidden-custom { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
     .visible-custom { opacity: 1; visibility: visible; pointer-events: auto; display: block; }
-    
-    /* Memastikan kontainer utama beradaptasi mulus di semua ukuran layar */
-    body {
-      overflow-x: hidden;
-    }
   </style>
-  <title>Sistem Informasi Pelayanan & Manajemen Arsip - UPTD Farmasi</title>
+  <title>Dashboard & Layanan - UPTD Farmasi Tangsel</title>
 </head>
-<body class="bg-[#e3ede6] font-sans pb-36 min-h-screen">
+<body class="bg-[#e3ede6] font-sans pb-28 lg:pb-6 min-h-screen">
 
-  <!-- HEADER UTAMA -->
-  <header class="bg-[#e3ede6] px-4 py-3 shadow-sm sticky top-0 z-30 border-b">
-    <div class="max-w-2xl mx-auto w-full flex items-center justify-between">
+  <!-- HEADER UTAMA ATAS -->
+  <header class="bg-[#e3ede6] border-b border-gray-300 sticky top-0 z-30 px-4 lg:px-8 py-3 shadow-sm">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-3">
         <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-10 w-10 object-contain">
         <div>
-          <h1 class="font-extrabold text-blue-900 text-sm tracking-wide leading-tight">UPTD FARMASI</h1>
-          <p class="text-[10px] text-gray-600 font-semibold uppercase tracking-wider">Kota Tangerang Selatan</p>
+          <h1 class="font-extrabold text-blue-900 text-sm lg:text-base tracking-wide leading-tight">UPTD FARMASI KOTA TANGERANG SELATAN</h1>
+          <p class="text-[10px] lg:text-xs text-gray-600 font-semibold uppercase tracking-wider">SISTEM INFORMASI PELAYANAN & MANAJEMEN ARSIP</p>
+        </div>
+      </div>
+      <!-- Info Singkat Kanan khusus PC -->
+      <div class="hidden lg:flex items-center gap-2 border-l pl-4 border-gray-300 text-right">
+        <div>
+          <p class="text-xs font-bold text-gray-800">UPTD FARMASI</p>
+          <p class="text-[10px] text-gray-500">Kota Tangerang Selatan</p>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- KONTEN UTAMA (Fleksibel menenggah di PC dan pas di HP) -->
-  <main id="mainDashboard" class="max-w-2xl mx-auto p-3 space-y-4">
-    
-    <!-- Kartu Profil Pegawai -->
-    <a href="profil.html" class="block bg-white p-4 rounded-2xl shadow-sm border border-gray-100 relative hover:border-blue-300 transition">
-      <div class="flex items-center justify-between gap-4 text-left">
-        <div>
-          <p class="text-[10px] text-blue-900 font-extrabold uppercase tracking-wide">PROFIL PEGAWAI</p>
-          <h2 class="text-sm font-extrabold text-gray-800 mt-0.5">UPTD FARMASI</h2>
-          <p class="text-[10px] text-gray-600 font-mono mt-0.5">Kota Tangerang Selatan</p>
-        </div>
-        <div class="h-24 w-24 flex items-center justify-center flex-shrink-0 bg-transparent">
-          <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain">
-        </div>
-      </div>
-    </a>
+  <!-- STRUKTUR UTAMA LAYOUT PROFESIONAL (SIDEBAR KIRI + KONTEN KANAN DI PC) -->
+  <div class="max-w-7xl mx-auto p-3 lg:p-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
 
-    <!-- Kotak Aksi Cepat -->
-    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-      <div class="flex items-center gap-2 mb-3 text-gray-700 font-bold text-xs">
-        <span class="text-blue-900">⇄</span> Aksi Cepat
-      </div>
-      <div class="grid grid-cols-2 gap-3">
+      <!-- SIDEBAR KIRI (Hanya tampil di PC/Laptop, tersembunyi otomatis di HP) -->
+      <aside class="hidden lg:block lg:col-span-3 space-y-4">
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+          <div class="flex flex-col items-center text-center pb-4 border-b border-gray-100">
+            <div class="h-20 w-20 flex items-center justify-center bg-transparent mb-2">
+              <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain">
+            </div>
+            <h3 class="font-extrabold text-xs text-blue-900 uppercase">PROFIL PEGAWAI</h3>
+            <h4 class="text-sm font-extrabold text-gray-800 mt-0.5">UPTD FARMASI</h4>
+            <p class="text-[10px] text-gray-600 font-mono">Kota Tangerang Selatan</p>
+          </div>
+          <nav class="space-y-1 mt-3">
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 text-blue-900 font-bold text-xs">
+              <span>📊</span> Dashboard
+            </a>
+            <a href="profil.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-gray-700 font-medium text-xs transition">
+              <span>👤</span> Profil Pegawai
+            </a>
+            <a href="kontak.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-gray-700 font-medium text-xs transition">
+              <span>📍</span> Maps / Lokasi
+            </a>
+            <a href="registrasi.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-gray-700 font-medium text-xs transition">
+              <span>📝</span> Buku Tamu
+            </a>
+          </nav>
+        </div>
+      </aside>
+
+      <!-- KONTEN UTAMA (Membentang di 9 kolom PC, atau penuh di HP) -->
+      <main id="mainDashboard" class="lg:col-span-9 space-y-4">
         
-        <!-- Informasi -->
-        <button onclick="bukaDaftar('Informasi')" class="p-3 rounded-xl border border-blue-100 bg-[#f4f8fb] hover:bg-blue-50 transition flex flex-col items-center justify-center text-center gap-1 overflow-visible">
-          <div class="w-12 h-12 flex items-center justify-center bg-transparent overflow-visible">
-            <img src="https://i.ibb.co.com/fzWd1Sq6/Picsart-26-07-24-23-03-05-634.png" class="w-20 h-20 max-w-none object-contain">
+        <!-- Kartu Profil Pegawai (Tampil di HP & bagian atas konten PC) -->
+        <a href="profil.html" class="block bg-white p-4 lg:p-6 rounded-2xl shadow-sm border border-gray-100 relative hover:border-blue-300 transition">
+          <div class="flex items-center justify-between gap-4 text-left">
+            <div>
+              <p class="text-[10px] lg:text-xs text-blue-900 font-extrabold uppercase tracking-wide">PROFIL PEGAWAI</p>
+              <h2 class="text-sm lg:text-lg font-extrabold text-gray-800 mt-0.5">UPTD FARMASI</h2>
+              <p class="text-[10px] lg:text-sm text-gray-600 font-mono mt-0.5">Kota Tangerang Selatan</p>
+            </div>
+            <div class="h-24 w-24 lg:h-32 lg:w-32 flex items-center justify-center flex-shrink-0 bg-transparent">
+              <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain">
+            </div>
           </div>
-          <div class="mt-2">
-            <p class="text-xs font-bold text-gray-800 leading-tight">Informasi</p>
-            <p class="text-[9px] text-gray-500">Update Arsip</p>
-          </div>
-        </button>
+        </a>
 
-        <!-- Edukasi -->
-        <button onclick="bukaDaftar('Edukasi')" class="p-3 rounded-xl border border-emerald-100 bg-[#f2faf5] hover:bg-emerald-50 transition flex flex-col items-center justify-center text-center gap-1 overflow-visible">
-          <div class="w-12 h-12 flex items-center justify-center bg-transparent overflow-visible">
-            <img src="https://i.ibb.co.com/SWQXc7m/Picsart-26-07-24-23-05-58-799.png" class="w-20 h-20 max-w-none object-contain">
+        <!-- Kotak Aksi Cepat -->
+        <div class="bg-white p-4 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+          <div class="flex items-center gap-2 mb-3 text-gray-700 font-bold text-xs lg:text-sm">
+            <span class="text-blue-900">⇄</span> Aksi Cepat
           </div>
-          <div class="mt-2">
-            <p class="text-xs font-bold text-gray-800 leading-tight">Edukasi</p>
-            <p class="text-[9px] text-gray-500">Materi & Panduan</p>
-          </div>
-        </button>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
+            
+            <!-- Informasi -->
+            <button onclick="bukaDaftar('Informasi')" class="p-3 lg:p-4 rounded-xl border border-blue-100 bg-[#f4f8fb] hover:bg-blue-50 transition flex flex-col items-center justify-center text-center gap-1 overflow-visible">
+              <div class="w-12 h-12 lg:w-16 lg:h-16 flex items-center justify-center bg-transparent overflow-visible">
+                <img src="https://i.ibb.co.com/fzWd1Sq6/Picsart-26-07-24-23-03-05-634.png" class="w-20 h-20 lg:w-28 lg:h-28 max-w-none object-contain">
+              </div>
+              <div class="mt-2">
+                <p class="text-xs lg:text-sm font-bold text-gray-800 leading-tight">Informasi</p>
+                <p class="text-[9px] lg:text-xs text-gray-500">Update Arsip</p>
+              </div>
+            </button>
 
-        <!-- Layanan -->
-        <button onclick="bukaDaftar('Pelayanan')" class="p-3 rounded-xl border border-purple-100 bg-[#faf5fb] hover:bg-purple-50 transition flex flex-col items-center justify-center text-center gap-1 overflow-visible">
-          <div class="w-12 h-12 flex items-center justify-center bg-transparent overflow-visible">
-            <img src="https://i.ibb.co.com/N6WBWsJT/Picsart-26-07-24-23-01-12-888.png" class="w-20 h-20 max-w-none object-contain">
-          </div>
-          <div class="mt-2">
-            <p class="text-xs font-bold text-gray-800 leading-tight">Layanan</p>
-            <p class="text-[9px] text-gray-500">Distribusi Logistik</p>
-          </div>
-        </button>
+            <!-- Edukasi -->
+            <button onclick="bukaDaftar('Edukasi')" class="p-3 lg:p-4 rounded-xl border border-emerald-100 bg-[#f2faf5] hover:bg-emerald-50 transition flex flex-col items-center justify-center text-center gap-1 overflow-visible">
+              <div class="w-12 h-12 lg:w-16 lg:h-16 flex items-center justify-center bg-transparent overflow-visible">
+                <img src="https://i.ibb.co.com/SWQXc7m/Picsart-26-07-24-23-05-58-799.png" class="w-20 h-20 lg:w-28 lg:h-28 max-w-none object-contain">
+              </div>
+              <div class="mt-2">
+                <p class="text-xs lg:text-sm font-bold text-gray-800 leading-tight">Edukasi</p>
+                <p class="text-[9px] lg:text-xs text-gray-500">Materi & Panduan</p>
+              </div>
+            </button>
 
-        <!-- Kategori Obat -->
-        <button onclick="bukaDaftar('Obat')" class="p-3 rounded-xl border border-amber-100 bg-[#fdfaf2] hover:bg-amber-50 transition flex flex-col items-center justify-center text-center gap-1 overflow-visible">
-          <div class="w-12 h-12 flex items-center justify-center bg-transparent overflow-visible">
-            <img src="https://i.ibb.co.com/8QzyGR8/Picsart-26-07-24-23-04-30-680.png" class="w-20 h-20 max-w-none object-contain">
-          </div>
-          <div class="mt-2">
-            <p class="text-xs font-bold text-gray-800 leading-tight">Kategori Obat</p>
-            <p class="text-[9px] text-gray-500">Data Perbekalan</p>
-          </div>
-        </button>
+            <!-- Layanan -->
+            <button onclick="bukaDaftar('Pelayanan')" class="p-3 lg:p-4 rounded-xl border border-purple-100 bg-[#faf5fb] hover:bg-purple-50 transition flex flex-col items-center justify-center text-center gap-1 overflow-visible">
+              <div class="w-12 h-12 lg:w-16 lg:h-16 flex items-center justify-center bg-transparent overflow-visible">
+                <img src="https://i.ibb.co.com/N6WBWsJT/Picsart-26-07-24-23-01-12-888.png" class="w-20 h-20 lg:w-28 lg:h-28 max-w-none object-contain">
+              </div>
+              <div class="mt-2">
+                <p class="text-xs lg:text-sm font-bold text-gray-800 leading-tight">Layanan</p>
+                <p class="text-[9px] lg:text-xs text-gray-500">Distribusi Logistik</p>
+              </div>
+            </button>
 
-      </div>
-    </div>
+            <!-- Kategori Obat -->
+            <button onclick="bukaDaftar('Obat')" class="p-3 lg:p-4 rounded-xl border border-amber-100 bg-[#fdfaf2] hover:bg-amber-50 transition flex flex-col items-center justify-center text-center gap-1 overflow-visible">
+              <div class="w-12 h-12 lg:w-16 lg:h-16 flex items-center justify-center bg-transparent overflow-visible">
+                <img src="https://i.ibb.co.com/8QzyGR8/Picsart-26-07-24-23-04-30-680.png" class="w-20 h-20 lg:w-28 lg:h-28 max-w-none object-contain">
+              </div>
+              <div class="mt-2">
+                <p class="text-xs lg:text-sm font-bold text-gray-800 leading-tight">Kategori Obat</p>
+                <p class="text-[9px] lg:text-xs text-gray-500">Data Perbekalan</p>
+              </div>
+            </button>
 
-    <!-- Galeri Kegiatan UPTD Farmasi -->
-    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-      <div class="flex justify-between items-center mb-3">
-        <div class="flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
-          <span class="font-extrabold text-blue-900 text-xs tracking-wide">Galeri Kegiatan UPTD Farmasi</span>
+          </div>
         </div>
-        <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md font-bold">Dokumentasi</span>
-      </div>
-      <div id="gridGaleri" class="grid grid-cols-3 gap-3">
-        <div class="col-span-full text-center py-4 text-xs text-gray-400">Memuat galeri...</div>
-      </div>
-    </div>
-  </main>
 
-  <!-- KONTEN DINAMIS -->
-  <div id="pageDaftar" class="hidden-custom max-w-2xl mx-auto p-4">
-    <button onclick="kembaliKeDashboard()" class="text-blue-900 font-bold mb-4 text-xs inline-flex items-center gap-1">← Kembali ke Dashboard</button>
-    <div id="areaDaftar" class="bg-white p-4 rounded-2xl shadow-sm"></div>
+        <!-- Galeri Kegiatan UPTD Farmasi -->
+        <div class="bg-white p-4 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+          <div class="flex justify-between items-center mb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+              <span class="font-extrabold text-blue-900 text-xs lg:text-sm tracking-wide">Galeri Kegiatan UPTD Farmasi</span>
+            </div>
+            <span class="text-[10px] lg:text-xs text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md font-bold">Dokumentasi</span>
+          </div>
+          <!-- Grid galeri menyesuaikan jumlah kolom di PC dan HP -->
+          <div id="gridGaleri" class="grid grid-cols-3 md:grid-cols-4 gap-3">
+            <div class="col-span-full text-center py-4 text-xs text-gray-400">Memuat galeri...</div>
+          </div>
+        </div>
+
+      </main>
+    </div>
   </div>
 
-  <div id="pageBaca" class="hidden-custom max-w-2xl mx-auto p-4">
-    <button onclick="kembaliKeDaftar()" class="text-blue-900 font-bold mb-4 text-xs inline-flex items-center gap-1">← Kembali ke Daftar</button>
-    <div id="areaBaca" class="bg-white p-5 rounded-2xl shadow-sm"></div>
+  <!-- KONTEN DINAMIS -->
+  <div id="pageDaftar" class="hidden-custom max-w-7xl mx-auto p-4">
+    <button onclick="kembaliKeDashboard()" class="text-blue-900 font-bold mb-4 text-xs lg:text-sm inline-flex items-center gap-1">← Kembali ke Dashboard</button>
+    <div id="areaDaftar" class="bg-white p-4 lg:p-6 rounded-2xl shadow-sm"></div>
+  </div>
+
+  <div id="pageBaca" class="hidden-custom max-w-7xl mx-auto p-4">
+    <button onclick="kembaliKeDaftar()" class="text-blue-900 font-bold mb-4 text-xs lg:text-sm inline-flex items-center gap-1">← Kembali ke Daftar</button>
+    <div id="areaBaca" class="bg-white p-5 lg:p-8 rounded-2xl shadow-sm"></div>
   </div>
 
   <!-- MODAL ZOOM GAMBAR -->
@@ -136,8 +173,8 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAVIGATION BAR -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-[#e3ede6] border-t border-emerald-300 shadow-xl py-3 px-6 flex justify-around items-center z-40 max-w-2xl mx-auto rounded-t-2xl">
+  <!-- BOTTOM NAVIGATION BAR (Hanya aktif/tampil di HP/Mobile) -->
+  <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-[#e3ede6] border-t border-emerald-300 shadow-xl py-3 px-6 flex justify-around items-center z-40 max-w-2xl mx-auto rounded-t-2xl">
     <a href="index.html#registrasi" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
       <div class="w-7 h-7 flex items-center justify-center overflow-visible">
         <img src="https://i.ibb.co.com/Xf1wsJ41/Picsart-26-07-25-12-29-14-940.png" class="w-20 h-20 max-w-none object-contain">
@@ -183,7 +220,7 @@
         snapshot.forEach((docSnap) => {
           const item = docSnap.data();
           const fotoDiv = document.createElement('div');
-          fotoDiv.className = "rounded-xl overflow-hidden h-24 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2 cursor-pointer";
+          fotoDiv.className = "rounded-xl overflow-hidden h-24 lg:h-32 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2 cursor-pointer";
           fotoDiv.innerHTML = `<img src="${item.url}" class="w-full h-full object-cover hover:scale-105 transition">`;
           
           fotoDiv.onclick = () => bukaZoom(item.url);
@@ -209,54 +246,54 @@
 
     window.bukaDaftar = async (kategori) => {
       document.getElementById('mainDashboard').className = 'hidden-custom';
-      document.getElementById('pageDaftar').className = 'visible-custom max-w-2xl mx-auto p-4';
+      document.getElementById('pageDaftar').className = 'visible-custom max-w-7xl mx-auto p-4';
       const area = document.getElementById('areaDaftar');
-      area.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">Memuat data ${kategori}...</p>`;
+      area.innerHTML = `<p class="text-xs lg:text-sm text-gray-500 text-center py-6">Memuat data ${kategori}...</p>`;
       
       try {
         const snap = await getDocs(query(collection(db, kategori), orderBy("waktuInput", "desc")));
-        area.innerHTML = `<h3 class="text-base font-extrabold text-blue-900 mb-4 capitalize border-b pb-2">Kategori: ${kategori}</h3>`;
+        area.innerHTML = `<h3 class="text-base lg:text-xl font-extrabold text-blue-900 mb-4 capitalize border-b pb-2">Kategori: ${kategori}</h3>`;
         
         if (snap.empty) {
-          area.innerHTML += `<p class="text-xs text-gray-400 text-center py-4">Belum ada konten pada kategori ini.</p>`;
+          area.innerHTML += `<p class="text-xs lg:text-sm text-gray-400 text-center py-4">Belum ada konten pada kategori ini.</p>`;
           return;
         }
 
         const listDiv = document.createElement('div');
-        listDiv.className = "space-y-2";
+        listDiv.className = "grid grid-cols-1 md:grid-cols-2 gap-3";
         snap.forEach(d => {
           const data = d.data();
           const btn = document.createElement('button');
-          btn.className = "w-full text-left p-3 border rounded-xl hover:bg-blue-50 font-bold text-xs text-gray-800 transition shadow-sm flex items-center justify-between";
-          btn.innerHTML = `<span>📄 ${data.judul}</span> <span class="text-blue-900 text-[10px]">Baca →</span>`;
+          btn.className = "w-full text-left p-3 lg:p-4 border rounded-xl hover:bg-blue-50 font-bold text-xs lg:text-sm text-gray-800 transition shadow-sm flex items-center justify-between";
+          btn.innerHTML = `<span>📄 ${data.judul}</span> <span class="text-blue-900 text-[10px] lg:text-xs">Baca →</span>`;
           btn.onclick = () => bukaArtikel(data);
           listDiv.appendChild(btn);
         });
         area.appendChild(listDiv);
       } catch (err) {
-        area.innerHTML = `<p class="text-xs text-red-500 text-center py-4">Gagal memuat data dari database.</p>`;
+        area.innerHTML = `<p class="text-xs lg:text-sm text-red-500 text-center py-4">Gagal memuat data dari database.</p>`;
       }
     };
 
     window.bukaArtikel = (data) => {
       document.getElementById('pageDaftar').className = 'hidden-custom';
-      document.getElementById('pageBaca').className = 'visible-custom max-w-2xl mx-auto p-4';
+      document.getElementById('pageBaca').className = 'visible-custom max-w-7xl mx-auto p-4';
       document.getElementById('areaBaca').innerHTML = `
-        <h2 class="text-lg font-extrabold text-blue-900 mb-3">${data.judul}</h2>
+        <h2 class="text-lg lg:text-2xl font-extrabold text-blue-900 mb-3">${data.judul}</h2>
         ${data.url ? `<img src="${data.url}" class="w-full h-auto rounded-xl mb-4 shadow-sm object-cover max-h-80 cursor-pointer" onclick="bukaZoom('${data.url}')">` : ''}
-        <article class="text-xs text-gray-700 leading-relaxed whitespace-pre-line bg-gray-50 p-4 rounded-xl border">${data.isi}</article>
+        <article class="text-xs lg:text-base text-gray-700 leading-relaxed whitespace-pre-line bg-gray-50 p-4 lg:p-6 rounded-xl border">${data.isi}</article>
       `;
     };
 
     window.kembaliKeDashboard = () => {
       document.getElementById('pageDaftar').className = 'hidden-custom';
       document.getElementById('pageBaca').className = 'hidden-custom';
-      document.getElementById('mainDashboard').className = 'visible-custom max-w-2xl mx-auto p-3 space-y-4';
+      document.getElementById('mainDashboard').className = 'lg:col-span-9 space-y-4 visible-custom';
     };
 
     window.kembaliKeDaftar = () => {
       document.getElementById('pageBaca').className = 'hidden-custom';
-      document.getElementById('pageDaftar').className = 'visible-custom max-w-2xl mx-auto p-4';
+      document.getElementById('pageDaftar').className = 'visible-custom max-w-7xl mx-auto p-4';
     };
   </script>
 </body>
