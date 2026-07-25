@@ -2,260 +2,67 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .hidden-custom { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
-    .visible-custom { opacity: 1; visibility: visible; pointer-events: auto; display: block; }
-    body { overflow-x: hidden; width: 100%; position: relative; }
-  </style>
-  <title>Profil Pegawai - UPTD Farmasi Tangsel</title>
+  <title>Profil Pegawai - UPTD Farmasi</title>
 </head>
-<body class="bg-[#e3ede6] font-sans min-h-screen pb-16">
+<body class="bg-[#d1e7dd] min-h-screen p-4 md:p-8">
 
-  <!-- Header Atas -->
-  <header class="bg-[#e3ede6] px-4 py-3 shadow-sm sticky top-0 z-30 border-b border-emerald-200">
-    <div class="max-w-4xl mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <a href="index.html" class="flex items-center gap-2 text-blue-900 font-bold text-xs bg-white px-3 py-1.5 rounded-xl border border-emerald-200 shadow-sm">← Dashboard</a>
-      </div>
-      <h1 class="font-extrabold text-blue-900 text-xs tracking-wide">PROFIL PEGAWAI UPTD FARMASI</h1>
-    </div>
-  </header>
-
-  <!-- Konten Utama Daftar Pegawai -->
-  <main class="max-w-4xl mx-auto p-4 space-y-4">
-    <div class="flex justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+  <div class="max-w-6xl mx-auto space-y-6">
+    <!-- Header / Navigasi Sederhana -->
+    <div class="bg-white p-6 rounded-2xl shadow-lg flex justify-between items-center">
       <div>
-        <h2 class="text-sm font-extrabold text-blue-900">Kartu Pegawai & Staf</h2>
-        <p class="text-[10px] text-gray-500">Struktur organisasi, golongan, dan PJ Program UPTD Farmasi Tangsel</p>
+        <h1 class="text-2xl font-bold text-blue-900">Profil & Data Pegawai</h1>
+        <p class="text-xs text-gray-500 mt-1">UPTD Farmasi - Daftar Pegawai dan Penanggung Jawab Program</p>
       </div>
-      <button onclick="bukaLoginAdmin()" class="bg-blue-900 text-white text-[10px] font-bold px-3 py-2 rounded-xl shadow hover:bg-blue-800 transition">⚙️ Admin Panel</button>
+      <a href="index.html" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-300">Kembali ke Beranda</a>
     </div>
 
-    <!-- Grid Kartu Pegawai Dari Firestore -->
-    <div id="gridPegawai" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <div class="bg-white p-6 rounded-2xl text-center text-xs text-gray-400 col-span-full shadow-sm">Memuat data pegawai...</div>
-    </div>
-  </main>
-
-  <!-- MODAL LOGIN ADMIN -->
-  <div id="modalLogin" class="hidden-custom fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-    <div class="bg-white p-6 rounded-2xl max-w-sm w-full shadow-2xl space-y-3">
-      <div class="flex justify-between items-center">
-        <h3 class="text-xs font-extrabold text-blue-900 uppercase">Login Admin</h3>
-        <button onclick="tutupModal('modalLogin')" class="text-gray-400 hover:text-black font-bold">✕</button>
-      </div>
-      <p class="text-[10px] text-gray-500">Masukkan sandi admin untuk mengelola data profil pegawai.</p>
-      <input type="password" id="inputSandi" placeholder="Kata Sandi Admin" class="w-full p-2.5 text-xs border rounded-xl focus:outline-blue-900">
-      <button onclick="prosesLogin()" class="w-full bg-blue-900 text-white py-2.5 rounded-xl text-xs font-bold shadow hover:bg-blue-800 transition">Masuk</button>
+    <!-- Grid Daftar Pegawai -->
+    <div id="containerProfilPegawai" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Data pegawai akan dimuat otomatis secara real-time dari Firestore -->
+      <div class="col-span-full text-center py-10 text-gray-500">Memuat data pegawai...</div>
     </div>
   </div>
 
-  <!-- MODAL KELOLA PEGAWAI (TAMBAH / EDIT) -->
-  <div id="modalKelola" class="hidden-custom fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white p-6 rounded-2xl max-w-md w-full shadow-2xl space-y-3 my-8">
-      <div class="flex justify-between items-center">
-        <h3 id="judulModalKelola" class="text-xs font-extrabold text-blue-900 uppercase">Tambah Profil Pegawai</h3>
-        <button onclick="tutupModal('modalKelola')" class="text-gray-400 hover:text-black font-bold">✕</button>
-      </div>
-      <input type="hidden" id="editId">
-      <div>
-        <label class="text-[10px] font-bold text-gray-600">Nama & Gelar</label>
-        <input type="text" id="inputNama" class="w-full p-2 text-xs border rounded-xl mt-1 focus:outline-blue-900" placeholder="Contoh: Budi Santoso, S.Farm., Apt.">
-      </div>
-      <div>
-        <label class="text-[10px] font-bold text-gray-600">Jabatan</label>
-        <input type="text" id="inputJabatan" class="w-full p-2 text-xs border rounded-xl mt-1 focus:outline-blue-900" placeholder="Contoh: Kepala UPTD Farmasi">
-      </div>
-      <div>
-        <label class="text-[10px] font-bold text-gray-600">Golongan</label>
-        <input type="text" id="inputGolongan" class="w-full p-2 text-xs border rounded-xl mt-1 focus:outline-blue-900" placeholder="Contoh: Pembina / IV/a">
-      </div>
-      <div>
-        <label class="text-[10px] font-bold text-gray-600">PJ Program</label>
-        <input type="text" id="inputPj" class="w-full p-2 text-xs border rounded-xl mt-1 focus:outline-blue-900" placeholder="Contoh: Penanggung Jawab Pengelolaan Obat">
-      </div>
-      <div>
-        <label class="text-[10px] font-bold text-gray-600">Link Foto (URL Gambar)</label>
-        <input type="text" id="inputFoto" class="w-full p-2 text-xs border rounded-xl mt-1 focus:outline-blue-900" placeholder="Tempel URL foto (misal dari Imbb)">
-      </div>
-      <div class="flex gap-2 pt-2">
-        <button onclick="simpanPegawai()" class="flex-1 bg-emerald-700 text-white py-2.5 rounded-xl text-xs font-bold shadow hover:bg-emerald-800 transition">Simpan Kartu</button>
-        <button onclick="tutupModal('modalKelola')" class="bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl text-xs font-bold">Batal</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Panel Admin Mengambang -->
-  <div id="panelAdminMenu" class="hidden-custom fixed bottom-4 right-4 bg-blue-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 z-40 border border-blue-700">
-    <span class="text-[10px] font-bold">🛠️ Mode Admin Aktif</span>
-    <button onclick="bukaFormTambah()" class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl text-[10px] font-bold shadow hover:bg-emerald-500 transition">+ Tambah Pegawai</button>
-    <button onclick="logoutAdmin()" class="bg-red-600 text-white px-2.5 py-1.5 rounded-xl text-[10px] font-bold shadow hover:bg-red-500 transition">Keluar</button>
-  </div>
-
-  <!-- SKRIP FIREBASE -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app" };
+    const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
     const db = getFirestore(initializeApp(firebaseConfig));
 
-    let isAdmin = localStorage.getItem("isAdminUPTD") === "true";
+    // Menampilkan profil pegawai secara real-time dari koleksi "pegawai"
+    onSnapshot(query(collection(db, "pegawai"), orderBy("waktuInput", "desc")), (snap) => {
+      const container = document.getElementById("containerProfilPegawai");
+      container.innerHTML = "";
 
-    document.addEventListener("DOMContentLoaded", () => {
-      cekStatusAdminUI();
-      muatDataPegawai();
-    });
-
-    function cekStatusAdminUI() {
-      const panel = document.getElementById('panelAdminMenu');
-      if (isAdmin) {
-        panel.className = "fixed bottom-4 right-4 bg-blue-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 z-40 border border-blue-700 visible-custom";
-      } else {
-        panel.className = "hidden-custom fixed bottom-4 right-4 bg-blue-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 z-40 border border-blue-700";
+      if (snap.empty) {
+        container.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl shadow text-center text-gray-500">Belum ada data pegawai yang ditambahkan oleh admin.</div>`;
+        return;
       }
-    }
 
-    function muatDataPegawai() {
-      const grid = document.getElementById('gridPegawai');
-      onSnapshot(query(collection(db, "pegawai"), orderBy("waktuInput", "desc")), (snapshot) => {
-        grid.innerHTML = "";
-        if (snapshot.empty) {
-          grid.innerHTML = `<div class="bg-white p-6 rounded-2xl text-center text-xs text-gray-400 col-span-full shadow-sm">Belum ada data profil pegawai.</div>`;
-          return;
-        }
-
-        snapshot.forEach((docSnap) => {
-          const item = docSnap.data();
-          const id = docSnap.id;
-          const card = document.createElement('div');
-          card.className = "bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 relative";
-          
-          let fotoDefault = item.url ? item.url : "https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png";
-          
-          let tombolAdminHTML = "";
-          if (isAdmin) {
-            tombolAdminHTML = `
-              <div class="absolute top-2 right-2 flex gap-1">
-                <button onclick="editPegawai('${id}', '${item.nama || ''}', '${item.jabatan || ''}', '${item.golongan || ''}', '${item.pj || ''}', '${item.url || ''}')" class="bg-amber-100 text-amber-800 p-1.5 rounded-lg text-[10px] font-bold hover:bg-amber-200">✏️</button>
-                <button onclick="hapusPegawai('${id}')" class="bg-red-100 text-red-800 p-1.5 rounded-lg text-[10px] font-bold hover:bg-red-200">🗑️</button>
-              </div>
-            `;
-          }
-
-          card.innerHTML = `
-            ${tombolAdminHTML}
-            <div class="w-20 h-24 rounded-xl bg-emerald-50 border border-emerald-100 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-inner">
-              <img src="${fotoDefault}" class="w-full h-full object-cover">
+      snap.forEach(d => {
+        const item = d.data();
+        const fotoUrl = item.url ? item.url : "https://via.placeholder.com/150?text=No+Photo";
+        
+        container.innerHTML += `
+          <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center text-center space-y-3">
+            <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-blue-900 shadow-md">
+              <img src="${fotoUrl}" alt="Foto Pegawai" class="w-full h-full object-cover">
             </div>
-            <div class="space-y-0.5 text-left text-xs pr-6">
-              <h3 class="font-extrabold text-blue-900 text-sm">${item.nama || '-'}</h3>
-              <p class="text-gray-700 font-bold">Jabatan: <span class="font-normal text-gray-600">${item.jabatan || '-'}</span></p>
-              <p class="text-gray-700 font-bold">Golongan: <span class="font-normal text-gray-600">${item.golongan || '-'}</span></p>
-              <p class="text-gray-700 font-bold">PJ Program: <span class="font-normal text-gray-600">${item.pj || '-'}</span></p>
+            <div>
+              <h3 class="font-bold text-lg text-blue-900">${item.nama}</h3>
+              <p class="text-xs text-gray-600 font-semibold mt-0.5">${item.jabatan}</p>
             </div>
-          `;
-          grid.appendChild(card);
-        });
+            <div class="w-full border-t pt-3 text-left text-xs space-y-1 text-gray-700 bg-gray-50 p-3 rounded-lg">
+              <p><b>Golongan:</b> ${item.golongan || '-'}</p>
+              <p><b>PJ Program:</b> ${item.pj || '-'}</p>
+            </div>
+          </div>
+        `;
       });
-    }
-
-    window.bukaLoginAdmin = () => {
-      if (isAdmin) {
-        alert("Anda sudah masuk sebagai Admin.");
-        return;
-      }
-      document.getElementById('modalLogin').className = "visible-custom fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4";
-    };
-
-    window.prosesLogin = () => {
-      const sandi = document.getElementById('inputSandi').value;
-      if (sandi === "uptd123") {
-        isAdmin = true;
-        localStorage.setItem("isAdminUPTD", "true");
-        tutupModal('modalLogin');
-        cekStatusAdminUI();
-        muatDataPegawai();
-        alert("Berhasil masuk sebagai Admin!");
-      } else {
-        alert("Kata sandi salah!");
-      }
-    };
-
-    window.logoutAdmin = () => {
-      isAdmin = false;
-      localStorage.removeItem("isAdminUPTD");
-      cekStatusAdminUI();
-      muatDataPegawai();
-      alert("Keluar dari Mode Admin.");
-    };
-
-    window.bukaFormTambah = () => {
-      document.getElementById('editId').value = "";
-      document.getElementById('inputNama').value = "";
-      document.getElementById('inputJabatan').value = "";
-      document.getElementById('inputGolongan').value = "";
-      document.getElementById('inputPj').value = "";
-      document.getElementById('inputFoto').value = "";
-      document.getElementById('judulModalKelola').innerText = "Tambah Profil Pegawai";
-      document.getElementById('modalKelola').className = "visible-custom fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 overflow-y-auto";
-    };
-
-    window.editPegawai = (id, nama, jabatan, golongan, pj, url) => {
-      document.getElementById('editId').value = id;
-      document.getElementById('inputNama').value = nama;
-      document.getElementById('inputJabatan').value = jabatan;
-      document.getElementById('inputGolongan').value = golongan;
-      document.getElementById('inputPj').value = pj;
-      document.getElementById('inputFoto').value = url;
-      document.getElementById('judulModalKelola').innerText = "Edit Profil Pegawai";
-      document.getElementById('modalKelola').className = "visible-custom fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 overflow-y-auto";
-    };
-
-    window.simpanPegawai = async () => {
-      const id = document.getElementById('editId').value;
-      const nama = document.getElementById('inputNama').value;
-      const jabatan = document.getElementById('inputJabatan').value;
-      const golongan = document.getElementById('inputGolongan').value;
-      const pj = document.getElementById('inputPj').value;
-      const url = document.getElementById('inputFoto').value;
-
-      if (!nama || !jabatan) {
-        alert("Nama dan Jabatan wajib diisi!");
-        return;
-      }
-
-      try {
-        if (id) {
-          await updateDoc(doc(db, "pegawai", id), { nama, jabatan, golongan, pj, url });
-          alert("Profil pegawai berhasil diperbarui!");
-        } else {
-          await addDoc(collection(db, "pegawai"), { nama, jabatan, golongan, pj, url, waktuInput: Date.now() });
-          alert("Profil pegawai baru berhasil ditambahkan!");
-        }
-        tutupModal('modalKelola');
-      } catch (err) {
-        console.error(err);
-        alert("Gagal menyimpan data ke database.");
-      }
-    };
-
-    window.hapusPegawai = async (id) => {
-      if (confirm("Yakin ingin menghapus kartu pegawai ini?")) {
-        try {
-          await deleteDoc(doc(db, "pegawai", id));
-          alert("Pegawai berhasil dihapus.");
-        } catch (err) {
-          alert("Gagal menghapus data.");
-        }
-      }
-    };
-
-    window.tutupModal = (modalId) => {
-      document.getElementById(modalId).className = "hidden-custom fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4";
-    };
+    });
   </script>
 </body>
 </html>
