@@ -28,25 +28,25 @@
   <!-- KONTEN UTAMA -->
   <main id="mainDashboard" class="max-w-md mx-auto p-3 space-y-3">
     <!-- Kartu Profil Pegawai -->
-<a href="profil.html" class="block bg-white p-3 rounded-2xl shadow-sm border border-gray-100 relative hover:border-blue-300 transition">
-  <div class="flex items-center justify-between gap-3 text-left">
-    
-    <!-- Teks di Kiri -->
-    <div>
-      <p class="text-[9px] text-blue-900 font-extrabold uppercase tracking-wide">PROFIL PEGAWAI</p>
-      <h2 class="text-xs font-extrabold text-gray-800 mt-0.5">UPTD FARMASI</h2>
-      <p class="text-[9px] text-gray-600 font-mono mt-0.5">Kota Tangerang Selatan</p>
-    </div>
+    <a href="profil.html" class="block bg-white p-3 rounded-2xl shadow-sm border border-gray-100 relative hover:border-blue-300 transition">
+      <div class="flex items-center justify-between gap-3 text-left">
+        
+        <!-- Teks di Kiri -->
+        <div>
+          <p class="text-[9px] text-blue-900 font-extrabold uppercase tracking-wide">PROFIL PEGAWAI</p>
+          <h2 class="text-xs font-extrabold text-gray-800 mt-0.5">UPTD FARMASI</h2>
+          <p class="text-[9px] text-gray-600 font-mono mt-0.5">Kota Tangerang Selatan</p>
+        </div>
 
-    <!-- Ikon di Kanan -->
-    <div class="h-24 w-24 flex items-center justify-center flex-shrink-0 bg-transparent">
-      <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain">
-    </div>
-    
-  </div>
-</a>
+        <!-- Ikon di Kanan -->
+        <div class="h-24 w-24 flex items-center justify-center flex-shrink-0 bg-transparent">
+          <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain">
+        </div>
+        
+      </div>
+    </a>
 
-    <!-- 2. Kotak Aksi Cepat (Kotak Dibuat Ringkas, Namun Ukuran Ikon Diperbesar Menjadi w-14 h-14) -->
+    <!-- 2. Kotak Aksi Cepat -->
     <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
       <div class="flex items-center gap-2 mb-2 text-gray-700 font-bold text-xs">
         <span class="text-blue-900">⇄</span> Aksi Cepat
@@ -100,7 +100,7 @@
       </div>
     </div>
 
-    <!-- 3. Galeri Kegiatan UPTD Farmasi -->
+    <!-- 3. Galeri Kegiatan UPTD Farmasi (Terintegrasi Admin/Firebase) -->
     <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
       <div class="flex justify-between items-center mb-2">
         <div class="flex items-center gap-2">
@@ -109,17 +109,9 @@
         </div>
         <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md font-bold">Dokumentasi</span>
       </div>
-      <!-- Grid Foto Kegiatan -->
-      <div class="grid grid-cols-3 gap-2">
-        <div class="rounded-xl overflow-hidden h-20 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2">
-          <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain hover:scale-105 transition">
-        </div>
-        <div class="rounded-xl overflow-hidden h-20 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2">
-          <img src="https://i.ibb.co.com/SWQXc7m/Picsart-26-07-24-23-05-58-799.png" class="w-full h-full object-contain hover:scale-105 transition">
-        </div>
-        <div class="rounded-xl overflow-hidden h-20 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2">
-          <img src="https://i.ibb.co.com/fzWd1Sq6/Picsart-26-07-24-23-03-05-634.png" class="w-full h-full object-contain hover:scale-105 transition">
-        </div>
+      <!-- Grid Foto Kegiatan Dinamis -->
+      <div id="gridGaleri" class="grid grid-cols-3 gap-2">
+        <div class="col-span-3 text-center py-4 text-xs text-gray-400">Memuat galeri...</div>
       </div>
     </div>
   </main>
@@ -135,7 +127,7 @@
     <div id="areaBaca" class="bg-white p-5 rounded-2xl shadow-sm"></div>
   </div>
 
-<!-- Bottom Navigation Bar -->
+  <!-- Bottom Navigation Bar -->
   <nav class="fixed bottom-0 left-0 right-0 bg-[#e3ede6] border-t border-emerald-300 shadow-lg py-2.5 px-6 flex justify-around items-center z-40 max-w-md mx-auto">
     
     <!-- Registrasi -->
@@ -174,10 +166,32 @@
   <!-- Skrip JavaScript & Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
     
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app" };
     const db = getFirestore(initializeApp(firebaseConfig));
+
+    // Muat Galeri Kegiatan secara Real-time dari Koleksi "galeri" (sinkron dengan admin.html)
+    document.addEventListener("DOMContentLoaded", () => {
+      const gridGaleri = document.getElementById('gridGaleri');
+      onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snapshot) => {
+        gridGaleri.innerHTML = "";
+        if (snapshot.empty) {
+          gridGaleri.innerHTML = `<p class="text-xs text-gray-400 text-center col-span-3 py-3">Belum ada foto galeri kegiatan.</p>`;
+          return;
+        }
+        snapshot.forEach((docSnap) => {
+          const item = docSnap.data();
+          const fotoDiv = document.createElement('div');
+          fotoDiv.className = "rounded-xl overflow-hidden h-20 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2";
+          fotoDiv.innerHTML = `<img src="${item.url}" class="w-full h-full object-cover hover:scale-105 transition">`;
+          gridGaleri.appendChild(fotoDiv);
+        });
+      }, (error) => {
+        console.error("Gagal memuat galeri:", error);
+        gridGaleri.innerHTML = `<p class="text-xs text-red-400 text-center col-span-3 py-3">Gagal memuat galeri.</p>`;
+      });
+    });
 
     window.bukaDaftar = async (kategori) => {
       document.getElementById('mainDashboard').className = 'hidden-custom';
