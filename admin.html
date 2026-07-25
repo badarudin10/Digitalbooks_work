@@ -74,15 +74,36 @@
             <h3 class="font-bold text-sm text-blue-900 mb-2">Daftar Artikel (Klik untuk Hapus):</h3>
             <div id="containerDaftarArtikel" class="space-y-1"></div>
           </div>
-          <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700">Keluar (Logout)</button>
         </div>
       </div>
+    </div>
+
+    <!-- TAMBAHAN BARU: KELOLA PROFIL PEGAWAI (TERINTEGRASI DENGAN FIRESTORE & PROFIL.HTML) -->
+    <div class="bg-white p-6 rounded-2xl shadow-lg">
+      <h2 class="text-xl font-bold text-blue-900 mb-4">Kelola Profil Pegawai</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+        <input type="text" id="inputPegawaiNama" placeholder="Nama & Gelar..." class="p-2 border rounded-lg text-sm">
+        <input type="text" id="inputPegawaiJabatan" placeholder="Jabatan..." class="p-2 border rounded-lg text-sm">
+        <input type="text" id="inputPegawaiGolongan" placeholder="Golongan..." class="p-2 border rounded-lg text-sm">
+        <input type="text" id="inputPegawaiPj" placeholder="PJ Program..." class="p-2 border rounded-lg text-sm">
+        <input type="text" id="inputPegawaiFoto" placeholder="Link Foto URL..." class="p-2 border rounded-lg text-sm md:col-span-2">
+      </div>
+      <button onclick="tambahPegawaiAdmin()" class="w-full bg-blue-900 text-white p-3 rounded-lg font-bold mb-4 hover:bg-blue-800">Tambah Profil Pegawai</button>
+      
+      <div class="border-t pt-4">
+        <h3 class="font-bold text-sm text-blue-900 mb-2">Daftar Pegawai Saat Ini:</h3>
+        <div id="containerDaftarPegawai" class="space-y-2 max-h-60 overflow-y-auto"></div>
+      </div>
+    </div>
+
+    <div class="pt-4">
+      <button onclick="logout()" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700">Keluar (Logout)</button>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy, updateDoc, doc, serverTimestamp, addDoc, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, updateDoc, doc, serverTimestamp, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
     const db = getFirestore(initializeApp(firebaseConfig));
@@ -127,6 +148,29 @@
       onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snap) => {
         const c = document.getElementById("listFotoGaleri"); c.innerHTML = "";
         snap.forEach(d => c.innerHTML += `<div class="relative h-16 border rounded overflow-hidden"><img src="${d.data().url}" class="w-full h-full object-cover"><button onclick="hapusFoto('galeri', '${d.id}')" class="absolute inset-0 bg-red-600/70 text-white text-[10px] opacity-0 hover:opacity-100">Hapus</button></div>`);
+      });
+
+      // Sinkronisasi Real-time Daftar Pegawai di Admin
+      onSnapshot(query(collection(db, "pegawai"), orderBy("waktuInput", "desc")), (snap) => {
+        const container = document.getElementById("containerDaftarPegawai");
+        container.innerHTML = "";
+        if(snap.empty) {
+          container.innerHTML = `<p class="text-xs text-gray-400">Belum ada data pegawai.</p>`;
+          return;
+        }
+        snap.forEach(d => {
+          const item = d.data();
+          const div = document.createElement("div");
+          div.className = "flex justify-between items-center bg-gray-50 p-2.5 rounded-lg text-xs border";
+          div.innerHTML = `
+            <div>
+              <b>${item.nama}</b> - <span class="text-gray-600">${item.jabatan}</span> 
+              <br><span class="text-[10px] text-blue-900">Gol: ${item.golongan || '-'} | PJ: ${item.pj || '-'}</span>
+            </div>
+            <button onclick="hapusPegawaiAdmin('${d.id}')" class="bg-red-100 text-red-600 px-3 py-1 rounded font-bold hover:bg-red-200">Hapus</button>
+          `;
+          container.appendChild(div);
+        });
       });
     }
 
@@ -188,6 +232,44 @@
       if(confirm("Yakin ingin menghapus artikel ini?")) {
         await deleteDoc(doc(db, kategori, id));
         alert("Artikel berhasil dihapus");
+      }
+    };
+
+    // FUNGSI KELOLA PEGAWAI ADMIN
+    window.tambahPegawaiAdmin = async () => {
+      const nama = document.getElementById("inputPegawaiNama").value.trim();
+      const jabatan = document.getElementById("inputPegawaiJabatan").value.trim();
+      const golongan = document.getElementById("inputPegawaiGolongan").value.trim();
+      const pj = document.getElementById("inputPegawaiPj").value.trim();
+      const url = document.getElementById("inputPegawaiFoto").value.trim();
+
+      if (!nama || !jabatan) {
+        alert("Nama dan Jabatan wajib diisi!");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "pegawai"), { nama, jabatan, golongan, pj, url, waktuInput: Date.now() });
+        alert("Profil pegawai berhasil ditambahkan ke database!");
+        document.getElementById("inputPegawaiNama").value = "";
+        document.getElementById("inputPegawaiJabatan").value = "";
+        document.getElementById("inputPegawaiGolongan").value = "";
+        document.getElementById("inputPegawaiPj").value = "";
+        document.getElementById("inputPegawaiFoto").value = "";
+      } catch (err) {
+        console.error(err);
+        alert("Gagal menambahkan pegawai.");
+      }
+    };
+
+    window.hapusPegawaiAdmin = async (id) => {
+      if (confirm("Yakin ingin menghapus pegawai ini dari database?")) {
+        try {
+          await deleteDoc(doc(db, "pegawai", id));
+          alert("Pegawai berhasil dihapus.");
+        } catch (err) {
+          alert("Gagal menghapus data.");
+        }
       }
     };
   </script>
