@@ -135,41 +135,41 @@
     <div id="areaBaca" class="bg-white p-5 rounded-2xl shadow-sm"></div>
   </div>
 
-    <!-- Bottom Navigation Bar -->
+<!-- Bottom Navigation Bar -->
   <nav class="fixed bottom-0 left-0 right-0 bg-[#e3ede6] border-t border-emerald-300 shadow-lg py-2.5 px-4 flex justify-around items-center z-40 max-w-md mx-auto overflow-visible">
     
-    <!-- Dashboard -->
-    <a href="#registrasi" onclick="kembaliKeRegistrasi()" class="flex flex-col items-center justify-center text-emerald-900 font-bold overflow-visible relative">
+    <!-- Dashboard -> Masuk halaman dashboard tamu -->
+    <a href="tamu.html" class="flex flex-col items-center justify-center text-emerald-900 font-bold overflow-visible relative">
       <div class="w-7 h-7 flex items-center justify-center overflow-visible">
         <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-24 h-24 max-w-none object-contain">
       </div>
       <span class="text-[10px] mt-2 font-extrabold tracking-tight text-center">Dashboard</span>
     </a>
 
-    <!-- Layanan -->
-    <a href="#" onclick="bukaDaftar('Pelayanan')" class="flex flex-col items-center justify-center text-emerald-900 font-bold overflow-visible relative">
+    <!-- Layanan diganti menjadi Kontak -> Masuk halaman kontak -->
+    <a href="kontak.html" class="flex flex-col items-center justify-center text-emerald-900 font-bold overflow-visible relative">
       <div class="w-7 h-7 flex items-center justify-center overflow-visible">
         <img src="https://i.ibb.co.com/N6WBWsJT/Picsart-26-07-24-23-01-12-888.png" class="w-24 h-24 max-w-none object-contain">
       </div>
-      <span class="text-[10px] mt-2 font-bold tracking-tight text-center">Layanan</span>
+      <span class="text-[10px] mt-2 font-bold tracking-tight text-center">Kontak</span>
     </a>
     
-    <!-- Tombol Bulat Tengah (Profil) -->
+    <!-- Tombol Bulat Tengah -> Kembali ke atas konten dashboard -->
     <div class="relative -top-5 flex flex-col items-center overflow-visible">
-      <a href="profil.html" class="block h-16 w-16 rounded-full bg-white border-4 border-emerald-800 flex items-center justify-center shadow-md overflow-hidden hover:scale-105 transition">
+      <button onclick="window.scrollTo({top: 0, behavior: 'smooth'}); kembaliKeDashboard();" class="block h-16 w-16 rounded-full bg-white border-4 border-emerald-800 flex items-center justify-center shadow-md overflow-hidden hover:scale-105 transition cursor-pointer">
         <img src="https://i.ibb.co.com/yBSQNYZm/Picsart-26-07-25-10-57-45-621.png" class="h-full w-full object-cover scale-110">
-      </a>
+      </button>
     </div>
 
-    <!-- Buku Tamu -->
-    <a href="index.html" class="flex flex-col items-center justify-center text-emerald-900 font-bold overflow-visible relative">
+    <!-- Buku Tamu -> Masuk halaman registrasi -->
+    <a href="registrasi.html" class="flex flex-col items-center justify-center text-emerald-900 font-bold overflow-visible relative">
       <div class="w-7 h-7 flex items-center justify-center overflow-visible">
         <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-24 h-24 max-w-none object-contain">
       </div>
       <span class="text-[10px] mt-2 font-bold tracking-tight text-center">Buku Tamu</span>
     </a>
 
-    <!-- Lainnya -->
+    <!-- Lainnya / Survei -->
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex flex-col items-center justify-center text-emerald-900 font-bold overflow-visible relative">
       <div class="w-7 h-7 flex items-center justify-center overflow-visible">
         <img src="https://i.ibb.co.com/M5D0s0t9/Picsart-26-07-25-11-29-02-111.png" class="w-24 h-24 max-w-none object-contain">
