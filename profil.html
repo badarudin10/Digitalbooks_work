@@ -8,7 +8,7 @@
 </head>
 <body class="bg-[#d1e7dd] min-h-screen p-4 md:p-8">
 
-  <div class="max-w-6xl mx-auto space-y-6">
+  <div class="max-w-4xl mx-auto space-y-6">
     <!-- Header / Navigasi Sederhana -->
     <div class="bg-white p-6 rounded-2xl shadow-lg flex justify-between items-center">
       <div>
@@ -18,10 +18,10 @@
       <a href="index.html" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-300">Kembali ke Beranda</a>
     </div>
 
-    <!-- Grid Daftar Pegawai -->
-    <div id="containerProfilPegawai" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Container Daftar Pegawai (Layout Horizontal) -->
+    <div id="containerProfilPegawai" class="space-y-4">
       <!-- Data pegawai akan dimuat otomatis secara real-time dari Firestore -->
-      <div class="col-span-full text-center py-10 text-gray-500">Memuat data pegawai...</div>
+      <div class="bg-white p-6 rounded-2xl shadow-lg text-center text-gray-500">Memuat data pegawai...</div>
     </div>
   </div>
 
@@ -32,13 +32,13 @@
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
     const db = getFirestore(initializeApp(firebaseConfig));
 
-    // Menampilkan profil pegawai secara real-time dari koleksi "pegawai"
+    // Menampilkan profil pegawai secara real-time dari koleksi "pegawai" dengan layout horizontal
     onSnapshot(query(collection(db, "pegawai"), orderBy("waktuInput", "desc")), (snap) => {
       const container = document.getElementById("containerProfilPegawai");
       container.innerHTML = "";
 
       if (snap.empty) {
-        container.innerHTML = `<div class="col-span-full bg-white p-8 rounded-2xl shadow text-center text-gray-500">Belum ada data pegawai yang ditambahkan oleh admin.</div>`;
+        container.innerHTML = `<div class="bg-white p-8 rounded-2xl shadow text-center text-gray-500">Belum ada data pegawai yang ditambahkan oleh admin.</div>`;
         return;
       }
 
@@ -47,17 +47,21 @@
         const fotoUrl = item.url ? item.url : "https://via.placeholder.com/150?text=No+Photo";
         
         container.innerHTML += `
-          <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center text-center space-y-3">
-            <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-blue-900 shadow-md">
+          <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col md:flex-row items-center gap-6">
+            <!-- Foto di Kiri -->
+            <div class="w-32 h-32 md:w-36 md:h-36 shrink-0 rounded-2xl overflow-hidden border-2 border-blue-900 shadow-md bg-gray-100">
               <img src="${fotoUrl}" alt="Foto Pegawai" class="w-full h-full object-cover">
             </div>
-            <div>
-              <h3 class="font-bold text-lg text-blue-900">${item.nama}</h3>
-              <p class="text-xs text-gray-600 font-semibold mt-0.5">${item.jabatan}</p>
-            </div>
-            <div class="w-full border-t pt-3 text-left text-xs space-y-1 text-gray-700 bg-gray-50 p-3 rounded-lg">
-              <p><b>Golongan:</b> ${item.golongan || '-'}</p>
-              <p><b>PJ Program:</b> ${item.pj || '-'}</p>
+            <!-- Data di Kanan -->
+            <div class="flex-1 w-full text-center md:text-left space-y-2">
+              <div>
+                <h3 class="font-bold text-xl text-blue-900">${item.nama}</h3>
+                <p class="text-sm text-gray-600 font-semibold">${item.jabatan}</p>
+              </div>
+              <div class="border-t pt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-700 bg-gray-50 p-3 rounded-xl">
+                <p><b>Golongan:</b> ${item.golongan || '-'}</p>
+                <p><b>PJ Program:</b> ${item.pj || '-'}</p>
+              </div>
             </div>
           </div>
         `;
@@ -66,3 +70,4 @@
   </script>
 </body>
 </html>
+
