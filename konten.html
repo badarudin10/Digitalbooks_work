@@ -19,7 +19,7 @@
       height: auto;
     }
 
-    /* Penyesuaian layout agar mendukung sidebar grid ala MyASN di PC/Laptop tanpa merusak desain aslinya di mobile */
+    /* Penyesuaian layout grid PC/Laptop */
     @media (min-width: 1024px) {
       .app-layout-wrapper {
         max-width: 1200px !important;
@@ -38,7 +38,7 @@
         grid-column: span 9 / span 9;
       }
       .bottom-nav-wrapper {
-        display: none !important; /* Di PC/Laptop menggunakan Sidebar, bottom nav disembunyikan agar bersih */
+        display: none !important;
       }
     }
 
@@ -84,48 +84,40 @@
     </div>
   </header>
 
-  <!-- KONTROL UTAMA LAYOUT RESPONSIF (Grid PC + Tampilan Mobile) -->
+  <!-- KONTROL UTAMA LAYOUT RESPONSIF -->
   <div class="app-layout-wrapper">
 
-    <!-- SIDEBAR KIRI KHUSUS PC (Menggunakan ikon gambar yang sama persis dengan bottom bar mobile) -->
+    <!-- SIDEBAR KIRI KHUSUS PC (Bagian duplikat atas telah dihapus dan ikon logo diperbesar agar presisi) -->
     <aside class="pc-sidebar space-y-4">
       <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-        <div class="flex flex-col items-center text-center pb-4 border-b border-gray-100">
-          <div class="h-20 w-20 flex items-center justify-center bg-transparent mb-2">
-            <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain">
-          </div>
-          <h3 class="font-extrabold text-xs text-blue-900 uppercase">PROFIL PEGAWAI</h3>
-          <h4 class="text-sm font-extrabold text-gray-800 mt-0.5">UPTD FARMASI</h4>
-          <p class="text-[10px] text-gray-600 font-mono">Kota Tangerang Selatan</p>
-        </div>
-        <nav class="space-y-1.5 mt-3">
+        <nav class="space-y-1.5">
           <!-- Registrasi -->
-          <a href="index.html#registrasi" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-6 h-6 flex items-center justify-center overflow-visible flex-shrink-0">
-              <img src="https://i.ibb.co.com/Xf1wsJ41/Picsart-26-07-25-12-29-14-940.png" class="w-16 h-16 max-w-none object-contain">
+          <a href="index.html#registrasi" class="flex items-center gap-3.5 px-3.5 py-3 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
+            <div class="w-8 h-8 flex items-center justify-center overflow-visible flex-shrink-0">
+              <img src="https://i.ibb.co.com/Xf1wsJ41/Picsart-26-07-25-12-29-14-940.png" class="w-20 h-20 max-w-none object-contain">
             </div>
-            <span>Registrasi</span>
+            <span class="text-sm">Registrasi</span>
           </a>
           <!-- Maps -->
-          <a href="kontak.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-6 h-6 flex items-center justify-center overflow-visible flex-shrink-0">
-              <img src="https://i.ibb.co.com/5PtXnK6/Picsart-26-07-25-12-25-33-560.png" class="w-14 h-14 max-w-none object-contain">
+          <a href="kontak.html" class="flex items-center gap-3.5 px-3.5 py-3 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
+            <div class="w-8 h-8 flex items-center justify-center overflow-visible flex-shrink-0">
+              <img src="https://i.ibb.co.com/5PtXnK6/Picsart-26-07-25-12-25-33-560.png" class="w-18 h-18 max-w-none object-contain">
             </div>
-            <span>Maps</span>
+            <span class="text-sm">Maps</span>
           </a>
           <!-- Buku Tamu -->
-          <a href="registrasi.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-6 h-6 flex items-center justify-center overflow-visible flex-shrink-0">
-              <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-20 h-20 max-w-none object-contain">
+          <a href="registrasi.html" class="flex items-center gap-3.5 px-3.5 py-3 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
+            <div class="w-8 h-8 flex items-center justify-center overflow-visible flex-shrink-0">
+              <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-24 h-24 max-w-none object-contain">
             </div>
-            <span>Tamu</span>
+            <span class="text-sm">Tamu</span>
           </a>
           <!-- Survei -->
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-6 h-6 flex items-center justify-center overflow-visible flex-shrink-0">
-              <img src="https://i.ibb.co.com/M5D0s0t9/Picsart-26-07-25-11-29-02-111.png" class="w-20 h-20 max-w-none object-contain">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex items-center gap-3.5 px-3.5 py-3 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
+            <div class="w-8 h-8 flex items-center justify-center overflow-visible flex-shrink-0">
+              <img src="https://i.ibb.co.com/M5D0s0t9/Picsart-26-07-25-11-29-02-111.png" class="w-24 h-24 max-w-none object-contain">
             </div>
-            <span>Survei</span>
+            <span class="text-sm">Survei</span>
           </a>
         </nav>
       </div>
