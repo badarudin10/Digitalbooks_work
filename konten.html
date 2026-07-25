@@ -127,6 +127,14 @@
     <div id="areaBaca" class="bg-white p-5 rounded-2xl shadow-sm"></div>
   </div>
 
+  <!-- MODAL ZOOM GAMBAR GALERI -->
+  <div id="modalZoom" class="hidden-custom fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+    <div class="relative max-w-lg w-full">
+      <button onclick="tutupZoom()" class="absolute -top-10 right-0 text-white font-bold text-lg bg-black/50 px-3 py-1 rounded-full hover:bg-black">✕ Tutup</button>
+      <img id="gambarZoom" src="" class="w-full max-h-[80vh] object-contain rounded-2xl shadow-2xl bg-white">
+    </div>
+  </div>
+
   <!-- Bottom Navigation Bar -->
   <nav class="fixed bottom-0 left-0 right-0 bg-[#e3ede6] border-t border-emerald-300 shadow-lg py-2.5 px-6 flex justify-around items-center z-40 max-w-md mx-auto">
     
@@ -183,8 +191,11 @@
         snapshot.forEach((docSnap) => {
           const item = docSnap.data();
           const fotoDiv = document.createElement('div');
-          fotoDiv.className = "rounded-xl overflow-hidden h-20 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2";
+          fotoDiv.className = "rounded-xl overflow-hidden h-20 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2 cursor-pointer";
           fotoDiv.innerHTML = `<img src="${item.url}" class="w-full h-full object-cover hover:scale-105 transition">`;
+          
+          // Event klik untuk membuka modal zoom
+          fotoDiv.onclick = () => bukaZoom(item.url);
           gridGaleri.appendChild(fotoDiv);
         });
       }, (error) => {
@@ -192,6 +203,19 @@
         gridGaleri.innerHTML = `<p class="text-xs text-red-400 text-center col-span-3 py-3">Gagal memuat galeri.</p>`;
       });
     });
+
+    // Fungsi Zoom Foto Galeri
+    window.bukaZoom = (url) => {
+      const modal = document.getElementById('modalZoom');
+      const img = document.getElementById('gambarZoom');
+      img.src = url;
+      modal.className = 'visible-custom fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4';
+    };
+
+    window.tutupZoom = () => {
+      const modal = document.getElementById('modalZoom');
+      modal.className = 'hidden-custom fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4';
+    };
 
     window.bukaDaftar = async (kategori) => {
       document.getElementById('mainDashboard').className = 'hidden-custom';
@@ -229,7 +253,7 @@
       document.getElementById('pageBaca').className = 'visible-custom max-w-md mx-auto p-4';
       document.getElementById('areaBaca').innerHTML = `
         <h2 class="text-xl font-extrabold text-blue-900 mb-3">${data.judul}</h2>
-        ${data.url ? `<img src="${data.url}" class="w-full h-auto rounded-xl mb-4 shadow-sm object-cover max-h-64">` : ''}
+        ${data.url ? `<img src="${data.url}" class="w-full h-auto rounded-xl mb-4 shadow-sm object-cover max-h-64 cursor-pointer" onclick="bukaZoom('${data.url}')">` : ''}
         <article class="text-sm text-gray-700 leading-relaxed whitespace-pre-line bg-gray-50 p-4 rounded-xl border">${data.isi}</article>
       `;
     };
@@ -247,3 +271,4 @@
   </script>
 </body>
 </html>
+
