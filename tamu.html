@@ -27,10 +27,10 @@
       <p class="text-[11px] text-gray-500 mt-0.5">Cek status registrasi Anda secara real-time dan download bukti PDF</p>
     </div>
 
-    <!-- Container Daftar Tamu dari Firestore (Sinkron dengan admin.html) -->
+    <!-- Container Daftar Tamu dari Firestore -->
     <div id="containerTamu" class="space-y-3">
       <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center text-xs text-gray-400">
-        Memuat data registrasi...
+        Memuat data registrasi dari database...
       </div>
     </div>
 
@@ -49,20 +49,20 @@
   <!-- SKRIP FIREBASE & LOGIKA HALAMAN -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app" };
     const db = getFirestore(initializeApp(firebaseConfig));
 
-    // Sinkronisasi data real-time dengan Firestore (koleksi bukuTamu / admin)
-    onSnapshot(query(collection(db, "bukuTamu"), orderBy("waktuInput", "desc")), (snapshot) => {
+    // Fungsi untuk memuat dan merender data ke halaman
+    function renderData(snapshot) {
       const container = document.getElementById("containerTamu");
       container.innerHTML = "";
 
       if (snapshot.empty) {
         container.innerHTML = `
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center text-xs text-gray-400">
-            Belum ada riwayat registrasi yang tercatat.
+            Belum ada riwayat registrasi yang tercatat di sistem.
           </div>
         `;
         return;
@@ -73,13 +73,11 @@
 
         // Status badge styling
         let statusColor = "bg-amber-50 text-amber-800 border-amber-200";
-        let statusText = "Menunggu";
+        let statusText = item.status || "Menunggu";
         if (item.status === "Diproses") {
           statusColor = "bg-blue-50 text-blue-800 border-blue-200";
-          statusText = "Diproses";
         } else if (item.status === "Selesai") {
           statusColor = "bg-emerald-50 text-emerald-800 border-emerald-200";
-          statusText = "Selesai";
         }
 
         const card = document.createElement("div");
@@ -87,15 +85,16 @@
         card.innerHTML = `
           <div class="flex justify-between items-start gap-2">
             <div>
-              <h3 class="font-extrabold text-xs text-blue-900">${item.nama || item.namaTamu || 'Tanpa Nama'}</h3>
+              <h3 class="font-extrabold text-xs text-blue-900">${item.nama || item.namaTamu || item.namaLengkap || 'Tanpa Nama'}</h3>
               <p class="text-[10px] text-gray-600 mt-0.5"><b>Keperluan:</b> ${item.keperluan || item.tujuan || '-'}</p>
+              <p class="text-[10px] text-gray-500"><b>Instansi:</b> ${item.instansi || '-'}</p>
             </div>
             <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border shrink-0 ${statusColor}">
               ${statusText}
             </span>
           </div>
           <div class="border-t pt-2 flex justify-between items-center text-[10px] text-gray-500">
-            <span><b>Waktu:</b> ${item.tanggal || item.waktu || 'Baru saja'}</span>
+            <span><b>Waktu:</b> ${item.tanggal || item.waktu || item.waktuInput || 'Baru saja'}</span>
             <button onclick='downloadPdf(${JSON.stringify(item)})' class="bg-blue-900 hover:bg-blue-800 text-white px-3 py-1.5 rounded-xl font-bold transition shadow-sm">
               Download PDF 📥
             </button>
@@ -103,14 +102,27 @@
         `;
         container.appendChild(card);
       });
-    }, (error) => {
-      console.error("Gagal memuat data tamu:", error);
-      document.getElementById("containerTamu").innerHTML = `
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center text-xs text-red-400">
-          Gagal memuat data dari database.
-        </div>
-      `;
-    });
+    }
+
+    // Melakukan sinkronisasi real-time. 
+    // Catatan: Jika form registrasi Anda di index.html menggunakan nama koleksi selain "bukuTamu" (misal: "registrasi"), 
+    // silakan ubah string "bukuTamu" di bawah ini agar sama persis dengan yang ada di index.html dan admin.html Anda.
+    const namaKoleksi = "bukuTamu"; 
+
+    try {
+      const q = query(collection(db, namaKoleksi), orderBy("waktuInput", "desc"));
+      onSnapshot(q, (snapshot) => {
+        renderData(snapshot);
+      }, (err) => {
+        // Fallback jika field "waktuInput" belum ada di dokumen lama
+        console.warn("Menggunakan query tanpa sorting waktu:", err);
+        onSnapshot(collection(db, namaKoleksi), (fallbackSnap) => {
+          renderData(fallbackSnap);
+        });
+      });
+    } catch (e) {
+      console.error("Gagal menghubungkan database:", e);
+    }
 
     // Fungsi cetak PDF sesuai format instruksi Anda
     window.downloadPdf = (data) => {
@@ -123,11 +135,11 @@
             <p style="font-size: 10px; color: #555; margin: 4px 0 0 0;">Bukti Resmi Pengambilan Obat & Kunjungan Tamu</p>
           </div>
           <div style="font-size: 12px; color: #333; line-height: 1.8;">
-            <p style="margin: 6px 0;"><b>Nama :</b> ${data.nama || data.namaTamu || '-'}</p>
+            <p style="margin: 6px 0;"><b>Nama :</b> ${data.nama || data.namaTamu || data.namaLengkap || '-'}</p>
             <p style="margin: 6px 0;"><b>Instansi :</b> ${data.instansi || '-'}</p>
             <p style="margin: 6px 0;"><b>Keperluan :</b> ${data.keperluan || data.tujuan || '-'}</p>
             <p style="margin: 6px 0;"><b>Nama petugas penerima :</b> ${data.petugas || data.namaPetugas || '-'}</p>
-            <p style="margin: 6px 0;"><b>Waktu :</b> ${data.tanggal || data.waktu || '-'}</p>
+            <p style="margin: 6px 0;"><b>Waktu :</b> ${data.tanggal || data.waktu || data.waktuInput || '-'}</p>
             <p style="margin: 6px 0;"><b>Status :</b> ${data.status || 'Menunggu'}</p>
           </div>
           <div style="margin-top: 30px; text-align: center; font-size: 9px; color: #777; border-top: 1px solid #eee; padding-top: 12px;">
@@ -138,7 +150,7 @@
 
       const opt = {
         margin:       10,
-        filename:     `Bukti_Pengambilan_Obat_${data.nama || 'Tamu'}.pdf`,
+        filename:     `Bukti_Pengambilan_Obat_${data.nama || data.namaTamu || 'Tamu'}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2 },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -151,3 +163,4 @@
   </script>
 </body>
 </html>
+
