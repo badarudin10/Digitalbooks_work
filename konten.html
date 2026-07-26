@@ -19,7 +19,7 @@
       height: auto;
     }
 
-    /* Penyesuaian layout grid PC/Laptop sesuai instruksi gambar */
+    /* Penyesuaian layout grid PC/Laptop */
     @media (min-width: 1024px) {
       .app-layout-wrapper {
         max-width: 1200px !important;
@@ -253,11 +253,13 @@
     </div>
   </div>
 
-  <!-- MODAL ZOOM GAMBAR -->
+  <!-- MODAL ZOOM GAMBAR (Diperbaiki posisi agar benar-benar di tengah & tombol X terlihat jelas) -->
   <div id="modalZoom" class="hidden-custom fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-    <div class="relative max-w-4xl w-full flex flex-col items-center">
-      <button onclick="tutupZoom()" class="absolute -top-10 right-0 text-white font-bold text-lg bg-black/50 px-3 py-1 rounded-full hover:bg-black">✕ Tutup</button>
-      <img id="gambarZoom" src="" class="w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl bg-white">
+    <div class="relative max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-3 flex flex-col items-center">
+      <div class="w-full flex justify-end mb-2">
+        <button onclick="tutupZoom()" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-3 py-1.5 rounded-lg shadow transition flex items-center gap-1">✕ Tutup</button>
+      </div>
+      <img id="gambarZoom" src="" class="w-full max-h-[75vh] object-contain rounded-xl bg-gray-50">
     </div>
   </div>
 
@@ -370,7 +372,6 @@
       document.getElementById('pageDaftar').className = 'hidden-custom';
       document.getElementById('pageBaca').className = 'visible-custom main-container lg:max-w-none p-5 bg-white rounded-2xl shadow-sm border border-gray-100';
       
-      // Diperbaiki: Gambar diatur agar berada di tengah, berukuran proporsional, dan dapat diklik untuk zoom penuh
       document.getElementById('areaBaca').innerHTML = `
         <h2 class="text-lg font-extrabold text-blue-900 mb-4 text-center">${data.judul}</h2>
         ${data.url ? `
@@ -398,4 +399,3 @@
   </script>
 </body>
 </html>
-
