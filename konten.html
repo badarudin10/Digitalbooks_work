@@ -240,7 +240,7 @@
         </div>
       </main>
 
-      <!-- KONTEN DINAMIS (Diletakkan di dalam .pc-main-content agar tampil sempurna di PC maupun HP) -->
+      <!-- KONTEN DINAMIS -->
       <div id="pageDaftar" class="hidden-custom main-container lg:max-w-none p-4 bg-white rounded-2xl shadow-sm border border-gray-100">
         <button onclick="kembaliKeDashboard()" class="text-blue-900 font-bold mb-4 text-xs inline-flex items-center gap-1">← Kembali ke Dashboard</button>
         <div id="areaDaftar"></div>
@@ -253,11 +253,11 @@
     </div>
   </div>
 
-  <!-- MODAL ZOOM GAMBAR GALERI -->
+  <!-- MODAL ZOOM GAMBAR -->
   <div id="modalZoom" class="hidden-custom fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-    <div class="relative max-w-lg w-full">
+    <div class="relative max-w-4xl w-full flex flex-col items-center">
       <button onclick="tutupZoom()" class="absolute -top-10 right-0 text-white font-bold text-lg bg-black/50 px-3 py-1 rounded-full hover:bg-black">✕ Tutup</button>
-      <img id="gambarZoom" src="" class="w-full max-h-[80vh] object-contain rounded-2xl shadow-2xl bg-white">
+      <img id="gambarZoom" src="" class="w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl bg-white">
     </div>
   </div>
 
@@ -369,9 +369,18 @@
     window.bukaArtikel = (data) => {
       document.getElementById('pageDaftar').className = 'hidden-custom';
       document.getElementById('pageBaca').className = 'visible-custom main-container lg:max-w-none p-5 bg-white rounded-2xl shadow-sm border border-gray-100';
+      
+      // Diperbaiki: Gambar diatur agar berada di tengah, berukuran proporsional, dan dapat diklik untuk zoom penuh
       document.getElementById('areaBaca').innerHTML = `
-        <h2 class="text-lg font-extrabold text-blue-900 mb-3">${data.judul}</h2>
-        ${data.url ? `<img src="${data.url}" class="w-full h-auto rounded-xl mb-4 shadow-sm object-cover max-h-80 cursor-pointer" onclick="bukaZoom('${data.url}')">` : ''}
+        <h2 class="text-lg font-extrabold text-blue-900 mb-4 text-center">${data.judul}</h2>
+        ${data.url ? `
+          <div class="flex justify-center mb-5">
+            <div class="max-w-xl w-full bg-gray-50 p-2 rounded-2xl border border-gray-200 shadow-sm cursor-pointer" onclick="bukaZoom('${data.url}')">
+              <img src="${data.url}" class="w-full h-auto max-h-[400px] object-contain rounded-xl mx-auto hover:opacity-95 transition">
+              <p class="text-[10px] text-gray-500 text-center mt-2 italic">Klik gambar untuk memperbesar (Zoom)</p>
+            </div>
+          </div>
+        ` : ''}
         <article class="text-xs text-gray-700 leading-relaxed whitespace-pre-line bg-gray-50 p-4 rounded-xl border">${data.isi}</article>
       `;
     };
@@ -389,3 +398,4 @@
   </script>
 </body>
 </html>
+
