@@ -243,52 +243,67 @@
       snapshot.forEach((docSnap) => {
         const item = docSnap.data();
 
-        // Format waktu jika berupa Firestore Timestamp
-        let waktuStr = item.waktu || '-';
-        if (item.waktu && typeof item.waktu.toDate === 'function') {
-          waktuStr = item.waktu.toDate().toLocaleString('id-ID');
+        // 1. Tangani Format Waktu (Mendukung Timestamp Firestore maupun String biasa untuk data lama)
+        let waktuStr = '-';
+        if (item.waktu) {
+          if (typeof item.waktu.toDate === 'function') {
+            waktuStr = item.waktu.toDate().toLocaleString('id-ID');
+          } else {
+            waktuStr = item.waktu;
+          }
+        } else if (item.tanggal || item.createdAt) {
+          waktuStr = item.tanggal || item.createdAt;
         }
 
-        // Status badge styling
+        // 2. Tangani Status (Mendukung berbagai variasi huruf besar/kecil)
         let statusColor = "bg-amber-50 text-amber-800 border-amber-200";
-        let statusText = item.status || "Menunggu";
-        if (item.status === "Diproses" || item.status === "diproses") {
+        let statusText = item.status || item.statusPelayanan || "Selesai";
+        const statusLower = String(statusText).toLowerCase();
+        if (statusLower.includes("proses")) {
           statusColor = "bg-blue-50 text-blue-800 border-blue-200";
-        } else if (item.status === "Selesai" || item.status === "selesai") {
+        } else if (statusLower.includes("selesai")) {
           statusColor = "bg-emerald-50 text-emerald-800 border-emerald-200";
         }
 
-        // Ambil data obat yang diterima dari admin (mendukung field: obatDiterima, daftarObat, atau obat)
-        const obatTerima = item.obatDiterima || item.daftarObat || item.obat || '-';
+        // 3. Tangani Daftar Obat (Mendukung berbagai variasi nama field dari data lama)
+        const obatTerima = item.obatDiterima || item.daftarObat || item.obat || item.keteranganObat || '-';
 
-        // Simpan data terformat ke object item agar ikut terbawa saat tombol download diklik
-        item.waktuFormatted = waktuStr;
-        item.obatTerimaFormatted = obatTerima;
+        // 4. NORMALISASI DATA: Menyatukan data baru dan data lama ke format standar yang aman
+        const normalizedData = {
+          nama: item.nama || item.namaTamu || item.namaLengkap || 'Tanpa Nama',
+          instansi: item.instansi || item.asal || item.instansiAsal || '-',
+          keperluan: item.keperluan || item.tujuan || '-',
+          petugas: item.petugas || item.namaPetugas || item.petugasProgram || '-',
+          waktuFormatted: waktuStr,
+          status: statusText,
+          obatTerimaFormatted: obatTerima,
+          nomorAntrian: item.nomorAntrian || item.noAntrian || ''
+        };
 
         const card = document.createElement("div");
         card.className = "bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-3";
         card.innerHTML = `
           <div class="flex justify-between items-start gap-2">
             <div class="space-y-0.5">
-              <h3 class="font-extrabold text-xs text-blue-900">${item.nama || 'Tanpa Nama'}</h3>
-              <p class="text-[10px] text-gray-600"><b>Instansi:</b> ${item.instansi || '-'}</p>
-              <p class="text-[10px] text-gray-600"><b>Keperluan:</b> ${item.keperluan || '-'}</p>
-              ${item.nomorAntrian ? `<p class="text-[10px] text-blue-700 font-bold">No. Antrian: ${item.nomorAntrian}</p>` : ''}
+              <h3 class="font-extrabold text-xs text-blue-900">${normalizedData.nama}</h3>
+              <p class="text-[10px] text-gray-600"><b>Instansi:</b> ${normalizedData.instansi}</p>
+              <p class="text-[10px] text-gray-600"><b>Keperluan:</b> ${normalizedData.keperluan}</p>
+              ${normalizedData.nomorAntrian ? `<p class="text-[10px] text-blue-700 font-bold">No. Antrian: ${normalizedData.nomorAntrian}</p>` : ''}
             </div>
             <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border shrink-0 ${statusColor}">
-              ${statusText}
+              ${normalizedData.status}
             </span>
           </div>
 
           <!-- Bagian Informasi Obat yang Diterima -->
           <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100 text-[10px] space-y-1">
             <p class="text-blue-900 font-bold">💊 Obat yang Diterima:</p>
-            <p class="text-gray-700 whitespace-pre-line">${obatTerima}</p>
+            <p class="text-gray-700 whitespace-pre-line">${normalizedData.obatTerimaFormatted}</p>
           </div>
 
           <div class="border-t pt-2 flex justify-between items-center text-[10px] text-gray-500">
-            <span><b>Waktu:</b> ${waktuStr}</span>
-            <button onclick='downloadPdf(${JSON.stringify(item)})' class="bg-blue-900 hover:bg-blue-800 text-white px-3 py-1.5 rounded-xl font-bold transition shadow-sm inline-flex items-center gap-1">
+            <span><b>Waktu:</b> ${normalizedData.waktuFormatted}</span>
+            <button onclick='downloadPdf(${JSON.stringify(normalizedData)})' class="bg-blue-900 hover:bg-blue-800 text-white px-3 py-1.5 rounded-xl font-bold transition shadow-sm inline-flex items-center gap-1">
               Download PDF 📥
             </button>
           </div>
@@ -304,7 +319,7 @@
       `;
     });
 
-    // Fungsi cetak PDF disesuaikan agar konsisten & rapi untuk semua jenis data (terlepas dari panjang pendeknya obat)
+    // Fungsi cetak PDF universal yang menjamin data lama maupun baru tercetak rapi secara konsisten
     window.downloadPdf = (data) => {
       const areaCetak = document.getElementById("areaCetakPdf");
       areaCetak.style.display = "block";
@@ -346,12 +361,12 @@
               <tr>
                 <td style="font-weight: normal;">Petugas Program</td>
                 <td style="text-align: center;">:</td>
-                <td>${data.petugas || data.namaPetugas || '-'}</td>
+                <td>${data.petugas || '-'}</td>
               </tr>
               <tr>
                 <td style="font-weight: normal;">Waktu Kunjungan</td>
                 <td style="text-align: center;">:</td>
-                <td>${data.waktuFormatted || data.waktu || '-'}</td>
+                <td>${data.waktuFormatted || '-'}</td>
               </tr>
               <tr>
                 <td style="font-weight: normal;">Status Pelayanan</td>
@@ -361,7 +376,7 @@
             </table>
           </div>
 
-          <!-- Kotak Daftar Obat yang Diterima (Fleksibel menampung data panjang) -->
+          <!-- Kotak Daftar Obat yang Diterima -->
           <div style="margin-top: 10px; padding: 12px 18px; background: #fcfcfc; border: 1px solid #d1d5db; border-radius: 8px;">
             <p style="margin: 0 0 8px 0; font-weight: bold; color: #1e3a8a; font-size: 11.5px; text-transform: uppercase;">💊 DAFTAR OBAT / BARANG YANG DITERIMA:</p>
             <div style="margin: 0; white-space: pre-line; color: #1f2937; font-size: 12px; line-height: 1.6;">${data.obatTerimaFormatted || '-'}</div>
@@ -381,7 +396,7 @@
         </div>
       `;
 
-      // Konfigurasi ukuran F4 dengan margin yang dioptimalkan agar data panjang tidak terpotong
+      // Konfigurasi ukuran F4
       const opt = {
         margin:       8,
         filename:     `Bukti_Pengambilan_Obat_${data.nama || 'Tamu'}.pdf`,
