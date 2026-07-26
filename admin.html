@@ -42,7 +42,7 @@
             <th class="p-3">Instansi</th>
             <th class="p-3">Status</th>
             <th class="p-3">Durasi</th>
-            <th class="p-3">Aksi</th>
+            <th class="p-3">Input Obat & Aksi</th>
           </tr>
         </thead>
         <tbody id="tabelTamu"></tbody>
@@ -136,9 +136,12 @@
             <td class="p-3 text-gray-600">${data.instansi || '-'}</td>
             <td class="p-3 text-${data.status === 'selesai' ? 'green' : 'yellow'}-600">${data.status || 'menunggu'}</td>
             <td class="p-3">${durasi}</td>
-            <td class="p-3 flex gap-1">
-              ${data.status !== 'selesai' && data.status !== 'proses' ? `<button onclick="updateStatus('${docSnap.id}', 'proses', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-yellow-500 text-white px-2 py-1 rounded text-xs">Proses</button>` : ''}
-              ${data.status !== 'selesai' ? `<button onclick="updateStatus('${docSnap.id}', 'selesai', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-green-600 text-white px-2 py-1 rounded text-xs">Selesai</button>` : '✓'}
+            <td class="p-3 space-y-2">
+              <input type="text" id="obat_${docSnap.id}" value="${data.obatDiterima || ''}" placeholder="Masukkan obat..." class="w-full p-1.5 border rounded text-xs bg-gray-50">
+              <div class="flex gap-1">
+                ${data.status !== 'selesai' && data.status !== 'proses' ? `<button onclick="updateStatus('${docSnap.id}', 'proses', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-yellow-500 text-white px-2 py-1 rounded text-xs">Proses</button>` : ''}
+                <button onclick="updateStatus('${docSnap.id}', 'selesai', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-green-600 text-white px-2 py-1 rounded text-xs">Simpan & Selesai</button>
+              </div>
             </td>
           </tr>`;
         });
@@ -175,8 +178,16 @@
     }
 
     window.updateStatus = async (id, status, hp, nama, antrian) => {
-      await updateDoc(doc(db, "tamu", id), { status: status, [status === 'proses' ? 'waktuProses' : 'waktuSelesai']: serverTimestamp() });
-      const pesan = status === 'proses' ? `Halo ${nama}, antrian (${antrian}) Anda sedang diproses.` : `Halo ${nama}, antrian (${antrian}) Anda sudah selesai.`;
+      const obatInput = document.getElementById(`obat_${id}`).value.trim();
+      let updateData = { 
+        status: status, 
+        obatDiterima: obatInput,
+        [status === 'proses' ? 'waktuProses' : 'waktuSelesai']: serverTimestamp() 
+      };
+      
+      await updateDoc(doc(db, "tamu", id), updateData);
+      
+      const pesan = status === 'proses' ? `Halo ${nama}, antrian (${antrian}) Anda sedang diproses.` : `Halo ${nama}, antrian (${antrian}) Anda sudah selesai. Obat yang diberikan: ${obatInput || '-'}`;
       let phone = hp.startsWith('0') ? '62' + hp.substring(1) : (hp.startsWith('8') ? '62' + hp : hp);
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(pesan)}`, '_blank');
     };
@@ -275,3 +286,4 @@
   </script>
 </body>
 </html>
+
