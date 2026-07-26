@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Lokasi & Peta - UPTD Farmasi</title>
+</head>
+<body class="bg-[#d1e7dd] min-h-screen p-4 md:p-8 flex flex-col justify-between">
+
+  <div class="max-w-4xl mx-auto space-y-6 w-full">
+    <!-- Header / Judul di Tengah -->
+    <div class="bg-white p-6 rounded-2xl shadow-lg text-center">
+      <h1 class="text-2xl font-bold text-blue-900">Lokasi & Peta UPTD Farmasi</h1>
+      <p class="text-xs text-gray-500 mt-1">Temukan rute dan petunjuk arah menuju kantor kami</p>
+    </div>
+
+    <!-- Kotak Konten Peta & Informasi -->
+    <div class="bg-white p-6 rounded-2xl shadow-lg space-y-4">
+      
+      <!-- Informasi Alamat Singkat -->
+      <div class="bg-gray-50 p-4 rounded-xl border flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div>
+          <h3 class="font-bold text-sm text-blue-900">Alamat Kantor:</h3>
+          <p class="text-xs text-gray-600 mt-0.5">UPTD Farmasi (Sesuaikan alamat lengkap instansi Anda di sini)</p>
+        </div>
+        <a href="https://maps.google.com/?q=UPTD+Farmasi" target="_blank" class="bg-blue-900 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-800 transition shrink-0">Buka di Google Maps ↗</a>
+      </div>
+
+      <!-- Bingkai Peta Google Maps (Responsive Embed) -->
+      <div class="w-full h-96 rounded-xl overflow-hidden border shadow-inner">
+        <!-- Catatan: Ganti src iframe di bawah dengan embed map lokasi persis UPTD Farmasi Anda dari Google Maps -->
+        <iframe 
+          width="100%" 
+          height="100%" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.2(GantiDenganEmbedMapLokasiAnda)!2d106.8!(Ganti)!3d-6.2!(Ganti)!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMTInMDAuMCJTIDEwNsKwNDgnMDAuMCJF!5e0!3m2!1sid!2sid!4v1234567890">
+        </iframe>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Tombol Kembali ke Halaman Konten di Bawah -->
+  <div class="max-w-4xl mx-auto w-full mt-8 text-center">
+    <a href="konten.html" class="inline-block bg-white text-blue-900 border border-blue-900 px-6 py-3 rounded-2xl text-sm font-bold shadow-lg hover:bg-blue-50 transition">← Kembali ke Beranda</a>
+  </div>
+
+</body>
+</html>
