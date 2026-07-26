@@ -19,7 +19,7 @@
       height: auto;
     }
 
-    /* Penyesuaian layout grid PC/Laptop */
+    /* Penyesuaian layout grid PC/Laptop sesuai instruksi gambar */
     @media (min-width: 1024px) {
       .app-layout-wrapper {
         max-width: 1200px !important;
@@ -32,7 +32,9 @@
       }
       .pc-sidebar {
         grid-column: span 3 / span 3;
-        display: block !important;
+        display: flex !important;
+        flex-direction: column;
+        gap: 16px;
       }
       .pc-main-content {
         grid-column: span 9 / span 9;
@@ -40,11 +42,23 @@
       .bottom-nav-wrapper {
         display: none !important;
       }
+      .pc-header-desktop {
+        display: block !important;
+      }
+      .mobile-header-bar {
+        display: none !important;
+      }
     }
 
     @media (max-width: 1023px) {
       .pc-sidebar {
         display: none !important;
+      }
+      .pc-header-desktop {
+        display: none !important;
+      }
+      .mobile-header-bar {
+        display: block !important;
       }
       .main-container {
         max-width: 448px;
@@ -71,8 +85,8 @@
 </head>
 <body class="bg-[#e3ede6] font-sans min-h-screen pb-24 lg:pb-6">
   
-  <!-- Header Atas -->
-  <header class="bg-[#e3ede6] px-4 py-3 shadow-sm sticky top-0 z-30 border-b border-emerald-200">
+  <!-- Header Atas (Hanya tampil di Mobile/HP) -->
+  <header class="mobile-header-bar bg-[#e3ede6] px-4 py-3 shadow-sm sticky top-0 z-30 border-b border-emerald-200">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-3">
         <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-10 w-10 object-contain">
@@ -87,35 +101,48 @@
   <!-- KONTROL UTAMA LAYOUT RESPONSIF -->
   <div class="app-layout-wrapper">
 
-    <!-- SIDEBAR KIRI KHUSUS PC (Ikon diperbaiki agar presisi di dalam kotak) -->
+    <!-- SIDEBAR KIRI KHUSUS PC (Berisi Profil Pegawai di atas, lalu menu navigasi di bawahnya) -->
     <aside class="pc-sidebar space-y-4">
+      <!-- Kartu Profil Pegawai (Pindah ke kiri atas khusus PC) -->
+      <a href="profil.html" class="block bg-white p-4 rounded-2xl shadow-sm border border-gray-100 relative hover:border-blue-300 transition text-center">
+        <div class="flex flex-col items-center gap-2">
+          <div class="h-28 w-28 flex items-center justify-center flex-shrink-0 bg-transparent">
+            <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain">
+          </div>
+          <div>
+            <h2 class="text-xs font-extrabold text-gray-800">Profil Pegawai</h2>
+            <p class="text-[11px] text-blue-900 font-extrabold uppercase tracking-wide mt-0.5">UPTD FARMASI</p>
+          </div>
+        </div>
+      </a>
+
+      <!-- Menu Navigasi Samping (Registrasi, Maps, Tamu, Survei) -->
       <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
         <nav class="space-y-1.5">
           <!-- Registrasi -->
           <a href="index.html#registrasi" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
+            <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
               <img src="https://i.ibb.co.com/Xf1wsJ41/Picsart-26-07-25-12-29-14-940.png" class="w-full h-full object-contain">
             </div>
             <span class="text-xs">Registrasi</span>
           </a>
           <!-- Maps -->
           <a href="maps.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
+            <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
               <img src="https://i.ibb.co.com/5PtXnK6/Picsart-26-07-25-12-25-33-560.png" class="w-full h-full object-contain">
             </div>
             <span class="text-xs">Maps</span>
           </a>
-
           <!-- Buku Tamu -->
           <a href="tamu.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
+            <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
               <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-full h-full object-contain">
             </div>
             <span class="text-xs">Tamu</span>
           </a>
           <!-- Survei -->
           <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
+            <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
               <img src="https://i.ibb.co.com/M5D0s0t9/Picsart-26-07-25-11-29-02-111.png" class="w-full h-full object-contain">
             </div>
             <span class="text-xs">Survei</span>
@@ -128,8 +155,19 @@
     <div class="pc-main-content w-full">
       <main id="mainDashboard" class="main-container lg:max-w-none space-y-3 pt-1 pb-3">
         
-        <!-- Kartu Profil Pegawai -->
-        <a href="profil.html" class="block bg-white p-3 rounded-2xl shadow-sm border border-gray-100 relative hover:border-blue-300 transition">
+        <!-- Header Khusus Desktop (Hanya tampil di PC/Laptop di atas kotak aksi cepat) -->
+        <div class="pc-header-desktop hidden bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-3">
+          <div class="flex items-center gap-3">
+            <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-12 w-12 object-contain">
+            <div>
+              <h1 class="font-extrabold text-blue-900 text-base tracking-wide leading-tight">UPTD FARMASI</h1>
+              <p class="text-xs text-gray-600 font-semibold uppercase tracking-wider">Kota Tangerang Selatan</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kartu Profil Pegawai (Hanya tampil di Mobile/HP) -->
+        <a href="profil.html" class="block lg:hidden bg-white p-3 rounded-2xl shadow-sm border border-gray-100 relative hover:border-blue-300 transition">
           <div class="flex items-center justify-between gap-3 text-left">
             <div>
               <p class="text-[9px] text-blue-900 font-extrabold uppercase tracking-wide">PROFIL PEGAWAI</p>
@@ -236,7 +274,6 @@
         </div>
         <span class="text-[10px] mt-2 font-extrabold tracking-tight text-center">Registrasi</span>
       </a>
-      <!-- Diperbarui dari kontak.html ke maps.html -->
       <a href="maps.html" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
         <div class="w-7 h-7 flex items-center justify-center overflow-visible">
           <img src="https://i.ibb.co.com/5PtXnK6/Picsart-26-07-25-12-25-33-560.png" class="w-16 h-16 max-w-none object-contain">
