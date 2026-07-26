@@ -11,10 +11,10 @@
 <body class="bg-[#e3ede6] font-sans min-h-screen pb-24">
 
   <!-- Header Atas (Judul di Tengah) -->
-  <header class="bg-[#e3ede6] px-4 py-3 shadow-sm sticky top-0 z-30 border-b border-emerald-200">
+  <header class="bg-[#e3ede6] px-4 py-3.5 shadow-sm sticky top-0 z-30 border-b border-emerald-200">
     <div class="max-w-md mx-auto text-center">
-      <h1 class="font-extrabold text-blue-900 text-xs tracking-wide leading-tight">STATUS & BUKTI TAMU</h1>
-      <p class="text-[9px] text-gray-600 font-semibold uppercase tracking-wider mt-0.5">UPTD Farmasi Tangsel</p>
+      <h1 class="font-extrabold text-blue-900 text-xs tracking-wider leading-tight uppercase">STATUS & BUKTI TAMU</h1>
+      <p class="text-[9px] text-gray-600 font-semibold uppercase tracking-widest mt-0.5">UPTD Farmasi Tangsel</p>
     </div>
   </header>
 
@@ -22,9 +22,9 @@
   <main class="max-w-md mx-auto p-4 space-y-4">
     
     <!-- Kartu Informasi -->
-    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 text-center">
+    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 text-center space-y-1">
       <h2 class="text-sm font-extrabold text-blue-900">Daftar Tamu & Pengambilan Obat</h2>
-      <p class="text-[11px] text-gray-500 mt-0.5">Cek status registrasi Anda secara real-time dan download bukti PDF</p>
+      <p class="text-[11px] text-gray-500 leading-relaxed">Cek status registrasi Anda secara real-time dan download bukti PDF pengambilan obat.</p>
     </div>
 
     <!-- Container Daftar Tamu dari Firestore -->
@@ -88,26 +88,37 @@
           statusColor = "bg-emerald-50 text-emerald-800 border-emerald-200";
         }
 
-        // Simpan waktu terformat ke object data agar ikut tercetak di PDF
+        // Ambil data obat yang diterima dari admin (mendukung field: obatDiterima, daftarObat, atau obat)
+        const obatTerima = item.obatDiterima || item.daftarObat || item.obat || '-';
+
+        // Simpan data terformat ke object item agar ikut terbawa saat tombol download diklik
         item.waktuFormatted = waktuStr;
+        item.obatTerimaFormatted = obatTerima;
 
         const card = document.createElement("div");
         card.className = "bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-3";
         card.innerHTML = `
           <div class="flex justify-between items-start gap-2">
-            <div>
+            <div class="space-y-0.5">
               <h3 class="font-extrabold text-xs text-blue-900">${item.nama || 'Tanpa Nama'}</h3>
-              <p class="text-[10px] text-gray-600 mt-0.5"><b>Keperluan:</b> ${item.keperluan || '-'}</p>
-              <p class="text-[10px] text-gray-500"><b>Instansi:</b> ${item.instansi || '-'}</p>
-              ${item.nomorAntrian ? `<p class="text-[10px] text-blue-700 font-bold mt-0.5">No. Antrian: ${item.nomorAntrian}</p>` : ''}
+              <p class="text-[10px] text-gray-600"><b>Instansi:</b> ${item.instansi || '-'}</p>
+              <p class="text-[10px] text-gray-600"><b>Keperluan:</b> ${item.keperluan || '-'}</p>
+              ${item.nomorAntrian ? `<p class="text-[10px] text-blue-700 font-bold">No. Antrian: ${item.nomorAntrian}</p>` : ''}
             </div>
             <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border shrink-0 ${statusColor}">
               ${statusText}
             </span>
           </div>
+
+          <!-- Bagian Informasi Obat yang Diterima -->
+          <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100 text-[10px] space-y-1">
+            <p class="text-blue-900 font-bold">💊 Obat yang Diterima:</p>
+            <p class="text-gray-700 whitespace-pre-line">${obatTerima}</p>
+          </div>
+
           <div class="border-t pt-2 flex justify-between items-center text-[10px] text-gray-500">
             <span><b>Waktu:</b> ${waktuStr}</span>
-            <button onclick='downloadPdf(${JSON.stringify(item)})' class="bg-blue-900 hover:bg-blue-800 text-white px-3 py-1.5 rounded-xl font-bold transition shadow-sm">
+            <button onclick='downloadPdf(${JSON.stringify(item)})' class="bg-blue-900 hover:bg-blue-800 text-white px-3 py-1.5 rounded-xl font-bold transition shadow-sm inline-flex items-center gap-1">
               Download PDF 📥
             </button>
           </div>
@@ -123,7 +134,7 @@
       `;
     });
 
-    // Fungsi cetak PDF sesuai format instruksi persis Anda
+    // Fungsi cetak PDF dengan format rapi dan menyertakan nama obat
     window.downloadPdf = (data) => {
       const areaCetak = document.getElementById("areaCetakPdf");
       areaCetak.style.display = "block";
@@ -134,12 +145,16 @@
             <p style="font-size: 10px; color: #555; margin: 4px 0 0 0;">Bukti Resmi Pengambilan Obat & Kunjungan Tamu</p>
           </div>
           <div style="font-size: 12px; color: #333; line-height: 1.8;">
-            <p style="margin: 6px 0;"><b>Nama :</b> ${data.nama || '-'}</p>
-            <p style="margin: 6px 0;"><b>Instansi :</b> ${data.instansi || '-'}</p>
-            <p style="margin: 6px 0;"><b>Keperluan :</b> ${data.keperluan || '-'}</p>
-            <p style="margin: 6px 0;"><b>Nama petugas penerima :</b> ${data.petugas || data.namaPetugas || '-'}</p>
-            <p style="margin: 6px 0;"><b>Waktu :</b> ${data.waktuFormatted || data.waktu || '-'}</p>
-            <p style="margin: 6px 0;"><b>Status :</b> ${data.status || 'Menunggu'}</p>
+            <p style="margin: 5px 0;"><b>Nama :</b> ${data.nama || '-'}</p>
+            <p style="margin: 5px 0;"><b>Instansi :</b> ${data.instansi || '-'}</p>
+            <p style="margin: 5px 0;"><b>Keperluan :</b> ${data.keperluan || '-'}</p>
+            <p style="margin: 5px 0;"><b>Nama petugas penerima :</b> ${data.petugas || data.namaPetugas || '-'}</p>
+            <p style="margin: 5px 0;"><b>Waktu :</b> ${data.waktuFormatted || data.waktu || '-'}</p>
+            <p style="margin: 5px 0;"><b>Status :</b> ${data.status || 'Menunggu'}</p>
+            <div style="margin-top: 12px; padding: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+              <p style="margin: 0 0 4px 0; font-weight: bold; color: #1e3a8a;">Daftar Obat yang Diterima:</p>
+              <p style="margin: 0; white-space: pre-line; color: #334155;">${data.obatTerimaFormatted || '-'}</p>
+            </div>
           </div>
           <div style="margin-top: 30px; text-align: center; font-size: 9px; color: #777; border-top: 1px solid #eee; padding-top: 12px;">
             <p>Dokumen ini diterbitkan secara resmi dan sah melalui Sistem UPTD Farmasi Tangsel.</p>
@@ -162,3 +177,4 @@
   </script>
 </body>
 </html>
+
