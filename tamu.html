@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Library html2pdf untuk cetak bukti PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     .hidden-custom { opacity: 0; visibility: hidden; pointer-events: none; display: none !important; }
     .visible-custom { opacity: 1; visibility: visible; pointer-events: auto; display: block !important; }
@@ -19,7 +21,7 @@
       height: auto;
     }
 
-    /* Penyesuaian layout grid PC/Laptop agar konsisten */
+    /* Penyesuaian layout grid PC/Laptop agar konsisten dengan halaman lain */
     @media (min-width: 1024px) {
       .app-layout-wrapper {
         max-width: 1200px !important;
@@ -81,20 +83,15 @@
       }
     }
   </style>
-  <title>Buku Tamu - UPTD Farmasi Tangsel</title>
+  <title>Buku Tamu & Status - UPTD Farmasi Tangsel</title>
 </head>
 <body class="bg-[#e3ede6] font-sans min-h-screen pb-24 lg:pb-6">
-  
+
   <!-- Header Atas (Hanya tampil di Mobile/HP) -->
-  <header class="mobile-header-bar bg-[#e3ede6] px-4 py-3 shadow-sm sticky top-0 z-30 border-b border-emerald-200">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-10 w-10 object-contain">
-        <div>
-          <h1 class="font-extrabold text-blue-900 text-sm tracking-wide leading-tight">UPTD FARMASI</h1>
-          <p class="text-[10px] text-gray-600 font-semibold uppercase tracking-wider">Kota Tangerang Selatan</p>
-        </div>
-      </div>
+  <header class="mobile-header-bar bg-[#e3ede6] px-4 py-3.5 shadow-sm sticky top-0 z-30 border-b border-emerald-200">
+    <div class="max-w-md mx-auto text-center">
+      <h1 class="font-extrabold text-blue-900 text-xs tracking-wider leading-tight uppercase">STATUS & BUKTI TAMU</h1>
+      <p class="text-[9px] text-gray-600 font-semibold uppercase tracking-widest mt-0.5">UPTD Farmasi Tangsel</p>
     </div>
   </header>
 
@@ -147,59 +144,47 @@
       </div>
     </aside>
 
-    <!-- KONTEN UTAMA TAMU -->
+    <!-- KONTEN UTAMA -->
     <div class="pc-main-content w-full">
-      <main class="main-container lg:max-w-none space-y-3 pt-1 pb-3">
+      <main class="main-container lg:max-w-none space-y-4 pt-1 pb-3">
         
         <!-- Header Khusus Desktop -->
         <div class="pc-header-desktop hidden bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-3">
           <div class="flex items-center gap-3">
             <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-12 w-12 object-contain">
             <div>
-              <h1 class="font-extrabold text-blue-900 text-base tracking-wide leading-tight">UPTD FARMASI</h1>
-              <p class="text-xs text-gray-600 font-semibold uppercase tracking-wider">Kota Tangerang Selatan</p>
+              <h1 class="font-extrabold text-blue-900 text-base tracking-wide leading-tight">STATUS & BUKTI TAMU</h1>
+              <p class="text-xs text-gray-600 font-semibold uppercase tracking-wider">UPTD Farmasi Kota Tangerang Selatan</p>
             </div>
           </div>
         </div>
 
-        <!-- Tombol Kembali ke Beranda / Dashboard -->
-        <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 mb-3">
-          <a href="index.html" class="text-blue-900 font-bold text-xs inline-flex items-center gap-1 hover:underline">← Kembali ke Beranda</a>
+        <!-- Kartu Informasi -->
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 text-center space-y-1">
+          <h2 class="text-sm font-extrabold text-blue-900">Daftar Tamu & Pengambilan Obat</h2>
+          <p class="text-[11px] text-gray-500 leading-relaxed">Cek status registrasi Anda secara real-time dan download bukti PDF pengambilan obat.</p>
         </div>
 
-        <!-- Kotak Formulir Buku Tamu -->
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-          <div class="flex items-center gap-2 mb-4 border-b pb-2">
-            <span class="text-blue-900">📝</span>
-            <h2 class="font-extrabold text-blue-900 text-sm tracking-wide">Formulir Buku Tamu UPTD Farmasi</h2>
+        <!-- Container Daftar Tamu dari Firestore -->
+        <div id="containerTamu" class="space-y-3">
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center text-xs text-gray-400">
+            Memuat data registrasi dari database...
           </div>
-
-          <!-- Form Buku Tamu (Sesuaikan id atau aksi form dengan database/script Anda sebelumnya) -->
-          <form id="formBukuTamu" class="space-y-3">
-            <div>
-              <label class="block text-xs font-bold text-gray-700 mb-1">Nama Lengkap</label>
-              <input type="text" id="namaTamu" required class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-blue-300 outline-none" placeholder="Masukkan nama lengkap...">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-gray-700 mb-1">Asal Instansi / Unit Kerja</label>
-              <input type="text" id="instansiTamu" required class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-blue-300 outline-none" placeholder="Contoh: Puskesmas / Dinas / Umum">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-gray-700 mb-1">Nomor WhatsApp</label>
-              <input type="tel" id="waTamu" required class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-blue-300 outline-none" placeholder="08xxxxxxxxxx">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-gray-700 mb-1">Keperluan / Tujuan Kunjungan</label>
-              <textarea id="keperluanTamu" rows="3" required class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-blue-300 outline-none" placeholder="Tuliskan keperluan kunjungan Anda..."></textarea>
-            </div>
-            <button type="submit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold p-3 rounded-xl text-xs transition shadow-sm">
-              Kirim Buku Tamu
-            </button>
-          </form>
         </div>
+
+        <!-- Tombol Kembali -->
+        <div class="flex justify-end pt-2">
+          <a href="konten.html" class="bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition inline-flex items-center gap-1.5">
+            ← Kembali
+          </a>
+        </div>
+
       </main>
     </div>
   </div>
+
+  <!-- Area Tersembunyi untuk Format Cetak PDF Bukti Pengambilan Obat -->
+  <div id="areaCetakPdf" style="display: none;"></div>
 
   <!-- Bottom Navigation Bar (Hanya tampil di Mobile/HP) -->
   <div class="bottom-nav-wrapper">
@@ -231,9 +216,176 @@
     </nav>
   </div>
 
-  <!-- Skrip Tambahan jika menggunakan Firebase / Script khusus tamu -->
+  <!-- SKRIP FIREBASE & LOGIKA HALAMAN -->
   <script type="module">
-    // Tempatkan logika Firebase / simpan buku tamu Anda di sini jika diperlukan
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app" };
+    const db = getFirestore(initializeApp(firebaseConfig));
+
+    // Menghubungkan langsung ke koleksi "tamu" sesuai database Firestore Anda
+    const q = query(collection(db, "tamu"), orderBy("waktu", "desc"));
+
+    onSnapshot(q, (snapshot) => {
+      const container = document.getElementById("containerTamu");
+      container.innerHTML = "";
+
+      if (snapshot.empty) {
+        container.innerHTML = `
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center text-xs text-gray-400">
+            Belum ada riwayat registrasi yang tercatat di sistem.
+          </div>
+        `;
+        return;
+      }
+
+      snapshot.forEach((docSnap) => {
+        const item = docSnap.data();
+
+        // Format waktu jika berupa Firestore Timestamp
+        let waktuStr = item.waktu || '-';
+        if (item.waktu && typeof item.waktu.toDate === 'function') {
+          waktuStr = item.waktu.toDate().toLocaleString('id-ID');
+        }
+
+        // Status badge styling
+        let statusColor = "bg-amber-50 text-amber-800 border-amber-200";
+        let statusText = item.status || "Menunggu";
+        if (item.status === "Diproses" || item.status === "diproses") {
+          statusColor = "bg-blue-50 text-blue-800 border-blue-200";
+        } else if (item.status === "Selesai" || item.status === "selesai") {
+          statusColor = "bg-emerald-50 text-emerald-800 border-emerald-200";
+        }
+
+        // Ambil data obat yang diterima dari admin (mendukung field: obatDiterima, daftarObat, atau obat)
+        const obatTerima = item.obatDiterima || item.daftarObat || item.obat || '-';
+
+        // Simpan data terformat ke object item agar ikut terbawa saat tombol download diklik
+        item.waktuFormatted = waktuStr;
+        item.obatTerimaFormatted = obatTerima;
+
+        const card = document.createElement("div");
+        card.className = "bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-3";
+        card.innerHTML = `
+          <div class="flex justify-between items-start gap-2">
+            <div class="space-y-0.5">
+              <h3 class="font-extrabold text-xs text-blue-900">${item.nama || 'Tanpa Nama'}</h3>
+              <p class="text-[10px] text-gray-600"><b>Instansi:</b> ${item.instansi || '-'}</p>
+              <p class="text-[10px] text-gray-600"><b>Keperluan:</b> ${item.keperluan || '-'}</p>
+              ${item.nomorAntrian ? `<p class="text-[10px] text-blue-700 font-bold">No. Antrian: ${item.nomorAntrian}</p>` : ''}
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border shrink-0 ${statusColor}">
+              ${statusText}
+            </span>
+          </div>
+
+          <!-- Bagian Informasi Obat yang Diterima -->
+          <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100 text-[10px] space-y-1">
+            <p class="text-blue-900 font-bold">💊 Obat yang Diterima:</p>
+            <p class="text-gray-700 whitespace-pre-line">${obatTerima}</p>
+          </div>
+
+          <div class="border-t pt-2 flex justify-between items-center text-[10px] text-gray-500">
+            <span><b>Waktu:</b> ${waktuStr}</span>
+            <button onclick='downloadPdf(${JSON.stringify(item)})' class="bg-blue-900 hover:bg-blue-800 text-white px-3 py-1.5 rounded-xl font-bold transition shadow-sm inline-flex items-center gap-1">
+              Download PDF 📥
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }, (error) => {
+      console.error("Gagal memuat data tamu:", error);
+      document.getElementById("containerTamu").innerHTML = `
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center text-xs text-red-400">
+          Gagal memuat data dari database.
+        </div>
+      `;
+    });
+
+    // Fungsi cetak PDF dengan format ukuran F4 dan penataan daftar obat ke bawah
+    window.downloadPdf = (data) => {
+      const areaCetak = document.getElementById("areaCetakPdf");
+      areaCetak.style.display = "block";
+      areaCetak.innerHTML = `
+        <div style="padding: 40px; font-family: Arial, sans-serif; color: #1e3a8a; width: 100%; max-width: 650px; margin: 0 auto; background: #fff; box-sizing: border-box;">
+          
+          <!-- Kop Surat / Judul Dokumen -->
+          <div style="text-align: center; border-bottom: 3px double #1e3a8a; padding-bottom: 15px; margin-bottom: 25px;">
+            <h2 style="font-size: 18px; margin: 0; font-weight: bold; letter-spacing: 0.5px;">UPTD FARMASI KOTA TANGERANG SELATAN</h2>
+            <p style="font-size: 11px; color: #555; margin: 6px 0 0 0; text-transform: uppercase; font-weight: 600;">Bukti Resmi Pengambilan Obat & Kunjungan Tamu</p>
+          </div>
+
+          <!-- Informasi Detail Tamu -->
+          <div style="font-size: 13px; color: #333; line-height: 2;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="width: 160px; font-weight: bold;">Nama Tamu</td>
+                <td style="width: 15px;">:</td>
+                <td>${data.nama || '-'}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold;">Instansi / Asal</td>
+                <td>:</td>
+                <td>${data.instansi || '-'}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold;">Keperluan</td>
+                <td>:</td>
+                <td>${data.keperluan || '-'}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold;">Petugas Penerima</td>
+                <td>:</td>
+                <td>${data.petugas || data.namaPetugas || '-'}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold;">Waktu Kunjungan</td>
+                <td>:</td>
+                <td>${data.waktuFormatted || data.waktu || '-'}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold;">Status Pelayanan</td>
+                <td>:</td>
+                <td><span style="font-weight: bold; color: #047857; text-transform: uppercase;">${data.status || 'Selesai'}</span></td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- Kotak Daftar Obat yang Diterima -->
+          <div style="margin-top: 25px; padding: 15px 20px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;">
+            <p style="margin: 0 0 8px 0; font-weight: bold; color: #1e3a8a; font-size: 13px; text-transform: uppercase;">💊 Daftar Obat / Barang yang Diterima:</p>
+            <div style="margin: 0; white-space: pre-line; color: #1e293b; font-size: 13px; line-height: 1.8;">${data.obatTerimaFormatted || '-'}</div>
+          </div>
+
+          <!-- Catatan / Footer Dokumen -->
+          <div style="margin-top: 60px; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div style="font-size: 10px; color: #64748b;">
+              <p style="margin: 0;">Dokumen ini diterbitkan secara elektronik dan sah melalui Sistem UPTD Farmasi Tangsel.</p>
+            </div>
+            <div style="text-align: center; font-size: 12px; color: #333; min-width: 180px;">
+              <p style="margin: 0 0 50px 0;">Penerima / Tamu,</p>
+              <p style="margin: 0; font-weight: bold; text-decoration: underline;">${data.nama || '......................................'}</p>
+            </div>
+          </div>
+
+        </div>
+      `;
+
+      // Konfigurasi ukuran F4 (210mm x 330mm) menggunakan html2pdf
+      const opt = {
+        margin:       10,
+        filename:     `Bukti_Pengambilan_Obat_${data.nama || 'Tamu'}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'mm', format: [210, 330], orientation: 'portrait' }
+      };
+
+      html2pdf().from(areaCetak).set(opt).save().then(() => {
+        areaCetak.style.display = "none";
+      });
+    };
   </script>
 </body>
 </html>
