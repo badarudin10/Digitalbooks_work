@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .hidden-custom { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
-    .visible-custom { opacity: 1; visibility: visible; pointer-events: auto; display: block; }
+    .hidden-custom { opacity: 0; visibility: hidden; pointer-events: none; display: none !important; }
+    .visible-custom { opacity: 1; visibility: visible; pointer-events: auto; display: block !important; }
     
     body {
       overflow-x: hidden;
@@ -101,9 +101,9 @@
   <!-- KONTROL UTAMA LAYOUT RESPONSIF -->
   <div class="app-layout-wrapper">
 
-    <!-- SIDEBAR KIRI KHUSUS PC (Berisi Profil Pegawai di atas, lalu menu navigasi di bawahnya) -->
+    <!-- SIDEBAR KIRI KHUSUS PC -->
     <aside class="pc-sidebar space-y-4">
-      <!-- Kartu Profil Pegawai (Pindah ke kiri atas khusus PC) -->
+      <!-- Kartu Profil Pegawai -->
       <a href="profil.html" class="block bg-white p-4 rounded-2xl shadow-sm border border-gray-100 relative hover:border-blue-300 transition text-center">
         <div class="flex flex-col items-center gap-2">
           <div class="h-28 w-28 flex items-center justify-center flex-shrink-0 bg-transparent">
@@ -116,31 +116,27 @@
         </div>
       </a>
 
-      <!-- Menu Navigasi Samping (Registrasi, Maps, Tamu, Survei) -->
+      <!-- Menu Navigasi Samping -->
       <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
         <nav class="space-y-1.5">
-          <!-- Registrasi -->
           <a href="index.html#registrasi" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
             <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
               <img src="https://i.ibb.co.com/Xf1wsJ41/Picsart-26-07-25-12-29-14-940.png" class="w-full h-full object-contain">
             </div>
             <span class="text-xs">Registrasi</span>
           </a>
-          <!-- Maps -->
           <a href="maps.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
             <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
               <img src="https://i.ibb.co.com/5PtXnK6/Picsart-26-07-25-12-25-33-560.png" class="w-full h-full object-contain">
             </div>
             <span class="text-xs">Maps</span>
           </a>
-          <!-- Buku Tamu -->
           <a href="tamu.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
             <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
               <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-full h-full object-contain">
             </div>
             <span class="text-xs">Tamu</span>
           </a>
-          <!-- Survei -->
           <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
             <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
               <img src="https://i.ibb.co.com/M5D0s0t9/Picsart-26-07-25-11-29-02-111.png" class="w-full h-full object-contain">
@@ -155,7 +151,7 @@
     <div class="pc-main-content w-full">
       <main id="mainDashboard" class="main-container lg:max-w-none space-y-3 pt-1 pb-3">
         
-        <!-- Header Khusus Desktop (Hanya tampil di PC/Laptop di atas kotak aksi cepat) -->
+        <!-- Header Khusus Desktop -->
         <div class="pc-header-desktop hidden bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-3">
           <div class="flex items-center gap-3">
             <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-12 w-12 object-contain">
@@ -243,18 +239,18 @@
           </div>
         </div>
       </main>
+
+      <!-- KONTEN DINAMIS (Diletakkan di dalam .pc-main-content agar tampil sempurna di PC maupun HP) -->
+      <div id="pageDaftar" class="hidden-custom main-container lg:max-w-none p-4 bg-white rounded-2xl shadow-sm border border-gray-100">
+        <button onclick="kembaliKeDashboard()" class="text-blue-900 font-bold mb-4 text-xs inline-flex items-center gap-1">← Kembali ke Dashboard</button>
+        <div id="areaDaftar"></div>
+      </div>
+
+      <div id="pageBaca" class="hidden-custom main-container lg:max-w-none p-5 bg-white rounded-2xl shadow-sm border border-gray-100">
+        <button onclick="kembaliKeDaftar()" class="text-blue-900 font-bold mb-4 text-xs inline-flex items-center gap-1">← Kembali ke Daftar</button>
+        <div id="areaBaca"></div>
+      </div>
     </div>
-  </div>
-
-  <!-- KONTEN DINAMIS -->
-  <div id="pageDaftar" class="hidden-custom main-container p-4">
-    <button onclick="kembaliKeDashboard()" class="text-blue-900 font-bold mb-4 text-xs inline-flex items-center gap-1">← Kembali ke Dashboard</button>
-    <div id="areaDaftar" class="bg-white p-4 rounded-2xl shadow-sm"></div>
-  </div>
-
-  <div id="pageBaca" class="hidden-custom main-container p-4">
-    <button onclick="kembaliKeDaftar()" class="text-blue-900 font-bold mb-4 text-xs inline-flex items-center gap-1">← Kembali ke Daftar</button>
-    <div id="areaBaca" class="bg-white p-5 rounded-2xl shadow-sm"></div>
   </div>
 
   <!-- MODAL ZOOM GAMBAR GALERI -->
@@ -340,7 +336,8 @@
 
     window.bukaDaftar = async (kategori) => {
       document.getElementById('mainDashboard').className = 'hidden-custom';
-      document.getElementById('pageDaftar').className = 'visible-custom main-container p-4';
+      document.getElementById('pageBaca').className = 'hidden-custom';
+      document.getElementById('pageDaftar').className = 'visible-custom main-container lg:max-w-none p-4 bg-white rounded-2xl shadow-sm border border-gray-100';
       const area = document.getElementById('areaDaftar');
       area.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">Memuat data ${kategori}...</p>`;
       
@@ -371,7 +368,7 @@
 
     window.bukaArtikel = (data) => {
       document.getElementById('pageDaftar').className = 'hidden-custom';
-      document.getElementById('pageBaca').className = 'visible-custom main-container p-4';
+      document.getElementById('pageBaca').className = 'visible-custom main-container lg:max-w-none p-5 bg-white rounded-2xl shadow-sm border border-gray-100';
       document.getElementById('areaBaca').innerHTML = `
         <h2 class="text-lg font-extrabold text-blue-900 mb-3">${data.judul}</h2>
         ${data.url ? `<img src="${data.url}" class="w-full h-auto rounded-xl mb-4 shadow-sm object-cover max-h-80 cursor-pointer" onclick="bukaZoom('${data.url}')">` : ''}
@@ -387,7 +384,7 @@
 
     window.kembaliKeDaftar = () => {
       document.getElementById('pageBaca').className = 'hidden-custom';
-      document.getElementById('pageDaftar').className = 'visible-custom main-container p-4';
+      document.getElementById('pageDaftar').className = 'visible-custom main-container lg:max-w-none p-4 bg-white rounded-2xl shadow-sm border border-gray-100';
     };
   </script>
 </body>
