@@ -131,13 +131,18 @@
           let durasi = "-"; if (data.status === 'selesai' && data.waktuSelesai && data.waktuProses) durasi = Math.round((data.waktuSelesai.toDate() - data.waktuProses.toDate()) / 60000) + " Menit";
           
           tabel.innerHTML += `<tr class="border-b text-sm">
-<td class="p-3 space-y-2 min-w-[220px]">
-  <textarea id="obat_${docSnap.id}" rows="4" placeholder="1. Nama Obat&#10;2. Nama Obat&#10;3. Nama Obat" class="w-full p-2 border rounded-lg text-xs bg-gray-50 focus:bg-white focus:ring-1 focus:ring-blue-900 outline-none">${data.obatDiterima || ''}</textarea>
-  <div class="flex gap-1">
-    ${data.status !== 'selesai' && data.status !== 'proses' ? `<button onclick="updateStatus('${docSnap.id}', 'proses', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-yellow-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold">Proses</button>` : ''}
-    <button onclick="updateStatus('${docSnap.id}', 'selesai', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-green-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-green-700">Simpan & Selesai</button>
-  </div>
-</td>
+            <td class="p-3 font-bold">${data.nomorAntrian || '-'}</td>
+            <td class="p-3 font-semibold text-blue-900">${data.nama || '-'}</td>
+            <td class="p-3 text-gray-600">${data.instansi || '-'}</td>
+            <td class="p-3 font-bold text-${data.status === 'selesai' ? 'green' : (data.status === 'proses' ? 'blue' : 'yellow')}-600 uppercase text-xs">${data.status || 'menunggu'}</td>
+            <td class="p-3 text-gray-500">${durasi}</td>
+            <td class="p-3 space-y-2 min-w-[220px]">
+              <textarea id="obat_${docSnap.id}" rows="4" placeholder="1. Nama Obat&#10;2. Nama Obat&#10;3. Nama Obat" class="w-full p-2 border rounded-lg text-xs bg-gray-50 focus:bg-white focus:ring-1 focus:ring-blue-900 outline-none">${data.obatDiterima || ''}</textarea>
+              <div class="flex gap-1">
+                ${data.status !== 'selesai' && data.status !== 'proses' ? `<button onclick="updateStatus('${docSnap.id}', 'proses', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-yellow-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-yellow-600">Proses</button>` : ''}
+                <button onclick="updateStatus('${docSnap.id}', 'selesai', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-green-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-green-700">Simpan & Selesai</button>
+              </div>
+            </td>
           </tr>`;
         });
         updateGrafik(dataPerHari);
