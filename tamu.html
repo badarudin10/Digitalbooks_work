@@ -304,68 +304,76 @@
       `;
     });
 
-    // Fungsi cetak PDF dengan format ukuran F4 dan penataan daftar obat ke bawah
+    // Fungsi cetak PDF persis sesuai format gambar (Kop Surat Resmi, Garis Ganda, dan Tata Letak)
     window.downloadPdf = (data) => {
       const areaCetak = document.getElementById("areaCetakPdf");
       areaCetak.style.display = "block";
       areaCetak.innerHTML = `
-        <div style="padding: 40px; font-family: Arial, sans-serif; color: #1e3a8a; width: 100%; max-width: 650px; margin: 0 auto; background: #fff; box-sizing: border-box;">
+        <div style="padding: 30px 40px; font-family: Arial, sans-serif; color: #000; width: 100%; max-width: 700px; margin: 0 auto; background: #fff; box-sizing: border-box;">
           
-          <!-- Kop Surat / Judul Dokumen -->
-          <div style="text-align: center; border-bottom: 3px double #1e3a8a; padding-bottom: 15px; margin-bottom: 25px;">
-            <h2 style="font-size: 18px; margin: 0; font-weight: bold; letter-spacing: 0.5px;">UPTD FARMASI KOTA TANGERANG SELATAN</h2>
-            <p style="font-size: 11px; color: #555; margin: 6px 0 0 0; text-transform: uppercase; font-weight: 600;">Bukti Resmi Pengambilan Obat & Kunjungan Tamu</p>
+          <!-- Kop Surat Resmi dengan Logo di Kiri -->
+          <div style="display: flex; align-items: center; border-bottom: 3px double #000; padding-bottom: 12px; margin-bottom: 25px; position: relative;">
+            <div style="width: 75px; flex-shrink: 0; margin-right: 15px;">
+              <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" style="width: 65px; height: auto; display: block;" crossorigin="anonymous">
+            </div>
+            <div style="text-align: center; flex-grow: 1; padding-right: 75px;">
+              <h2 style="font-size: 15px; margin: 0; font-weight: bold; letter-spacing: 0.3px; text-transform: uppercase;">PEMERINTAH KOTA TANGERANG SELATAN</h2>
+              <h1 style="font-size: 17px; margin: 3px 0; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">UPTD FARMASI</h1>
+              <p style="font-size: 11px; margin: 2px 0; font-weight: normal;">Jl. Cendekia, Ciater, Serpong, Kota Tangerang Selatan</p>
+              <p style="font-size: 10.5px; margin: 2px 0; font-weight: normal;">Telepon (021) 29307897 Faksimili (021) 29307989</p>
+              <p style="font-size: 10px; margin: 2px 0; font-weight: normal;">Laman dinkes.tangerangselatankota.go.id , pos-el dinkes@tangerangselatankota.go.id</p>
+            </div>
           </div>
 
           <!-- Informasi Detail Tamu -->
-          <div style="font-size: 13px; color: #333; line-height: 2;">
+          <div style="font-size: 13px; color: #000; line-height: 2.1; margin-bottom: 20px;">
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
-                <td style="width: 160px; font-weight: bold;">Nama Tamu</td>
-                <td style="width: 15px;">:</td>
-                <td>${data.nama || '-'}</td>
+                <td style="width: 155px; font-weight: normal;">Nama Tamu</td>
+                <td style="width: 15px; text-align: center;">:</td>
+                <td style="font-weight: bold;">${data.nama || '-'}</td>
               </tr>
               <tr>
-                <td style="font-weight: bold;">Instansi / Asal</td>
-                <td>:</td>
+                <td style="font-weight: normal;">Instansi / Asal</td>
+                <td style="text-align: center;">:</td>
                 <td>${data.instansi || '-'}</td>
               </tr>
               <tr>
-                <td style="font-weight: bold;">Keperluan</td>
-                <td>:</td>
+                <td style="font-weight: normal;">Keperluan</td>
+                <td style="text-align: center;">:</td>
                 <td>${data.keperluan || '-'}</td>
               </tr>
               <tr>
-                <td style="font-weight: bold;">Petugas Penerima</td>
-                <td>:</td>
+                <td style="font-weight: normal;">Petugas Program</td>
+                <td style="text-align: center;">:</td>
                 <td>${data.petugas || data.namaPetugas || '-'}</td>
               </tr>
               <tr>
-                <td style="font-weight: bold;">Waktu Kunjungan</td>
-                <td>:</td>
+                <td style="font-weight: normal;">Waktu Kunjungan</td>
+                <td style="text-align: center;">:</td>
                 <td>${data.waktuFormatted || data.waktu || '-'}</td>
               </tr>
               <tr>
-                <td style="font-weight: bold;">Status Pelayanan</td>
-                <td>:</td>
-                <td><span style="font-weight: bold; color: #047857; text-transform: uppercase;">${data.status || 'Selesai'}</span></td>
+                <td style="font-weight: normal;">Status Pelayanan</td>
+                <td style="text-align: center;">:</td>
+                <td><span style="font-weight: bold; color: #047857; text-transform: uppercase;">${data.status || 'SELESAI'}</span></td>
               </tr>
             </table>
           </div>
 
           <!-- Kotak Daftar Obat yang Diterima -->
-          <div style="margin-top: 25px; padding: 15px 20px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;">
-            <p style="margin: 0 0 8px 0; font-weight: bold; color: #1e3a8a; font-size: 13px; text-transform: uppercase;">💊 Daftar Obat / Barang yang Diterima:</p>
-            <div style="margin: 0; white-space: pre-line; color: #1e293b; font-size: 13px; line-height: 1.8;">${data.obatTerimaFormatted || '-'}</div>
+          <div style="margin-top: 15px; padding: 15px 20px; background: #fcfcfc; border: 1px solid #d1d5db; border-radius: 8px;">
+            <p style="margin: 0 0 10px 0; font-weight: bold; color: #1e3a8a; font-size: 12px; text-transform: uppercase;">💊 DAFTAR OBAT / BARANG YANG DITERIMA:</p>
+            <div style="margin: 0; white-space: pre-line; color: #1f2937; font-size: 12.5px; line-height: 1.8;">${data.obatTerimaFormatted || '-'}</div>
           </div>
 
-          <!-- Catatan / Footer Dokumen -->
-          <div style="margin-top: 60px; display: flex; justify-content: space-between; align-items: flex-end;">
-            <div style="font-size: 10px; color: #64748b;">
+          <!-- Catatan / Footer Dokumen & Tanda Tangan -->
+          <div style="margin-top: 50px; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div style="font-size: 9.5px; color: #6b7280; max-width: 320px; line-height: 1.4;">
               <p style="margin: 0;">Dokumen ini diterbitkan secara elektronik dan sah melalui Sistem UPTD Farmasi Tangsel.</p>
             </div>
-            <div style="text-align: center; font-size: 12px; color: #333; min-width: 180px;">
-              <p style="margin: 0 0 50px 0;">Penerima / Tamu,</p>
+            <div style="text-align: center; font-size: 12px; color: #000; min-width: 180px;">
+              <p style="margin: 0 0 55px 0;">Penerima / Tamu,</p>
               <p style="margin: 0; font-weight: bold; text-decoration: underline;">${data.nama || '......................................'}</p>
             </div>
           </div>
