@@ -79,20 +79,21 @@
         </button>
       </div>
 
-      <!-- TAMPILAN TABEL BIASA DI DASHBOARD ADMIN (TANPA FORMAT KOP SURAT) -->
+      <!-- TAMPILAN TABEL BIASA DI DASHBOARD ADMIN (KOLOM NAMA DAN INSTANSI TERPISAH) -->
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="border-b text-gray-500 text-xs uppercase bg-gray-50">
               <th class="p-3 border">Waktu</th>
-              <th class="p-3 border">Nama / Instansi</th>
+              <th class="p-3 border">Nama</th>
+              <th class="p-3 border">Instansi</th>
               <th class="p-3 border">Kontak</th>
               <th class="p-3 border">Kategori</th>
               <th class="p-3 border">Isi Keluhan</th>
             </tr>
           </thead>
           <tbody id="tabelKonsultasiAdmin" class="text-xs text-gray-800">
-            <tr><td colspan="5" class="text-center py-4 text-gray-400">Memuat data keluhan...</td></tr>
+            <tr><td colspan="6" class="text-center py-4 text-gray-400">Memuat data keluhan...</td></tr>
           </tbody>
         </table>
       </div>
@@ -124,14 +125,15 @@
           <thead>
             <tr class="border-b text-gray-700 text-[10px] uppercase bg-gray-50">
               <th class="p-2 border">Waktu</th>
-              <th class="p-2 border">Nama / Instansi</th>
+              <th class="p-2 border">Nama</th>
+              <th class="p-2 border">Instansi</th>
               <th class="p-2 border">Kontak</th>
               <th class="p-2 border">Kategori</th>
               <th class="p-2 border">Isi Keluhan</th>
             </tr>
           </thead>
           <tbody id="tabelKonsultasiPDF" class="text-[11px] text-gray-800">
-            <tr><td colspan="5" class="text-center py-4 text-gray-400">Memuat data keluhan...</td></tr>
+            <tr><td colspan="6" class="text-center py-4 text-gray-400">Memuat data keluhan...</td></tr>
           </tbody>
         </table>
       </div>
@@ -249,7 +251,7 @@
         document.getElementById("totalTamu").innerText = total; document.getElementById("totalProses").innerText = proses; document.getElementById("totalSelesai").innerText = selesai;
       });
 
-      // SINKRONISASI REAL-TIME DATA KELUHAN / KONSULTASI KE TABEL ADMIN & TABEL PDF TERSEMBUNYI
+      // SINKRONISASI REAL-TIME DATA KELUHAN / KONSULTASI KE TABEL ADMIN & TABEL PDF TERSEMBUNYI (KOLOM NAMA DAN INSTANSI TERPISAH)
       onSnapshot(query(collection(db, "konsultasi"), orderBy("waktuInput", "desc")), (snapshot) => {
         const tabelKonsultasiAdmin = document.getElementById("tabelKonsultasiAdmin");
         const tabelKonsultasiPDF = document.getElementById("tabelKonsultasiPDF");
@@ -258,7 +260,7 @@
         tabelKonsultasiPDF.innerHTML = "";
 
         if (snapshot.empty) {
-          const emptyHtml = `<tr><td colspan="5" class="text-center py-4 text-gray-400">Belum ada data konsultasi atau keluhan masuk.</td></tr>`;
+          const emptyHtml = `<tr><td colspan="6" class="text-center py-4 text-gray-400">Belum ada data konsultasi atau keluhan masuk.</td></tr>`;
           tabelKonsultasiAdmin.innerHTML = emptyHtml;
           tabelKonsultasiPDF.innerHTML = emptyHtml;
           return;
@@ -268,24 +270,26 @@
           const data = docSnap.data();
           const tanggalStr = data.waktuInput?.toDate ? data.waktuInput.toDate().toLocaleString('id-ID') : 'Baru saja';
           
-          // Render untuk Dashboard Admin (Tabel Biasa)
+          // Render untuk Dashboard Admin (Tabel Biasa - Kolom Terpisah)
           const trAdmin = document.createElement('tr');
           trAdmin.className = "border-b hover:bg-gray-50";
           trAdmin.innerHTML = `
             <td class="p-3 border text-gray-500 whitespace-nowrap">${tanggalStr}</td>
-            <td class="p-3 border font-bold">${data.nama || '-'}<br><span class="text-gray-600 font-normal">${data.instansi || '-'}</span></td>
+            <td class="p-3 border font-bold text-blue-900">${data.nama || '-'}</td>
+            <td class="p-3 border text-gray-700">${data.instansi || '-'}</td>
             <td class="p-3 border text-blue-900">${data.kontak || '-'}</td>
             <td class="p-3 border font-semibold text-emerald-800">${data.kategori || '-'}</td>
             <td class="p-3 border whitespace-pre-line text-gray-700">${data.isi || '-'}</td>
           `;
           tabelKonsultasiAdmin.appendChild(trAdmin);
 
-          // Render untuk Area Cetak PDF (Format Kop Surat)
+          // Render untuk Area Cetak PDF (Format Kop Surat - Kolom Terpisah)
           const trPDF = document.createElement('tr');
           trPDF.className = "border-b";
           trPDF.innerHTML = `
             <td class="p-2 border text-[10px] text-gray-500 whitespace-nowrap">${tanggalStr}</td>
-            <td class="p-2 border font-bold">${data.nama || '-'}<br><span class="text-[10px] text-gray-600 font-normal">${data.instansi || '-'}</span></td>
+            <td class="p-2 border font-bold">${data.nama || '-'}</td>
+            <td class="p-2 border text-gray-700">${data.instansi || '-'}</td>
             <td class="p-2 border text-blue-900">${data.kontak || '-'}</td>
             <td class="p-2 border font-semibold text-emerald-800">${data.kategori || '-'}</td>
             <td class="p-2 border whitespace-pre-line text-gray-700">${data.isi || '-'}</td>
