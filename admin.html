@@ -334,30 +334,38 @@
       });
     }
 
-    // FUNGSI DOWNLOAD PDF KELUHAN OTOMATIS 1 HALAMAN (DIRENDER DI LATAR BELAKANG)
-    window.downloadPDFKeluhan = () => {
-      const element = document.getElementById('printAreaKeluhan');
-      
-      // Tampilkan elemen secara transparan/di balik layar agar terbaca oleh html2pdf tanpa kedipan mata pengguna
-      element.style.display = 'block';
-      element.style.position = 'absolute';
-      element.style.left = '-9999px';
+    // FUNGSI DOWNLOAD PDF KELUHAN OTOMATIS 1 HALAMAN (DIRENDER DI LATAR BELAKANG DENGAN AMAN)
+window.downloadPDFKeluhan = () => {
+  const element = document.getElementById('printAreaKeluhan');
+  
+  // Ambil elemen dari status hidden, lalu jadikan transparan penuh dan taruh di belakang layar agar ukurannya terbaca sempurna oleh renderer
+  element.classList.remove('hidden');
+  element.style.opacity = '0';
+  element.style.position = 'fixed';
+  element.style.top = '0';
+  element.style.left = '0';
+  element.style.zIndex = '-999';
+  element.style.pointerEvents = 'none';
 
-      const opt = {
-        margin:       5,
-        filename:     'Laporan_Konsultasi_Dan_Pengaduan_UPTD.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
+  const opt = {
+    margin:       5,
+    filename:     'Laporan_Konsultasi_Dan_Pengaduan_UPTD.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
 
-      html2pdf().from(element).set(opt).save().then(() => {
-        // Kembalikan posisi dan sembunyikan kembali elemen setelah PDF selesai ter-download
-        element.style.display = 'none';
-        element.style.position = '';
-        element.style.left = '';
-      });
-    };
+  html2pdf().from(element).set(opt).save().then(() => {
+    // Kembalikan ke pengaturan awal dan sembunyikan kembali setelah file PDF selesai ter-download
+    element.style.opacity = '1';
+    element.style.position = '';
+    element.style.top = '';
+    element.style.left = '';
+    element.style.zIndex = '';
+    element.style.pointerEvents = '';
+    element.classList.add('hidden');
+  });
+};
 
     window.updateStatus = async (id, status, hp, nama, antrian) => {
       const obatInput = document.getElementById(`obat_${id}`).value.trim();
