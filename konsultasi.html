@@ -23,7 +23,7 @@
 </head>
 <body class="bg-[#e3ede6] font-sans min-h-screen pb-10">
   
-  <!-- Header Atas (Tanpa tombol kembali di atas) -->
+  <!-- Header Atas -->
   <header class="bg-[#e3ede6] px-4 py-3 shadow-sm sticky top-0 z-30 border-b border-emerald-200">
     <div class="max-w-2xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -41,7 +41,6 @@
     
     <!-- Kartu Informasi / Header Halaman -->
     <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
-      <!-- Kotak pembungkus ukuran 20 (w-20 h-20) dan ikon di-zoom agar proporsional -->
       <div class="w-20 h-20 flex items-center justify-center flex-shrink-0 bg-blue-50 rounded-2xl p-2 border border-blue-100 overflow-hidden">
         <img src="https://i.ibb.co.com/4nWYJqhW/Picsart-26-07-27-12-54-41-199.png" class="w-full h-full object-contain transform scale-150">
       </div>
@@ -82,10 +81,10 @@
       </form>
     </div>
 
-    <!-- Tombol Kembali ke Menu Utama dipindah ke bawah dengan warna Biru Tua 900 -->
-    <div>
-      <a href="index.html" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-extrabold py-3 rounded-2xl text-xs transition shadow-md flex items-center justify-center gap-2 block text-center">
-        <span>← Kembali ke Menu Utama</span>
+    <!-- Tombol Kembali ke konten.html dengan pembungkus kecil di sebelah kanan -->
+    <div class="flex justify-end">
+      <a href="konten.html" class="bg-blue-900 hover:bg-blue-800 text-white font-extrabold px-5 py-2.5 rounded-xl text-xs transition shadow-md inline-flex items-center justify-center gap-2">
+        <span>← Kembali</span>
       </a>
     </div>
 
@@ -99,9 +98,6 @@
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app" };
     const db = getFirestore(initializeApp(firebaseConfig));
 
-    // =========================================================================
-    // UBÂH NOMOR WHATSAPP DI BAWAH INI DENGAN NOMOR PENANGGUNG JAWAB (Gunakan format internasional tanpa tanda +, contoh: 6281234567890)
-    // =========================================================================
     const NOMOR_WA_ADMIN = "6285716842806"; 
 
     const form = document.getElementById('formKonsultasi');
@@ -118,7 +114,6 @@
       const isi = document.getElementById('isiKonsultasi').value;
 
       try {
-        // Simpan ke Database Firebase
         await addDoc(collection(db, "konsultasi"), {
           nama: nama,
           kontak: kontak,
@@ -127,10 +122,8 @@
           waktuInput: serverTimestamp()
         });
 
-        // Format Pesan WhatsApp
         const pesanWA = `Halo Admin / Penanggung Jawab UPTD Farmasi Tangsel,%0A%0ASaya ingin menyampaikan konsultasi / keluhan baru:%0A%0A*Nama / Instansi:* ${encodeURIComponent(nama)}%0A*No. WhatsApp:* ${encodeURIComponent(kontak)}%0A*Kategori:* ${encodeURIComponent(kategori)}%0A*Isi Keluhan:*%0A${encodeURIComponent(isi)}%0A%0ATerima kasih.`;
 
-        // Buka otomatis WhatsApp ke nomor penanggung jawab
         window.open(`https://wa.me/${NOMOR_WA_ADMIN}?text=${pesanWA}`, '_blank');
 
         alert("Konsultasi berhasil disimpan ke sistem dan WhatsApp penanggung jawab akan segera dibuka.");
