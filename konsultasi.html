@@ -5,306 +5,215 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    .hidden-custom { opacity: 0; visibility: hidden; pointer-events: none; display: none !important; }
+    .visible-custom { opacity: 1; visibility: visible; pointer-events: auto; display: block !important; }
+    
     body {
       overflow-x: hidden;
       width: 100%;
       position: relative;
     }
+    
     img, video {
       max-width: 100%;
       height: auto;
     }
 
-    @media (min-width: 1024px) {
-      .app-layout-wrapper {
-        max-width: 1200px !important;
-        margin-left: auto;
-        margin-right: auto;
-        display: grid;
-        grid-template-columns: repeat(12, minmax(0, 1fr));
-        gap: 20px;
-        padding: 20px;
+    @media print {
+      body * {
+        visibility: hidden;
       }
-      .pc-sidebar {
-        grid-column: span 3 / span 3;
-        display: flex !important;
-        flex-direction: column;
-        gap: 16px;
+      #printArea, #printArea * {
+        visibility: visible;
       }
-      .pc-main-content {
-        grid-column: span 9 / span 9;
-      }
-      .bottom-nav-wrapper {
-        display: none !important;
-      }
-      .pc-header-desktop {
-        display: block !important;
-      }
-      .mobile-header-bar {
-        display: none !important;
-      }
-    }
-
-    @media (max-width: 1023px) {
-      .pc-sidebar {
-        display: none !important;
-      }
-      .pc-header-desktop {
-        display: none !important;
-      }
-      .mobile-header-bar {
-        display: block !important;
-      }
-      .main-container {
-        max-width: 448px;
-        margin-left: auto;
-        margin-right: auto;
-        width: 100%;
-        padding-left: 12px;
-        padding-right: 12px;
-        box-sizing: border-box;
-      }
-      .bottom-nav-wrapper {
-        max-width: 448px;
-        margin-left: auto;
-        margin-right: auto;
+      #printArea {
+        position: absolute;
         left: 0;
-        right: 0;
-        bottom: 0;
-        position: fixed;
-        z-index: 40;
+        top: 0;
+        width: 100%;
+      }
+      .no-print {
+        display: none !important;
       }
     }
   </style>
-  <title>Konsultasi & Keluhan - UPTD Farmasi Tangsel</title>
+  <title>Konsultasi & Pengaduan - UPTD Farmasi Tangsel</title>
 </head>
-<body class="bg-[#e3ede6] font-sans min-h-screen pb-24 lg:pb-6">
-
-  <!-- Header Atas (Mobile) -->
-  <header class="mobile-header-bar bg-[#e3ede6] px-4 py-3.5 shadow-sm sticky top-0 z-30 border-b border-emerald-200">
-    <div class="max-w-md mx-auto text-center">
-      <h1 class="font-extrabold text-blue-900 text-xs tracking-wider leading-tight uppercase">KONSULTASI & KELUHAN</h1>
-      <p class="text-[9px] text-gray-600 font-semibold uppercase tracking-widest mt-0.5">UPTD Farmasi Tangsel</p>
+<body class="bg-[#e3ede6] font-sans min-h-screen pb-10">
+  
+  <!-- Header Atas -->
+  <header class="bg-[#e3ede6] px-4 py-3 shadow-sm sticky top-0 z-30 border-b border-emerald-200">
+    <div class="max-w-2xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-10 w-10 object-contain">
+        <div>
+          <h1 class="font-extrabold text-blue-900 text-sm tracking-wide leading-tight">UPTD FARMASI</h1>
+          <p class="text-[10px] text-gray-600 font-semibold uppercase tracking-wider">Kota Tangerang Selatan</p>
+        </div>
+      </div>
+      <a href="index.html" class="text-xs font-bold text-blue-900 bg-white px-3 py-1.5 rounded-xl border border-emerald-200 shadow-sm hover:bg-emerald-50 transition">← Dashboard</a>
     </div>
   </header>
 
-  <!-- KONTROL UTAMA LAYOUT -->
-  <div class="app-layout-wrapper">
-
-    <!-- SIDEBAR KIRI PC -->
-    <aside class="pc-sidebar space-y-4">
-      <!-- Kartu Profil Pegawai -->
-      <a href="profil.html" class="block bg-white p-4 rounded-2xl shadow-sm border border-gray-100 relative hover:border-blue-300 transition text-center">
-        <div class="flex flex-col items-center gap-2">
-          <div class="h-28 w-28 flex items-center justify-center flex-shrink-0 bg-transparent">
-            <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain">
-          </div>
-          <div>
-            <h2 class="text-xs font-extrabold text-gray-800">Profil Pegawai</h2>
-            <p class="text-[11px] text-blue-900 font-extrabold uppercase tracking-wide mt-0.5">UPTD FARMASI</p>
-          </div>
-        </div>
-      </a>
-
-      <!-- Menu Navigasi Samping -->
-      <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-        <nav class="space-y-1.5">
-          <a href="konten.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
-              <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" class="w-full h-full object-contain">
-            </div>
-            <span class="text-xs">Menu Utama</span>
-          </a>
-          <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
-              <img src="https://i.ibb.co.com/Xf1wsJ41/Picsart-26-07-25-12-29-14-940.png" class="w-full h-full object-contain">
-            </div>
-            <span class="text-xs">Registrasi</span>
-          </a>
-          <a href="maps.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
-              <img src="https://i.ibb.co.com/5PtXnK6/Picsart-26-07-25-12-25-33-560.png" class="w-full h-full object-contain">
-            </div>
-            <span class="text-xs">Maps</span>
-          </a>
-          <a href="tamu.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
-              <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-full h-full object-contain">
-            </div>
-            <span class="text-xs">Tamu</span>
-          </a>
-          <a href="konsultasi.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
-              <img src="https://i.ibb.co.com/ksP96f3m/Picsart-26-07-25-11-28-36-829.png" class="w-full h-full object-contain">
-            </div>
-            <span class="text-xs">Konsultasi</span>
-          </a>
-          <a href="panduan.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-10 h-10 flex items-center justify-center flex-shrink-0">
-              <img src="https://i.ibb.co.com/m524Hk0C/Picsart-26-07-25-11-28-11-137.png" class="w-full h-full object-contain">
-            </div>
-            <span class="text-xs">Panduan</span>
-          </a>
-        </nav>
+  <!-- Konten Utama Form Konsultasi -->
+  <main class="max-w-2xl mx-auto p-4 space-y-4">
+    
+    <!-- Kartu Informasi / Header Halaman -->
+    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
+      <div class="w-16 h-16 flex items-center justify-center flex-shrink-0 bg-blue-50 rounded-2xl p-2 border border-blue-100">
+        <img src="https://i.ibb.co.com/4nWYJqhW/Picsart-26-07-27-12-54-41-199.png" class="w-full h-full object-contain">
       </div>
-    </aside>
-
-    <!-- KONTEN UTAMA -->
-    <div class="pc-main-content w-full">
-      <main class="main-container lg:max-w-none space-y-4 pt-1 pb-3">
-        
-        <!-- Header Desktop -->
-        <div class="pc-header-desktop hidden bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-3">
-          <div class="flex items-center gap-3">
-            <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-12 w-12 object-contain">
-            <div>
-              <h1 class="font-extrabold text-blue-900 text-base tracking-wide leading-tight">LAYANAN KONSULTASI & PENGADUAN KELUHAN</h1>
-              <p class="text-xs text-gray-600 font-semibold uppercase tracking-wider">UPTD Farmasi Kota Tangerang Selatan</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Bagian 1: Artikel Informasi Dinamis -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-2">
-          <div class="flex items-center gap-2.5 border-b pb-2">
-            <div class="w-8 h-8 flex items-center justify-center flex-shrink-0">
-              <img src="https://i.ibb.co.com/ksP96f3m/Picsart-26-07-25-11-28-36-829.png" class="w-full h-full object-contain">
-            </div>
-            <h2 class="font-extrabold text-xs text-blue-900 uppercase">Informasi & Kebijakan Layanan Pengaduan</h2>
-          </div>
-          <div id="artikel-konsultasi-content" class="text-[11px] text-gray-700 leading-relaxed space-y-2">
-            <p>Selamat datang di pusat layanan konsultasi dan pengaduan UPTD Farmasi Kota Tangerang Selatan. Halaman ini disediakan khusus bagi fasilitas kesehatan, puskesmas, maupun pemangku kepentingan untuk menyampaikan pertanyaan teknis perbekalan kesehatan ataupun kendala layanan.</p>
-            <p>Setiap keluhan dan konsultasi yang masuk akan diverifikasi langsung oleh petugas penanggung jawab terkait guna memastikan respons cepat dan solusi yang tepat sasaran.</p>
-          </div>
-        </div>
-
-        <!-- Bagian 2: Kontak Petugas Penanggung Jawab Keluhan -->
-        <div class="bg-gradient-to-r from-blue-900 to-emerald-900 text-white p-4 rounded-2xl shadow-sm space-y-2">
-          <div class="flex items-center gap-2.5 border-b border-blue-800 pb-2">
-            <span class="text-base">☎️</span>
-            <h3 class="font-extrabold text-xs uppercase tracking-wide">Kontak Petugas Penanggung Jawab</h3>
-          </div>
-          <div class="text-[11px] space-y-1 text-emerald-50">
-            <p><b>Nama Petugas:</b> Tim Layanan Pengaduan & Informasi UPTD Farmasi</p>
-            <p><b>Jam Layanan:</b> Senin - Jumat (08.00 - 15.00 WIB)</p>
-            <p><b>No. WhatsApp / Hotline:</b> <a href="https://wa.me/6281234567890" target="_blank" class="underline font-bold text-white hover:text-emerald-200">+62 812-3456-7890</a></p>
-          </div>
-        </div>
-
-        <!-- Bagian 3: Formulir Pengajuan Konsultasi & Keluhan -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-3">
-          <div class="flex items-center gap-2.5 border-b pb-2">
-            <span class="text-base">📝</span>
-            <h3 class="font-extrabold text-xs text-blue-900 uppercase">Formulir Pengaduan / Konsultasi Online</h3>
-          </div>
-
-          <form id="formKonsultasi" class="space-y-3 text-[11px]" onsubmit="kirimKonsultasi(event)">
-            <div>
-              <label class="block font-bold text-gray-700 mb-1">Nama Instansi / Puskesmas / Pengirim:</label>
-              <input type="text" id="pengirim" required placeholder="Contoh: Puskesmas Pamulang" class="w-full px-3 py-2 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500 text-xs">
-            </div>
-
-            <div>
-              <label class="block font-bold text-gray-700 mb-1">Pilihan Judul Keluhan / Topik:</label>
-              <select id="judulKeluhan" required class="w-full px-3 py-2 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500 text-xs bg-white">
-                <option value="" disabled selected>-- Pilih Judul / Topik Keluhan --</option>
-                <option value="Keterlambatan Distribusi Obat / Logistik">Keterlambatan Distribusi Obat / Logistik</option>
-                <option value="Ketidaksesuaian Jumlah / Jenis Perbekalan">Ketidaksesuaian Jumlah / Jenis Perbekalan</option>
-                <option value="Kendala Teknis Aplikasi / Sistem Arsip">Kendala Teknis Aplikasi / Sistem Arsip</option>
-                <option value="Konsultasi Permintaan Reagen / Vaksin">Konsultasi Permintaan Reagen / Vaksin</option>
-                <option value="Lainnya (Tuliskan di Detail)">Lainnya (Tuliskan di Detail)</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="block font-bold text-gray-700 mb-1">Tuliskan Keluhan / Konsultasi Secara Detail:</label>
-              <textarea id="detailKeluhan" rows="4" required placeholder="Jelaskan kendala, nomor batch, atau pertanyaan Anda secara lengkap di sini..." class="w-full px-3 py-2 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500 text-xs"></textarea>
-            </div>
-
-            <button type="submit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-extrabold text-xs py-2.5 rounded-xl shadow-md transition">
-              Kirim Konsultasi / Keluhan 🚀
-            </button>
-          </form>
-        </div>
-
-        <!-- Tombol Kembali -->
-        <div class="flex justify-between pt-2">
-          <a href="konten.html" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold text-xs px-4 py-2.5 rounded-xl transition inline-flex items-center gap-1.5">
-            ← Menu Utama
-          </a>
-          <a href="tamu.html" class="bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition inline-flex items-center gap-1.5">
-            Cek Status Tamu →
-          </a>
-        </div>
-
-      </main>
+      <div>
+        <h2 class="text-sm font-extrabold text-blue-900 uppercase">Layanan Konsultasi & Pengaduan</h2>
+        <p class="text-[11px] text-gray-600 mt-0.5">Sampaikan pertanyaan teknis, kendala layanan, atau masukan Anda. Data tercatat di sistem dan otomatis terkirim via WhatsApp penanggung jawab.</p>
+      </div>
     </div>
-  </div>
 
-  <!-- Bottom Navigation Bar (Mobile) -->
-  <div class="bottom-nav-wrapper">
-    <nav class="bg-[#e3ede6] border-t border-emerald-300 shadow-lg py-2.5 px-4 flex justify-around items-center rounded-t-2xl">
-      <a href="konten.html" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
-        <div class="w-7 h-7 flex items-center justify-center overflow-visible">
-          <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" class="w-16 h-16 max-w-none object-contain">
+    <!-- Form Input Konsultasi -->
+    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+      <form id="formKonsultasi" class="space-y-3">
+        <div>
+          <label class="block text-xs font-extrabold text-gray-700 mb-1">Nama Lengkap / Instansi</label>
+          <input type="text" id="namaPengirim" required placeholder="Masukkan nama atau asal instansi..." class="w-full px-3 py-2 text-xs border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50">
         </div>
-        <span class="text-[9px] mt-2 font-bold tracking-tight text-center">Utama</span>
-      </a>
-      <a href="index.html" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
-        <div class="w-7 h-7 flex items-center justify-center overflow-visible">
-          <img src="https://i.ibb.co.com/Xf1wsJ41/Picsart-26-07-25-12-29-14-940.png" class="w-20 h-20 max-w-none object-contain">
+        <div>
+          <label class="block text-xs font-extrabold text-gray-700 mb-1">Nomor WhatsApp / Kontak</label>
+          <input type="tel" id="kontakPengirim" required placeholder="Contoh: 081234567890" class="w-full px-3 py-2 text-xs border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50">
         </div>
-        <span class="text-[9px] mt-2 font-bold tracking-tight text-center">Registrasi</span>
-      </a>
-      <a href="tamu.html" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
-        <div class="w-7 h-7 flex items-center justify-center overflow-visible">
-          <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-24 h-24 max-w-none object-contain">
+        <div>
+          <label class="block text-xs font-extrabold text-gray-700 mb-1">Kategori Kendala / Topik</label>
+          <select id="kategoriKonsultasi" class="w-full px-3 py-2 text-xs border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 font-bold text-gray-700">
+            <option value="Distribusi Obat & Logistik">Distribusi Obat & Logistik</option>
+            <option value="Teknis Sistem / Website">Teknis Sistem / Website</option>
+            <option value="Administrasi & Pelayanan Umum">Administrasi & Pelayanan Umum</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
         </div>
-        <span class="text-[9px] mt-2 font-bold tracking-tight text-center">Tamu</span>
-      </a>
-      <a href="konsultasi.html" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
-        <div class="w-7 h-7 flex items-center justify-center overflow-visible">
-          <img src="https://i.ibb.co.com/ksP96f3m/Picsart-26-07-25-11-28-36-829.png" class="w-24 h-24 max-w-none object-contain">
+        <div>
+          <label class="block text-xs font-extrabold text-gray-700 mb-1">Isi Konsultasi / Keluhan</label>
+          <textarea id="isiKonsultasi" rows="4" required placeholder="Tuliskan detail pertanyaan atau keluhan Anda secara jelas..." class="w-full px-3 py-2 text-xs border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"></textarea>
         </div>
-        <span class="text-[9px] mt-2 font-extrabold tracking-tight text-center">Konsultasi</span>
-      </a>
-      <a href="panduan.html" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
-        <div class="w-7 h-7 flex items-center justify-center overflow-visible">
-          <img src="https://i.ibb.co.com/m524Hk0C/Picsart-26-07-25-11-28-11-137.png" class="w-24 h-24 max-w-none object-contain">
-        </div>
-        <span class="text-[9px] mt-2 font-bold tracking-tight text-center">Panduan</span>
-      </a>
-    </nav>
-  </div>
+        <button type="submit" id="btnKirim" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-extrabold py-2.5 rounded-xl text-xs transition shadow-md flex items-center justify-center gap-2">
+          <span>Kirim Konsultasi & Keluhan via WhatsApp</span>
+          <span>→</span>
+        </button>
+      </form>
+    </div>
 
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedArtikel = localStorage.getItem('admin_artikel_konsultasi');
-      if (savedArtikel) {
-        document.getElementById('artikel-konsultasi-content').innerHTML = savedArtikel;
+    <!-- Panel Tabel Keluhan untuk Admin / Print PDF -->
+    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="text-xs font-extrabold text-blue-900 uppercase">Riwayat & Daftar Keluhan Masuk</h3>
+        <button onclick="window.print()" class="no-print bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg transition shadow flex items-center gap-1">
+          🖨️ Cetak / Simpan PDF
+        </button>
+      </div>
+      
+      <div id="printArea" class="overflow-x-auto">
+        <div class="hidden print:block mb-4 text-center">
+          <h2 class="font-bold text-sm text-blue-900">LAPORAN KONSULTASI DAN PENGADUAN KELUHAN</h2>
+          <p class="text-[10px] text-gray-600">UPTD FARMASI KOTA TANGERANG SELATAN</p>
+        </div>
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-100 text-[11px] text-gray-700 uppercase border-b">
+              <th class="p-2 border">Waktu</th>
+              <th class="p-2 border">Nama / Instansi</th>
+              <th class="p-2 border">Kontak</th>
+              <th class="p-2 border">Kategori</th>
+              <th class="p-2 border">Isi Keluhan</th>
+            </tr>
+          </thead>
+          <tbody id="tabelKonsultasi" class="text-xs text-gray-800">
+            <tr>
+              <td colspan="5" class="text-center py-4 text-gray-400 text-xs">Memuat data konsultasi...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- SKRIP FIREBASE & INTEGRASI WHATSAPP & DATABASE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    
+    const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app" };
+    const db = getFirestore(initializeApp(firebaseConfig));
+
+    // =========================================================================
+    // UBÂH NOMOR WHATSAPP DI BAWAH INI DENGAN NOMOR PENANGGUNG JAWAB (Gunakan format internasional tanpa tanda +, contoh: 6281234567890)
+    // =========================================================================
+    const NOMOR_WA_ADMIN = "6281234567890"; 
+
+    const form = document.getElementById('formKonsultasi');
+    const tabelBody = document.getElementById('tabelKonsultasi');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btnKirim');
+      btn.disabled = true;
+      btn.innerText = "Mengirim...";
+
+      const nama = document.getElementById('namaPengirim').value;
+      const kontak = document.getElementById('kontakPengirim').value;
+      const kategori = document.getElementById('kategoriKonsultasi').value;
+      const isi = document.getElementById('isiKonsultasi').value;
+
+      try {
+        // Simpan ke Database Firebase
+        await addDoc(collection(db, "konsultasi"), {
+          nama: nama,
+          kontak: kontak,
+          kategori: kategori,
+          isi: isi,
+          waktuInput: serverTimestamp()
+        });
+
+        // Format Pesan WhatsApp
+        const pesanWA = `Halo Admin / Penanggung Jawab UPTD Farmasi Tangsel,%0A%0ASaya ingin menyampaikan konsultasi / keluhan baru:%0A%0A*Nama / Instansi:* ${encodeURIComponent(nama)}%0A*No. WhatsApp:* ${encodeURIComponent(kontak)}%0A*Kategori:* ${encodeURIComponent(kategori)}%0A*Isi Keluhan:*%0A${encodeURIComponent(isi)}%0A%0ATerima kasih.`;
+
+        // Buka otomatis WhatsApp ke nomor penanggung jawab
+        window.open(`https://wa.me/${NOMOR_WA_ADMIN}?text=${pesanWA}`, '_blank');
+
+        alert("Konsultasi berhasil disimpan ke sistem dan WhatsApp penanggung jawab akan segera dibuka.");
+        form.reset();
+      } catch (err) {
+        console.error("Gagal mengirim:", err);
+        alert("Gagal mengirim konsultasi. Silakan coba lagi.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>Kirim Konsultasi & Keluhan via WhatsApp</span> <span>→</span>`;
       }
     });
 
-    function kirimKonsultasi(e) {
-      e.preventDefault();
-      const pengirim = document.getElementById('pengirim').value;
-      const judul = document.getElementById('judulKeluhan').value;
-      const detail = document.getElementById('detailKeluhan').value;
-
-      const dataKeluhan = {
-        pengirim,
-        judul,
-        detail,
-        tanggal: new Date().toLocaleString('id-ID')
-      };
-
-      let listKeluhan = JSON.parse(localStorage.getItem('daftar_keluhan_uptd') || '[]');
-      listKeluhan.push(dataKeluhan);
-      localStorage.setItem('daftar_keluhan_uptd', JSON.stringify(listKeluhan));
-
-      alert('Terima kasih. Konsultasi / keluhan Anda berhasil dikirim dan akan segera ditinjau oleh petugas penanggung jawab.');
-      document.getElementById('formKonsultasi').reset();
-    }
+    // Real-time listener untuk menampilkan data ke tabel admin / halaman cetak
+    onSnapshot(query(collection(db, "konsultasi"), orderBy("waktuInput", "desc")), (snapshot) => {
+      tabelBody.innerHTML = "";
+      if (snapshot.empty) {
+        tabelBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-gray-400 text-xs">Belum ada data konsultasi atau keluhan.</td></tr>`;
+        return;
+      }
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const tanggalStr = data.waktuInput?.toDate ? data.waktuInput.toDate().toLocaleString('id-ID') : 'Baru saja';
+        const tr = document.createElement('tr');
+        tr.className = "border-b hover:bg-gray-50";
+        tr.innerHTML = `
+          <td class="p-2 border text-[10px] text-gray-500 whitespace-nowrap">${tanggalStr}</td>
+          <td class="p-2 border font-bold">${data.nama || '-'}</td>
+          <td class="p-2 border text-blue-900">${data.kontak || '-'}</td>
+          <td class="p-2 border font-semibold text-emerald-800">${data.kategori || '-'}</td>
+          <td class="p-2 border whitespace-pre-line text-gray-700">${data.isi || '-'}</td>
+        `;
+        tabelBody.appendChild(tr);
+      });
+    }, (error) => {
+      console.error("Gagal memuat riwayat:", error);
+      tabelBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-red-400 text-xs">Gagal memuat data dari database.</td></tr>`;
+    });
   </script>
 </body>
 </html>
