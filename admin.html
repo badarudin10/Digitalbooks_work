@@ -334,10 +334,15 @@
       });
     }
 
-    // FUNGSI DOWNLOAD PDF KELUHAN OTOMATIS 1 HALAMAN (MENGGUNAKAN AREA KHUSUS BER-KOP SURAT)
+    // FUNGSI DOWNLOAD PDF KELUHAN OTOMATIS 1 HALAMAN (DIRENDER DI LATAR BELAKANG)
     window.downloadPDFKeluhan = () => {
       const element = document.getElementById('printAreaKeluhan');
       
+      // Tampilkan elemen secara transparan/di balik layar agar terbaca oleh html2pdf tanpa kedipan mata pengguna
+      element.style.display = 'block';
+      element.style.position = 'absolute';
+      element.style.left = '-9999px';
+
       const opt = {
         margin:       5,
         filename:     'Laporan_Konsultasi_Dan_Pengaduan_UPTD.pdf',
@@ -346,8 +351,12 @@
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      // Proses render dan simpan langsung di latar belakang tanpa memunculkan elemen ke layar
-      html2pdf().from(element).set(opt).save();
+      html2pdf().from(element).set(opt).save().then(() => {
+        // Kembalikan posisi dan sembunyikan kembali elemen setelah PDF selesai ter-download
+        element.style.display = 'none';
+        element.style.position = '';
+        element.style.left = '';
+      });
     };
 
     window.updateStatus = async (id, status, hp, nama, antrian) => {
