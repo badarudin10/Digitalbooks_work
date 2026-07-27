@@ -70,7 +70,7 @@
       </table>
     </div>
 
-    <!-- PEMANTAUAN KELUHAN & CETAK/DOWNLOAD PDF KELUHAN OTOMATIS 1 HALAMAN DENGAN KOP SURAT -->
+    <!-- PEMANTAUAN KELUHAN & TOMBOL DOWNLOAD PDF KELUHAN -->
     <div class="bg-white p-6 rounded-2xl shadow-lg">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-bold text-blue-900">Pantau Konsultasi & Pengaduan Keluhan</h2>
@@ -78,58 +78,74 @@
           <span>🖨️ Download PDF Keluhan (1 Halaman)</span>
         </button>
       </div>
-      
-      <!-- AREA CETAK PDF KELUHAN (DENGAN KOP SURAT SESUAI REFERENSI, UKURAN PAS 1 HALAMAN A4) -->
-      <div id="printAreaKeluhan" class="bg-white p-6 text-black box-border">
-        
-        <!-- KOP SURAT RESMI UPTD FARMASI TANGSEL -->
-        <div class="flex items-center border-b-4 border-black pb-4 mb-6">
-          <div class="w-20 flex-shrink-0">
-            <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo Tangsel" class="w-16 h-16 object-contain mx-auto">
-          </div>
-          <div class="flex-grow text-center pr-20">
-            <h2 class="text-xs font-bold uppercase tracking-wider text-black">PEMERINTAH KOTA TANGERANG SELATAN</h2>
-            <h1 class="text-base font-black uppercase tracking-wide text-black mt-0.5">UPTD FARMASI</h1>
-            <p class="text-[10px] text-gray-800 mt-0.5">Jl. Cendekia, Ciater, Serpong, Kota Tangerang Selatan</p>
-            <p class="text-[10px] text-gray-800">Telepon (021) 29307897 Faksimili (021) 29307989</p>
-            <p class="text-[9px] text-gray-700 mt-0.5">Laman dinkes.tangerangselatankota.go.id , pos-el dinkes@tangerangselatankota.go.id</p>
-          </div>
-        </div>
 
-        <div class="text-center mb-4">
-          <h3 class="text-xs font-black uppercase tracking-wider underline underline-offset-4">LAPORAN KONSULTASI DAN PENGADUAN KELUHAN</h3>
-          <p class="text-[10px] text-gray-600 mt-0.5">Dokumen Rekapitulasi Sistem Layanan UPTD Farmasi</p>
-        </div>
+      <!-- TAMPILAN TABEL BIASA DI DASHBOARD ADMIN (TANPA FORMAT KOP SURAT) -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="border-b text-gray-500 text-xs uppercase bg-gray-50">
+              <th class="p-3 border">Waktu</th>
+              <th class="p-3 border">Nama / Instansi</th>
+              <th class="p-3 border">Kontak</th>
+              <th class="p-3 border">Kategori</th>
+              <th class="p-3 border">Isi Keluhan</th>
+            </tr>
+          </thead>
+          <tbody id="tabelKonsultasiAdmin" class="text-xs text-gray-800">
+            <tr><td colspan="5" class="text-center py-4 text-gray-400">Memuat data keluhan...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr class="border-b text-gray-700 text-[10px] uppercase bg-gray-50">
-                <th class="p-2 border">Waktu</th>
-                <th class="p-2 border">Nama / Instansi</th>
-                <th class="p-2 border">Kontak</th>
-                <th class="p-2 border">Kategori</th>
-                <th class="p-2 border">Isi Keluhan</th>
-              </tr>
-            </thead>
-            <tbody id="tabelKonsultasiAdmin" class="text-[11px] text-gray-800">
-              <tr><td colspan="5" class="text-center py-4 text-gray-400">Memuat data keluhan...</td></tr>
-            </tbody>
-          </table>
+    <!-- AREA TERSEMBUNYI KHUSUS UNTUK GENERATE PDF DENGAN KOP SURAT & FORMAT LENGKAP -->
+    <div id="printAreaKeluhan" class="hidden bg-white p-6 text-black box-border">
+      <!-- KOP SURAT RESMI UPTD FARMASI TANGSEL -->
+      <div class="flex items-center border-b-4 border-black pb-4 mb-6">
+        <div class="w-20 flex-shrink-0">
+          <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo Tangsel" class="w-16 h-16 object-contain mx-auto">
         </div>
-
-        <!-- TANDA TANGAN / FOOTER 1 HALAMAN -->
-        <div class="mt-8 flex justify-between items-end text-[11px]">
-          <div>
-            <p class="text-[9px] text-gray-500 italic">* Dicetak secara otomatis dari Sistem UPTD Farmasi Tangsel.</p>
-          </div>
-          <div class="text-center w-48">
-            <p class="text-black mb-10">Penanggung Jawab / Admin,</p>
-            <p class="font-bold underline text-black">Tim Pengelola Layanan</p>
-            <p class="text-[9px] text-gray-600">NIP. 19850101 201001 1 001</p>
-          </div>
+        <div class="flex-grow text-center pr-20">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-black">PEMERINTAH KOTA TANGERANG SELATAN</h2>
+          <h1 class="text-base font-black uppercase tracking-wide text-black mt-0.5">UPTD FARMASI</h1>
+          <p class="text-[10px] text-gray-800 mt-0.5">Jl. Cendekia, Ciater, Serpong, Kota Tangerang Selatan</p>
+          <p class="text-[10px] text-gray-800">Telepon (021) 29307897 Faksimili (021) 29307989</p>
+          <p class="text-[9px] text-gray-700 mt-0.5">Laman dinkes.tangerangselatankota.go.id , pos-el dinkes@tangerangselatankota.go.id</p>
         </div>
+      </div>
 
+      <div class="text-center mb-4">
+        <h3 class="text-xs font-black uppercase tracking-wider underline underline-offset-4">LAPORAN KONSULTASI DAN PENGADUAN KELUHAN</h3>
+        <p class="text-[10px] text-gray-600 mt-0.5">Dokumen Rekapitulasi Sistem Layanan UPTD Farmasi</p>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="border-b text-gray-700 text-[10px] uppercase bg-gray-50">
+              <th class="p-2 border">Waktu</th>
+              <th class="p-2 border">Nama / Instansi</th>
+              <th class="p-2 border">Kontak</th>
+              <th class="p-2 border">Kategori</th>
+              <th class="p-2 border">Isi Keluhan</th>
+            </tr>
+          </thead>
+          <tbody id="tabelKonsultasiPDF" class="text-[11px] text-gray-800">
+            <tr><td colspan="5" class="text-center py-4 text-gray-400">Memuat data keluhan...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- TANDA TANGAN / FOOTER 1 HALAMAN -->
+      <div class="mt-8 flex justify-between items-end text-[11px]">
+        <div>
+          <p class="text-[9px] text-gray-500 italic">* Dicetak secara otomatis dari Sistem UPTD Farmasi Tangsel.</p>
+        </div>
+        <div class="text-center w-48">
+          <p class="text-black mb-10">Penanggung Jawab / Admin,</p>
+          <p class="font-bold underline text-black">Tim Pengelola Layanan</p>
+          <p class="text-[9px] text-gray-600">NIP. 19850101 201001 1 001</p>
+        </div>
       </div>
     </div>
 
@@ -233,27 +249,48 @@
         document.getElementById("totalTamu").innerText = total; document.getElementById("totalProses").innerText = proses; document.getElementById("totalSelesai").innerText = selesai;
       });
 
-      // SINKRONISASI REAL-TIME DATA KELUHAN / KONSULTASI DI ADMIN
+      // SINKRONISASI REAL-TIME DATA KELUHAN / KONSULTASI KE TABEL ADMIN & TABEL PDF TERSEMBUNYI
       onSnapshot(query(collection(db, "konsultasi"), orderBy("waktuInput", "desc")), (snapshot) => {
         const tabelKonsultasiAdmin = document.getElementById("tabelKonsultasiAdmin");
+        const tabelKonsultasiPDF = document.getElementById("tabelKonsultasiPDF");
+        
         tabelKonsultasiAdmin.innerHTML = "";
+        tabelKonsultasiPDF.innerHTML = "";
+
         if (snapshot.empty) {
-          tabelKonsultasiAdmin.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-gray-400">Belum ada data konsultasi atau keluhan masuk.</td></tr>`;
+          const emptyHtml = `<tr><td colspan="5" class="text-center py-4 text-gray-400">Belum ada data konsultasi atau keluhan masuk.</td></tr>`;
+          tabelKonsultasiAdmin.innerHTML = emptyHtml;
+          tabelKonsultasiPDF.innerHTML = emptyHtml;
           return;
         }
+
         snapshot.forEach((docSnap) => {
           const data = docSnap.data();
           const tanggalStr = data.waktuInput?.toDate ? data.waktuInput.toDate().toLocaleString('id-ID') : 'Baru saja';
-          const tr = document.createElement('tr');
-          tr.className = "border-b hover:bg-gray-50";
-          tr.innerHTML = `
+          
+          // Render untuk Dashboard Admin (Tabel Biasa)
+          const trAdmin = document.createElement('tr');
+          trAdmin.className = "border-b hover:bg-gray-50";
+          trAdmin.innerHTML = `
+            <td class="p-3 border text-gray-500 whitespace-nowrap">${tanggalStr}</td>
+            <td class="p-3 border font-bold">${data.nama || '-'}<br><span class="text-gray-600 font-normal">${data.instansi || '-'}</span></td>
+            <td class="p-3 border text-blue-900">${data.kontak || '-'}</td>
+            <td class="p-3 border font-semibold text-emerald-800">${data.kategori || '-'}</td>
+            <td class="p-3 border whitespace-pre-line text-gray-700">${data.isi || '-'}</td>
+          `;
+          tabelKonsultasiAdmin.appendChild(trAdmin);
+
+          // Render untuk Area Cetak PDF (Format Kop Surat)
+          const trPDF = document.createElement('tr');
+          trPDF.className = "border-b";
+          trPDF.innerHTML = `
             <td class="p-2 border text-[10px] text-gray-500 whitespace-nowrap">${tanggalStr}</td>
             <td class="p-2 border font-bold">${data.nama || '-'}<br><span class="text-[10px] text-gray-600 font-normal">${data.instansi || '-'}</span></td>
             <td class="p-2 border text-blue-900">${data.kontak || '-'}</td>
             <td class="p-2 border font-semibold text-emerald-800">${data.kategori || '-'}</td>
             <td class="p-2 border whitespace-pre-line text-gray-700">${data.isi || '-'}</td>
           `;
-          tabelKonsultasiAdmin.appendChild(tr);
+          tabelKonsultasiPDF.appendChild(trPDF);
         });
       });
 
@@ -286,9 +323,10 @@
       });
     }
 
-    // FUNGSI DOWNLOAD PDF KELUHAN OTOMATIS 1 HALAMAN
+    // FUNGSI DOWNLOAD PDF KELUHAN OTOMATIS 1 HALAMAN (MENGGUNAKAN AREA KHUSUS BER-KOP SURAT)
     window.downloadPDFKeluhan = () => {
       const element = document.getElementById('printAreaKeluhan');
+      element.classList.remove('hidden'); // Tampilkan sebentar untuk digenerate
       const opt = {
         margin:       5,
         filename:     'Laporan_Konsultasi_Dan_Pengaduan_UPTD.pdf',
@@ -296,7 +334,9 @@
         html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
-      html2pdf().from(element).set(opt).save();
+      html2pdf().from(element).set(opt).save().then(() => {
+        element.classList.add('hidden'); // Sembunyikan kembali setelah selesai di-download
+      });
     };
 
     window.updateStatus = async (id, status, hp, nama, antrian) => {
