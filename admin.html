@@ -139,7 +139,7 @@
       </div>
 
       <!-- TANDA TANGAN / FOOTER 1 HALAMAN -->
-      <div class="mt-8 flex justify-between items-end text-[11px]">
+      <div class="mt-16 flex justify-between items-end text-[11px]">
         <div>
           <p class="text-[9px] text-gray-500 italic">* Dicetak secara otomatis dari Sistem UPTD Farmasi Tangsel.</p>
         </div>
@@ -153,7 +153,7 @@
 <div class="border-b border-black mb-1.5 w-full"></div>
   
   <!-- NIP dengan jarak atas (mt-1) agar tidak dempet dengan nama -->
-  <p class="text-[9px] text-gray-600 mt-5">NIP. 19850101 201001 1 001</p>
+  <p class="text-[9px] text-gray-600 mt-1">NIP. 19850101 201001 1 001</p>
 </div>
       </div>
     </div>
@@ -337,7 +337,7 @@
     // FUNGSI DOWNLOAD PDF KELUHAN OTOMATIS 1 HALAMAN (MENGGUNAKAN AREA KHUSUS BER-KOP SURAT)
     window.downloadPDFKeluhan = () => {
       const element = document.getElementById('printAreaKeluhan');
-      element.classList.remove('hidden'); // Tampilkan sebentar untuk digenerate
+      
       const opt = {
         margin:       5,
         filename:     'Laporan_Konsultasi_Dan_Pengaduan_UPTD.pdf',
@@ -345,9 +345,9 @@
         html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
-      html2pdf().from(element).set(opt).save().then(() => {
-        element.classList.add('hidden'); // Sembunyikan kembali setelah selesai di-download
-      });
+
+      // Proses render dan simpan langsung di latar belakang tanpa memunculkan elemen ke layar
+      html2pdf().from(element).set(opt).save();
     };
 
     window.updateStatus = async (id, status, hp, nama, antrian) => {
