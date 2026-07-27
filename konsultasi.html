@@ -2,123 +2,168 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <script src="https://cdn.tailwindcss.com"></script>
-  <title>Konsultasi & Pengaduan - UPTD Farmasi</title>
+  <style>
+    .hidden-custom { opacity: 0; visibility: hidden; pointer-events: none; display: none !important; }
+    .visible-custom { opacity: 1; visibility: visible; pointer-events: auto; display: block !important; }
+    body { overflow-x: hidden; width: 100%; position: relative; }
+    img, video { max-width: 100%; height: auto; }
+  </style>
+  <title>Konsultasi & Pengaduan - UPTD Farmasi Tangsel</title>
 </head>
-<body class="bg-[#d1e7dd] min-h-screen p-4 flex items-center justify-center">
-
-  <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl w-full max-w-lg">
-    <div class="text-center mb-6">
-      <h2 class="text-2xl font-bold text-blue-900">Form Konsultasi & Pengaduan</h2>
-      <p class="text-xs text-gray-600 mt-1">UPTD Farmasi Kota Tangerang Selatan</p>
-    </div>
-
-    <form id="formKonsultasi" class="space-y-4">
-      <div>
-        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nama Lengkap</label>
-        <input type="text" id="nama" required placeholder="Masukkan nama Anda..." class="w-full p-3 border rounded-lg text-sm focus:ring-2 focus:ring-blue-900 outline-none">
-      </div>
-
-      <div>
-        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Instansi / Puskesmas / Rumah Sakit</label>
-        <input type="text" id="instansi" required placeholder="Masukkan nama instansi..." class="w-full p-3 border rounded-lg text-sm focus:ring-2 focus:ring-blue-900 outline-none">
-      </div>
-
-      <div>
-        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nomor Kontak / WhatsApp</label>
-        <input type="tel" id="kontak" required placeholder="Contoh: 08123456789" class="w-full p-3 border rounded-lg text-sm focus:ring-2 focus:ring-blue-900 outline-none">
-      </div>
-
-      <div>
-        <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Pilih Keperluan / Kategori Keluhan:</label>
-        <div class="space-y-2 border p-3 rounded-lg bg-gray-50 max-h-56 overflow-y-auto">
-          <label class="flex items-center space-x-3 p-2 bg-white rounded border cursor-pointer hover:bg-blue-50">
-            <input type="radio" name="kategori" value="A. OBAT PKD" required class="w-4 h-4 text-blue-900">
-            <span class="text-xs font-bold text-gray-800">A. OBAT PKD</span>
-          </label>
-          <label class="flex items-center space-x-3 p-2 bg-white rounded border cursor-pointer hover:bg-blue-50">
-            <input type="radio" name="kategori" value="B. VAKSIN" class="w-4 h-4 text-blue-900">
-            <span class="text-xs font-bold text-gray-800">B. VAKSIN</span>
-          </label>
-          <label class="flex items-center space-x-3 p-2 bg-white rounded border cursor-pointer hover:bg-blue-50">
-            <input type="radio" name="kategori" value="C. REAGEN" class="w-4 h-4 text-blue-900">
-            <span class="text-xs font-bold text-gray-800">C. REAGEN</span>
-          </label>
-          <label class="flex items-center space-x-3 p-2 bg-white rounded border cursor-pointer hover:bg-blue-50">
-            <input type="radio" name="kategori" value="D. TB dan KUSTA" class="w-4 h-4 text-blue-900">
-            <span class="text-xs font-bold text-gray-800">D. TB dan KUSTA</span>
-          </label>
-          <label class="flex items-center space-x-3 p-2 bg-white rounded border cursor-pointer hover:bg-blue-50">
-            <input type="radio" name="kategori" value="E. HIV dan PKG" class="w-4 h-4 text-blue-900">
-            <span class="text-xs font-bold text-gray-800">E. HIV dan PKG</span>
-          </label>
-          <label class="flex items-center space-x-3 p-2 bg-white rounded border cursor-pointer hover:bg-blue-50">
-            <input type="radio" name="kategori" value="F. DBD dan MALARIA" class="w-4 h-4 text-blue-900">
-            <span class="text-xs font-bold text-gray-800">F. DBD dan MALARIA</span>
-          </label>
-          <label class="flex items-center space-x-3 p-2 bg-white rounded border cursor-pointer hover:bg-blue-50">
-            <input type="radio" name="kategori" value="G. HEPATITIS VAKSIN PROGRAM" class="w-4 h-4 text-blue-900">
-            <span class="text-xs font-bold text-gray-800">G. HEPATITIS VAKSIN PROGRAM</span>
-          </label>
-          <label class="flex items-center space-x-3 p-2 bg-white rounded border cursor-pointer hover:bg-blue-50">
-            <input type="radio" name="kategori" value="Lain-lain" class="w-4 h-4 text-blue-900">
-            <span class="text-xs font-bold text-gray-800">Lain-lain</span>
-          </label>
+<body class="bg-[#e3ede6] font-sans min-h-screen pb-10">
+  
+  <header class="bg-[#e3ede6] px-4 py-3 shadow-sm sticky top-0 z-30 border-b border-emerald-200">
+    <div class="max-w-2xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-10 w-10 object-contain">
+        <div>
+          <h1 class="font-extrabold text-blue-900 text-sm tracking-wide leading-tight">UPTD FARMASI</h1>
+          <p class="text-[10px] text-gray-600 font-semibold uppercase tracking-wider">Kota Tangerang Selatan</p>
         </div>
       </div>
+    </div>
+  </header>
 
-      <div>
-        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Isi Konsultasi / Keluhan</label>
-        <textarea id="isi" rows="4" required placeholder="Tuliskan detail keluhan atau pertanyaan Anda..." class="w-full p-3 border rounded-lg text-sm focus:ring-2 focus:ring-blue-900 outline-none"></textarea>
+  <main class="max-w-2xl mx-auto p-4 space-y-4">
+    
+    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
+      <div class="w-20 h-20 flex items-center justify-center flex-shrink-0 bg-blue-50 rounded-2xl p-2 border border-blue-100 overflow-hidden">
+        <img src="https://i.ibb.co.com/4nWYJqhW/Picsart-26-07-27-12-54-41-199.png" class="w-full h-full object-contain transform scale-150">
       </div>
+      <div>
+        <h2 class="text-sm font-extrabold text-blue-900 uppercase">Layanan Konsultasi & Pengaduan</h2>
+        <p class="text-[11px] text-gray-600 mt-0.5">Sampaikan pertanyaan teknis, kendala layanan, atau masukan Anda. Data tercatat di sistem dan otomatis terkirim via WhatsApp penanggung jawab.</p>
+      </div>
+    </div>
 
-      <button type="submit" id="btnKirim" class="w-full bg-blue-900 text-white p-3 rounded-lg font-bold hover:bg-blue-800 transition">Kirim Konsultasi</button>
-    </form>
-  </div>
+    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+      <form id="formKonsultasi" class="space-y-3">
+        <!-- Input Nama Lengkap Terpisah -->
+        <div>
+          <label class="block text-xs font-extrabold text-gray-700 mb-1">Nama Lengkap</label>
+          <input type="text" id="namaPengirim" required placeholder="Masukkan nama lengkap..." class="w-full px-3 py-2 text-xs border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50">
+        </div>
+        <!-- Input Instansi Terpisah -->
+        <div>
+          <label class="block text-xs font-extrabold text-gray-700 mb-1">Asal Instansi / Unit Kerja</label>
+          <input type="text" id="instansiPengirim" required placeholder="Masukkan asal instansi / Puskesmas / RS / Unit..." class="w-full px-3 py-2 text-xs border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50">
+        </div>
+        <div>
+          <label class="block text-xs font-extrabold text-gray-700 mb-1">Nomor WhatsApp / Kontak</label>
+          <input type="tel" id="kontakPengirim" required placeholder="Contoh: 081234567890" class="w-full px-3 py-2 text-xs border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50">
+        </div>
+        
+        <!-- KATEGORI KELUHAN / KEPERLUAN (RADIO BUTTON SESUAI PERMINTAAN) -->
+        <div>
+          <label class="block text-xs font-extrabold text-gray-700 mb-1">Pilih Keperluan / Kategori Keluhan</label>
+          <div class="space-y-1.5 border p-3 rounded-xl bg-gray-50 max-h-56 overflow-y-auto">
+            <label class="flex items-center justify-between p-2 bg-white rounded-lg border cursor-pointer hover:bg-blue-50 text-xs font-bold text-gray-800">
+              <span>A. OBAT PKD</span>
+              <input type="radio" name="kategori" value="A. OBAT PKD" required class="w-4 h-4 text-blue-900">
+            </label>
+            <label class="flex items-center justify-between p-2 bg-white rounded-lg border cursor-pointer hover:bg-blue-50 text-xs font-bold text-gray-800">
+              <span>B. VAKSIN</span>
+              <input type="radio" name="kategori" value="B. VAKSIN" class="w-4 h-4 text-blue-900">
+            </label>
+            <label class="flex items-center justify-between p-2 bg-white rounded-lg border cursor-pointer hover:bg-blue-50 text-xs font-bold text-gray-800">
+              <span>C. REAGEN</span>
+              <input type="radio" name="kategori" value="C. REAGEN" class="w-4 h-4 text-blue-900">
+            </label>
+            <label class="flex items-center justify-between p-2 bg-white rounded-lg border cursor-pointer hover:bg-blue-50 text-xs font-bold text-gray-800">
+              <span>D. TB dan KUSTA</span>
+              <input type="radio" name="kategori" value="D. TB dan KUSTA" class="w-4 h-4 text-blue-900">
+            </label>
+            <label class="flex items-center justify-between p-2 bg-white rounded-lg border cursor-pointer hover:bg-blue-50 text-xs font-bold text-gray-800">
+              <span>E. HIV dan PKG</span>
+              <input type="radio" name="kategori" value="E. HIV dan PKG" class="w-4 h-4 text-blue-900">
+            </label>
+            <label class="flex items-center justify-between p-2 bg-white rounded-lg border cursor-pointer hover:bg-blue-50 text-xs font-bold text-gray-800">
+              <span>F. DBD dan MALARIA</span>
+              <input type="radio" name="kategori" value="F. DBD dan MALARIA" class="w-4 h-4 text-blue-900">
+            </label>
+            <label class="flex items-center justify-between p-2 bg-white rounded-lg border cursor-pointer hover:bg-blue-50 text-xs font-bold text-gray-800">
+              <span>G. HEPATITIS_VAKSIN_PROGRAM</span>
+              <input type="radio" name="kategori" value="G. HEPATITIS_VAKSIN_PROGRAM" class="w-4 h-4 text-blue-900">
+            </label>
+            <label class="flex items-center justify-between p-2 bg-white rounded-lg border cursor-pointer hover:bg-blue-50 text-xs font-bold text-gray-800">
+              <span>Lain-lain</span>
+              <input type="radio" name="kategori" value="Lain-lain" class="w-4 h-4 text-blue-900">
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-extrabold text-gray-700 mb-1">Isi Konsultasi / Keluhan</label>
+          <textarea id="isiKonsultasi" rows="4" required placeholder="Tuliskan detail pertanyaan atau keluhan Anda secara jelas..." class="w-full px-3 py-2 text-xs border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"></textarea>
+        </div>
+        <button type="submit" id="btnKirim" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-extrabold py-2.5 rounded-xl text-xs transition shadow-md flex items-center justify-center gap-2">
+          <span>Kirim Konsultasi & Keluhan via WhatsApp</span>
+          <span>→</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="flex justify-end">
+      <a href="konten.html" class="bg-blue-900 hover:bg-blue-800 text-white font-extrabold px-5 py-2.5 rounded-xl text-xs transition shadow-md inline-flex items-center justify-center gap-2">
+        <span>← Kembali</span>
+      </a>
+    </div>
+
+  </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-    const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
+    
+    const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app" };
     const db = getFirestore(initializeApp(firebaseConfig));
 
-    document.getElementById("formKonsultasi").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById("btnKirim");
-      btn.innerText = "Mengirim...";
-      btn.disabled = true;
+    const NOMOR_WA_ADMIN = "6285716842806"; 
 
-      const nama = document.getElementById("nama").value.trim();
-      const instansi = document.getElementById("instansi").value.trim();
-      const kontak = document.getElementById("kontak").value.trim();
+    const form = document.getElementById('formKonsultasi');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btnKirim');
+      btn.disabled = true;
+      btn.innerText = "Mengirim...";
+
+      const nama = document.getElementById('namaPengirim').value;
+      const instansi = document.getElementById('instansiPengirim').value;
+      const kontak = document.getElementById('kontakPengirim').value;
       
-      const selectedKategori = document.querySelector('input[name="kategori"]:checked');
-      const kategori = selectedKategori ? selectedKategori.value : "-";
+      // Mengambil nilai dari radio button kategori yang dipilih
+      const kategoriEl = document.querySelector('input[name="kategori"]:checked');
+      const kategori = kategoriEl ? kategoriEl.value : '';
       
-      const isi = document.getElementById("isi").value.trim();
+      const isi = document.getElementById('isiKonsultasi').value;
 
       try {
         await addDoc(collection(db, "konsultasi"), {
-          nama,
-          instansi,
-          kontak,
-          kategori,
-          isi,
+          nama: nama,
+          instansi: instansi,
+          kontak: kontak,
+          kategori: kategori,
+          isi: isi,
           waktuInput: serverTimestamp()
         });
-        alert("Konsultasi atau keluhan berhasil dikirim!");
-        document.getElementById("formKonsultasi").reset();
+
+        const pesanWA = `Halo Admin / Penanggung Jawab UPTD Farmasi Tangsel,%0A%0ASaya ingin menyampaikan konsultasi / keluhan baru:%0A%0A*Nama:* ${encodeURIComponent(nama)}%0A*Instansi:* ${encodeURIComponent(instansi)}%0A*No. WhatsApp:* ${encodeURIComponent(kontak)}%0A*Kategori:* ${encodeURIComponent(kategori)}%0A*Isi Keluhan:*%0A${encodeURIComponent(isi)}%0A%0ATerima kasih.`;
+
+        window.open(`https://wa.me/${NOMOR_WA_ADMIN}?text=${pesanWA}`, '_blank');
+
+        alert("Konsultasi berhasil disimpan ke sistem dan WhatsApp penanggung jawab akan segera dibuka.");
+        form.reset();
       } catch (err) {
-        console.error(err);
-        alert("Gagal mengirim data. Silakan coba lagi.");
+        console.error("Gagal mengirim:", err);
+        alert("Gagal mengirim konsultasi. Silakan coba lagi.");
       } finally {
-        btn.innerText = "Kirim Konsultasi";
         btn.disabled = false;
+        btn.innerHTML = `<span>Kirim Konsultasi & Keluhan via WhatsApp</span> <span>→</span>`;
       }
     });
   </script>
 </body>
 </html>
-
