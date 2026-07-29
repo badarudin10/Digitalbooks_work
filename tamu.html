@@ -319,15 +319,15 @@
       `;
     });
 
-    // Fungsi cetak PDF universal yang menjamin data lama maupun baru tercetak rapi secara konsisten
+    // Fungsi cetak PDF universal dengan penguncian ukuran konsisten & posisi kop yang lebih ke atas
     window.downloadPdf = (data) => {
       const areaCetak = document.getElementById("areaCetakPdf");
       areaCetak.style.display = "block";
       areaCetak.innerHTML = `
-        <div style="padding: 20px 30px; font-family: Arial, sans-serif; color: #000; width: 100%; max-width: 700px; margin: 0 auto; background: #fff; box-sizing: border-box;">
+        <div style="padding: 10px 30px 20px 30px; font-family: Arial, sans-serif; color: #000; width: 794px; min-height: 1123px; margin: 0 auto; background: #fff; box-sizing: border-box;">
           
           <!-- Kop Surat Resmi dengan Logo di Kiri -->
-          <div style="display: flex; align-items: center; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; border-bottom: 3px double #000; padding-bottom: 8px; margin-bottom: 15px;">
             <div style="width: 70px; flex-shrink: 0; margin-right: 15px;">
               <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" style="width: 60px; height: auto; display: block;" crossorigin="anonymous">
             </div>
@@ -396,12 +396,12 @@
         </div>
       `;
 
-      // Konfigurasi ukuran F4
+      // Konfigurasi ukuran F4 dengan margin atas diperkecil agar kop surat lebih naik ke atas
       const opt = {
-        margin:       4,
+        margin:       [2, 4, 4, 4], // [atas, kanan, bawah, kiri] dalam satuan mm
         filename:     `Bukti_Pengambilan_Obat_${data.nama || 'Tamu'}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+        html2canvas:  { scale: 2, useCORS: true, letterRendering: true, windowWidth: 794 },
         jsPDF:        { unit: 'mm', format: [210, 330], orientation: 'portrait' }
       };
 
@@ -412,4 +412,3 @@
   </script>
 </body>
 </html>
-
