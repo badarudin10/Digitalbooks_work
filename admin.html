@@ -392,20 +392,38 @@
       });
     }
 
-    // FUNGSI DOWNLOAD PDF KELUHAN OTOMATIS 1 HALAMAN (MENGGUNAKAN AREA KHUSUS BER-KOP SURAT)
+        // FUNGSI DOWNLOAD PDF KELUHAN OTOMATIS 1 HALAMAN (BERSIH, TANPA KEDIPAN & TIDAK KOSONG)
     window.downloadPDFKeluhan = () => {
       const element = document.getElementById('printAreaKeluhan');
-      element.classList.remove('hidden'); // Tampilkan sebentar untuk digenerate
-      const opt = {
-        margin:       5,
-        filename:     'Laporan_Konsultasi_Dan_Pengaduan_UPTD.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-      html2pdf().from(element).set(opt).save().then(() => {
-        element.classList.add('hidden'); // Sembunyikan kembali setelah selesai di-download
-      });
+      
+      // 1. Munculkan elemen secara instan di latar belakang tanpa merusak pandangan mata pengguna
+      element.classList.remove('hidden');
+      element.style.display = 'block';
+      element.style.position = 'absolute';
+      element.style.left = '-9999px';
+      element.style.top = '0';
+      element.style.width = '210mm'; // Kunci ukuran lebar agar konsisten seperti kertas A4
+
+      // 2. Berikan jeda waktu 300 milidetik agar data database selesai ter-render sempurna di memori
+      setTimeout(() => {
+        const opt = {
+          margin:       5,
+          filename:     'Laporan_Konsultasi_Dan_Pengaduan_UPTD.pdf',
+          image:        { type: 'jpeg', quality: 0.98 },
+          html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+          jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().from(element).set(opt).save().then(() => {
+          // 3. Kembalikan elemen ke mode tersembunyi setelah file selesai di-download
+          element.style.display = 'none';
+          element.style.position = '';
+          element.style.left = '';
+          element.style.top = '';
+          element.style.width = '';
+          element.classList.add('hidden');
+        });
+      }, 300); // Jeda 0.3 detik mengeliminasi risiko file kosong
     };
 
     window.updateStatus = async (id, status, hp, nama, antrian) => {
