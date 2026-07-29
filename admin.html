@@ -392,19 +392,18 @@
       });
     }
 
-        // FUNGSI DOWNLOAD PDF KELUHAN OTOMATIS 1 HALAMAN (BERSIH, TANPA KEDIPAN & TIDAK KOSONG)
+            // FUNGSI DOWNLOAD PDF KELUHAN OTOMATIS 1 HALAMAN (DIJAMIN TIDAK KOSONG)
     window.downloadPDFKeluhan = () => {
       const element = document.getElementById('printAreaKeluhan');
       
-      // 1. Munculkan elemen secara instan di latar belakang tanpa merusak pandangan mata pengguna
+      // 1. Munculkan elemen secara transparan di tempatnya (tidak dibuang ke luar layar agar terbaca renderer)
       element.classList.remove('hidden');
       element.style.display = 'block';
-      element.style.position = 'absolute';
-      element.style.left = '-9999px';
-      element.style.top = '0';
-      element.style.width = '210mm'; // Kunci ukuran lebar agar konsisten seperti kertas A4
+      element.style.opacity = '0';
+      element.style.position = 'relative';
+      element.style.zIndex = '-999';
 
-      // 2. Berikan jeda waktu 300 milidetik agar data database selesai ter-render sempurna di memori
+      // 2. Berikan jeda waktu 400 milidetik agar data dari Firebase benar-benar siap
       setTimeout(() => {
         const opt = {
           margin:       5,
@@ -415,15 +414,14 @@
         };
 
         html2pdf().from(element).set(opt).save().then(() => {
-          // 3. Kembalikan elemen ke mode tersembunyi setelah file selesai di-download
+          // 3. Kembalikan seperti semula setelah PDF selesai di-download
           element.style.display = 'none';
+          element.style.opacity = '1';
           element.style.position = '';
-          element.style.left = '';
-          element.style.top = '';
-          element.style.width = '';
+          element.style.zIndex = '';
           element.classList.add('hidden');
         });
-      }, 300); // Jeda 0.3 detik mengeliminasi risiko file kosong
+      }, 400); 
     };
 
     window.updateStatus = async (id, status, hp, nama, antrian) => {
