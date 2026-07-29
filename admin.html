@@ -105,10 +105,11 @@
               <th class="p-3 border">Kontak</th>
               <th class="p-3 border">Kategori</th>
               <th class="p-3 border">Isi Keluhan</th>
+              <th class="p-3 border">Aksi</th>
             </tr>
           </thead>
           <tbody id="tabelKonsultasiAdmin" class="text-xs text-gray-800">
-            <tr><td colspan="6" class="text-center py-4 text-gray-400">Memuat data keluhan...</td></tr>
+            <tr><td colspan="7" class="text-center py-4 text-gray-400">Memuat data keluhan...</td></tr>
           </tbody>
         </table>
       </div>
@@ -282,14 +283,14 @@
             waktuFormatted = data.waktu.toDate().toLocaleString('id-ID');
           }
 
-                    const dataObjStr = JSON.stringify({
-            nomorAntrian: data.nomorAntrian || '-', // Ditambahkan
+          const dataObjStr = JSON.stringify({
+            nomorAntrian: data.nomorAntrian || '-',
             nama: data.nama || '-',
             instansi: data.instansi || '-',
             keperluan: data.keperluan || '-',
             petugas: data.petugas || '-',
             waktuFormatted: waktuFormatted,
-            durasi: durasi || '-', // Ditambahkan
+            durasi: durasi || '-',
             status: data.status || 'SELESAI',
             obatTerimaFormatted: data.obatDiterima || '-'
           }).replace(/"/g, '&quot;');
@@ -306,6 +307,7 @@
                 ${data.status !== 'selesai' && data.status !== 'proses' ? `<button onclick="updateStatus('${docSnap.id}', 'proses', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-yellow-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-yellow-600">Proses</button>` : ''}
                 <button onclick="updateStatus('${docSnap.id}', 'selesai', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-green-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-green-700">Simpan & Selesai</button>
                 <button onclick="downloadPdf(${dataObjStr})" class="bg-blue-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-blue-700">Download PDF</button>
+                <button onclick="hapusAntrian('${docSnap.id}')" class="bg-red-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-red-700">Hapus</button>
               </div>
             </td>
           </tr>`;
@@ -322,7 +324,7 @@
 
         if (snapshot.empty) {
           const emptyHtml = `<tr><td colspan="6" class="text-center py-4 text-gray-400">Belum ada data konsultasi atau keluhan masuk.</td></tr>`;
-          tabelKonsultasiAdmin.innerHTML = emptyHtml;
+          tabelKonsultasiAdmin.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-gray-400">Belum ada data konsultasi atau keluhan masuk.</td></tr>`;
           tabelKonsultasiPDF.innerHTML = emptyHtml;
           return;
         }
@@ -340,6 +342,9 @@
             <td class="p-3 border text-blue-900">${data.kontak || '-'}</td>
             <td class="p-3 border font-semibold text-emerald-800">${data.kategori || '-'}</td>
             <td class="p-3 border whitespace-pre-line text-gray-700">${data.isi || '-'}</td>
+            <td class="p-3 border text-center">
+              <button onclick="hapusKeluhan('${docSnap.id}')" class="bg-red-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-red-700">Hapus</button>
+            </td>
           `;
           tabelKonsultasiAdmin.appendChild(trAdmin);
 
@@ -385,7 +390,7 @@
       });
     }
 
-          // FUNGSI DOWNLOAD PDF BUKTI PER TAMU (DIPERBAIKI LENGKAP DENGAN NOMOR ANTRIAN & DURASI)
+    // FUNGSI DOWNLOAD PDF BUKTI PER TAMU
     window.downloadPdf = (data) => {
       const areaCetak = document.getElementById("areaCetakPdf");
       areaCetak.style.display = "block";
@@ -412,7 +417,7 @@
             <h3 style="font-size: 12px; margin: 0; font-weight: bold; text-transform: uppercase; text-decoration: underline;">BUKTI PENGAMBILAN OBAT / PELAYANAN</h3>
           </div>
 
-          <!-- Informasi Detail Tamu Menggunakan Tabel (Nomor Antrian & Durasi Disertakan) -->
+          <!-- Informasi Detail Tamu Menggunakan Tabel -->
           <table style="width: 100%; font-size: 11.5px; color: #000; line-height: 1.6; border-collapse: collapse; margin-bottom: 15px;">
             <tr>
               <td style="width: 150px; padding: 4px 0;">Nomor Antrian</td>
@@ -522,6 +527,30 @@
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(pesan)}`, '_blank');
     };
 
+    window.hapusAntrian = async (id) => {
+      if (confirm("Apakah Anda yakin ingin menghapus data antrian ini?")) {
+        try {
+          await deleteDoc(doc(db, "tamu", id));
+          alert("Data antrian berhasil dihapus.");
+        } catch (err) {
+          console.error(err);
+          alert("Gagal menghapus data antrian.");
+        }
+      }
+    };
+
+    window.hapusKeluhan = async (id) => {
+      if (confirm("Apakah Anda yakin ingin menghapus data keluhan ini?")) {
+        try {
+          await deleteDoc(doc(db, "konsultasi", id));
+          alert("Data keluhan berhasil dihapus.");
+        } catch (err) {
+          console.error(err);
+          alert("Gagal menghapus data keluhan.");
+        }
+      }
+    };
+
     window.tambahFoto = async (koleksi, inputId) => {
       const url = document.getElementById(inputId).value.trim();
       if (!url) return;
@@ -603,4 +632,3 @@
   </script>
 </body>
 </html>
-
