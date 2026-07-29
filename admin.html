@@ -282,12 +282,14 @@
             waktuFormatted = data.waktu.toDate().toLocaleString('id-ID');
           }
 
-          const dataObjStr = JSON.stringify({
+                    const dataObjStr = JSON.stringify({
+            nomorAntrian: data.nomorAntrian || '-', // Ditambahkan
             nama: data.nama || '-',
             instansi: data.instansi || '-',
             keperluan: data.keperluan || '-',
             petugas: data.petugas || '-',
             waktuFormatted: waktuFormatted,
+            durasi: durasi || '-', // Ditambahkan
             status: data.status || 'SELESAI',
             obatTerimaFormatted: data.obatDiterima || '-'
           }).replace(/"/g, '&quot;');
@@ -383,7 +385,7 @@
       });
     }
 
-      // FUNGSI DOWNLOAD PDF BUKTI PER TAMU (DIUBAH TOTAL UNTUK MENGATASI POTONGAN KIRI)
+          // FUNGSI DOWNLOAD PDF BUKTI PER TAMU (DIPERBAIKI LENGKAP DENGAN NOMOR ANTRIAN & DURASI)
     window.downloadPdf = (data) => {
       const areaCetak = document.getElementById("areaCetakPdf");
       areaCetak.style.display = "block";
@@ -410,11 +412,16 @@
             <h3 style="font-size: 12px; margin: 0; font-weight: bold; text-transform: uppercase; text-decoration: underline;">BUKTI PENGAMBILAN OBAT / PELAYANAN</h3>
           </div>
 
-          <!-- Informasi Detail Tamu Menggunakan Tabel -->
+          <!-- Informasi Detail Tamu Menggunakan Tabel (Nomor Antrian & Durasi Disertakan) -->
           <table style="width: 100%; font-size: 11.5px; color: #000; line-height: 1.6; border-collapse: collapse; margin-bottom: 15px;">
             <tr>
-              <td style="width: 150px; padding: 4px 0;">Nama Tamu</td>
+              <td style="width: 150px; padding: 4px 0;">Nomor Antrian</td>
               <td style="width: 15px; text-align: center; padding: 4px 0;">:</td>
+              <td style="font-weight: bold; color: #1e3a8a; padding: 4px 0;">${data.nomorAntrian || '-'}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 0;">Nama Tamu</td>
+              <td style="text-align: center; padding: 4px 0;">:</td>
               <td style="font-weight: bold; padding: 4px 0;">${data.nama || '-'}</td>
             </tr>
             <tr>
@@ -436,6 +443,11 @@
               <td style="padding: 4px 0;">Waktu Kunjungan</td>
               <td style="text-align: center; padding: 4px 0;">:</td>
               <td style="padding: 4px 0;">${data.waktuFormatted || '-'}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 0;">Durasi Pelayanan</td>
+              <td style="text-align: center; padding: 4px 0;">:</td>
+              <td style="padding: 4px 0;">${data.durasi || '-'}</td>
             </tr>
             <tr>
               <td style="padding: 4px 0;">Status Pelayanan</td>
@@ -467,10 +479,10 @@
       `;
 
       const opt = {
-        margin:       [10, 10, 10, 15], // [atas, kanan, bawah, kiri] -> Margin kiri diperbesar ke 15mm
+        margin:       [10, 10, 10, 15],
         filename:     `Bukti_Pengambilan_Obat_${data.nama || 'Tamu'}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, letterRendering: true }, // windowWidth dihapus agar menyesuaikan otomatis
+        html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
