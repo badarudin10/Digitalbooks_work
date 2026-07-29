@@ -67,7 +67,6 @@
     <div class="bg-white p-6 rounded-2xl shadow-lg overflow-x-auto">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-bold text-blue-900">Daftar Antrian Real-time</h2>
-        <button onclick="exportTableToCSV('Laporan_Antrian_UPTD.csv')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700">Download Excel (.csv)</button>
       </div>
       <table class="w-full text-left" id="tabelTamuData">
         <thead>
@@ -83,6 +82,9 @@
         <tbody id="tabelTamu"></tbody>
       </table>
     </div>
+
+    <!-- AREA TERSEMBUNYI UNTUK CETAK PDF PER SATU TAMU -->
+    <div id="areaCetakPdf" class="hidden"></div>
 
     <!-- PEMANTAUAN KELUHAN & TOMBOL DOWNLOAD PDF KELUHAN -->
     <div class="bg-white p-6 rounded-2xl shadow-lg">
@@ -297,6 +299,21 @@
           if (data.waktu) { const tgl = data.waktu.toDate().toLocaleDateString('id-ID', {day: 'numeric', month: 'short'}); dataPerHari[tgl] = (dataPerHari[tgl] || 0) + 1; }
           let durasi = "-"; if (data.status === 'selesai' && data.waktuSelesai && data.waktuProses) durasi = Math.round((data.waktuSelesai.toDate() - data.waktuProses.toDate()) / 60000) + " Menit";
           
+          let waktuFormatted = '-';
+          if (data.waktu && data.waktu.toDate) {
+            waktuFormatted = data.waktu.toDate().toLocaleString('id-ID');
+          }
+
+          const dataObjStr = JSON.stringify({
+            nama: data.nama || '-',
+            instansi: data.instansi || '-',
+            keperluan: data.keperluan || '-',
+            petugas: data.petugas || '-',
+            waktuFormatted: waktuFormatted,
+            status: data.status || 'SELESAI',
+            obatTerimaFormatted: data.obatDiterima || '-'
+          }).replace(/"/g, '&quot;');
+
           tabel.innerHTML += `<tr class="border-b text-sm">
             <td class="p-3 font-bold">${data.nomorAntrian || '-'}</td>
             <td class="p-3 font-semibold text-blue-900">${data.nama || '-'}</td>
@@ -305,9 +322,10 @@
             <td class="p-3 text-gray-500">${durasi}</td>
             <td class="p-3 space-y-2 min-w-[220px]">
               <textarea id="obat_${docSnap.id}" rows="4" placeholder="1. Nama Obat&#10;2. Nama Obat&#10;3. Nama Obat" class="w-full p-2 border rounded-lg text-xs bg-gray-50 focus:bg-white focus:ring-1 focus:ring-blue-900 outline-none">${data.obatDiterima || ''}</textarea>
-              <div class="flex gap-1">
+              <div class="flex gap-1 flex-wrap">
                 ${data.status !== 'selesai' && data.status !== 'proses' ? `<button onclick="updateStatus('${docSnap.id}', 'proses', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-yellow-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-yellow-600">Proses</button>` : ''}
                 <button onclick="updateStatus('${docSnap.id}', 'selesai', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-green-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-green-700">Simpan & Selesai</button>
+                <button onclick="downloadPdf(${dataObjStr})" class="bg-blue-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-blue-700">Download PDF</button>
               </div>
             </td>
           </tr>`;
@@ -392,6 +410,97 @@
       });
     }
 
+    // FUNGSI DOWNLOAD PDF BUKTI PER TAMU DI HALAMAN ADMIN
+    window.downloadPdf = (data) => {
+      const areaCetak = document.getElementById("areaCetakPdf");
+      areaCetak.style.display = "block";
+      areaCetak.innerHTML = `
+        <div style="padding: 10px 30px 15px 30px; font-family: Arial, sans-serif; color: #000; width: 794px; background: #fff; box-sizing: border-box;">
+          
+          <!-- Kop Surat Resmi dengan Logo di Kiri -->
+          <div style="display: flex; align-items: center; border-bottom: 3px double #000; padding-bottom: 8px; margin-bottom: 15px;">
+            <div style="width: 70px; flex-shrink: 0; margin-right: 15px;">
+              <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" style="width: 60px; height: auto; display: block;" crossorigin="anonymous">
+            </div>
+            <div style="text-align: center; flex-grow: 1; padding-right: 70px;">
+              <h2 style="font-size: 14px; margin: 0; font-weight: bold; letter-spacing: 0.3px; text-transform: uppercase;">PEMERINTAH KOTA TANGERANG SELATAN</h2>
+              <h1 style="font-size: 16px; margin: 2px 0; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">UPTD FARMASI</h1>
+              <p style="font-size: 10.5px; margin: 1px 0; font-weight: normal;">Jl. Cendekia, Ciater, Serpong, Kota Tangerang Selatan</p>
+              <p style="font-size: 10px; margin: 1px 0; font-weight: normal;">Telepon (021) 29307897 Faksimili (021) 29307989</p>
+              <p style="font-size: 9.5px; margin: 1px 0; font-weight: normal;">Laman dinkes.tangerangselatankota.go.id , pos-el dinkes@tangerangselatankota.go.id</p>
+            </div>
+          </div>
+
+          <!-- Informasi Detail Tamu -->
+          <div style="font-size: 12px; color: #000; line-height: 1.8; margin-bottom: 12px;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="width: 150px; font-weight: normal;">Nama Tamu</td>
+                <td style="width: 15px; text-align: center;">:</td>
+                <td style="font-weight: bold;">${data.nama || '-'}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: normal;">Instansi / Asal</td>
+                <td style="text-align: center;">:</td>
+                <td>${data.instansi || '-'}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: normal;">Keperluan</td>
+                <td style="text-align: center;">:</td>
+                <td>${data.keperluan || '-'}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: normal;">Petugas Program</td>
+                <td style="text-align: center;">:</td>
+                <td>${data.petugas || '-'}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: normal;">Waktu Kunjungan</td>
+                <td style="text-align: center;">:</td>
+                <td>${data.waktuFormatted || '-'}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: normal;">Status Pelayanan</td>
+                <td style="text-align: center;">:</td>
+                <td><span style="font-weight: bold; color: #047857; text-transform: uppercase;">${data.status || 'SELESAI'}</span></td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- Kotak Daftar Obat yang Diterima -->
+          <div style="margin-top: 5px; padding: 12px 18px; background: #fcfcfc; border: 1px solid #d1d5db; border-radius: 8px;">
+            <p style="margin: 0 0 8px 0; font-weight: bold; color: #1e3a8a; font-size: 11.5px; text-transform: uppercase;">💊 DAFTAR OBAT / BARANG YANG DITERIMA:</p>
+            <div style="margin: 0; white-space: pre-line; color: #1f2937; font-size: 12px; line-height: 1.6;">${data.obatTerimaFormatted || '-'}</div>
+          </div>
+
+          <!-- Catatan / Footer Dokumen & Tanda Tangan -->
+          <div style="margin-top: 25px; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div style="font-size: 9px; color: #6b7280; max-width: 300px; line-height: 1.4;">
+              <p style="margin: 0;">Dokumen ini diterbitkan secara elektronik dan sah melalui Sistem UPTD Farmasi Tangsel.</p>
+            </div>
+            <div style="text-align: center; font-size: 11.5px; color: #000; min-width: 170px;">
+              <p style="margin: 0 0 35px 0;">Penerima / Tamu,</p>
+              <p style="margin: 0; font-weight: bold; text-decoration: underline;">${data.nama || '......................................'}</p>
+            </div>
+          </div>
+
+        </div>
+      `;
+
+      const opt = {
+        margin:       [2, 4, 10, 4],
+        filename:     `Bukti_Pengambilan_Obat_${data.nama || 'Tamu'}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, letterRendering: true, windowWidth: 794 },
+        jsPDF:        { unit: 'mm', format: [210, 330], orientation: 'portrait' }
+      };
+
+      html2pdf().from(areaCetak).set(opt).save().then(() => {
+        areaCetak.style.display = "none";
+        areaCetak.innerHTML = "";
+      });
+    };
+
     // FUNGSI DOWNLOAD PDF KELUHAN OTOMATIS 1 HALAMAN (MENGGUNAKAN AREA KHUSUS BER-KOP SURAT)
     window.downloadPDFKeluhan = () => {
       const element = document.getElementById('printAreaKeluhan');
@@ -429,20 +538,6 @@
       document.getElementById(inputId).value = "";
     };
     window.hapusFoto = async (koleksi, id) => { if (confirm("Hapus foto ini?")) await deleteDoc(doc(db, koleksi, id)); };
-    window.exportTableToCSV = (filename) => {
-      var csv = []; var rows = document.querySelectorAll("#tabelTamuData tr");
-      for (var i = 0; i < rows.length; i++) {
-        var row = [], cols = rows[i].querySelectorAll("td, th");
-        for (var j = 0; j < cols.length - 1; j++) row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');
-        csv.push(row.join(","));
-      }
-      var csvFile = new Blob([csv.join("\n")], {type: "text/csv"});
-      var downloadLink = document.createElement("a");
-      downloadLink.download = filename;
-      downloadLink.href = window.URL.createObjectURL(csvFile);
-      downloadLink.style.display = "none";
-      document.body.appendChild(downloadLink); downloadLink.click();
-    };
 
     window.tambahArtikel = async () => {
       const kategori = document.getElementById("pilihKategori").value;
