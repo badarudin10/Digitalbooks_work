@@ -383,14 +383,14 @@
       });
     }
 
-    // FUNGSI DOWNLOAD PDF BUKTI PER TAMU (DIPERBAIKI DENGAN TABEL STABIL)
+      // FUNGSI DOWNLOAD PDF BUKTI PER TAMU (DIUBAH TOTAL UNTUK MENGATASI POTONGAN KIRI)
     window.downloadPdf = (data) => {
       const areaCetak = document.getElementById("areaCetakPdf");
       areaCetak.style.display = "block";
       areaCetak.innerHTML = `
-        <div style="padding: 20px 50px; margin: 0 auto; font-family: Arial, sans-serif; color: #000; width: 794px; background: #fff; box-sizing: border-box;">
+        <div style="padding: 10px 40px 20px 40px; font-family: Arial, sans-serif; color: #000; width: 100%; background: #fff; box-sizing: border-box;">
           
-          <!-- Kop Surat Resmi dengan Tabel agar Tidak Bergeser -->
+          <!-- Kop Surat Resmi dengan Tabel -->
           <table style="width: 100%; border-collapse: collapse; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 20px;">
             <tr>
               <td style="width: 80px; vertical-align: middle; text-align: center;">
@@ -450,7 +450,7 @@
             <div style="margin: 0; white-space: pre-line; color: #1f2937; font-size: 11.5px; line-height: 1.5;">${data.obatTerimaFormatted || '-'}</div>
           </div>
 
-          <!-- Tanda Tangan Menggunakan Tabel agar Rata Kanan & Kiri Sempurna -->
+          <!-- Tanda Tangan Menggunakan Tabel -->
           <table style="width: 100%; margin-top: 40px; font-size: 11px; border-collapse: collapse;">
             <tr>
               <td style="width: 50%; vertical-align: bottom; color: #6b7280; font-size: 9px;">
@@ -467,10 +467,10 @@
       `;
 
       const opt = {
-        margin:       [5, 10, 5, 25],
+        margin:       [10, 10, 10, 15], // [atas, kanan, bawah, kiri] -> Margin kiri diperbesar ke 15mm
         filename:     `Bukti_Pengambilan_Obat_${data.nama || 'Tamu'}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, letterRendering: true, windowWidth: 794 },
+        html2canvas:  { scale: 2, useCORS: true, letterRendering: true }, // windowWidth dihapus agar menyesuaikan otomatis
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
