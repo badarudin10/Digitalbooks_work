@@ -319,12 +319,12 @@
       `;
     });
 
-    // Fungsi cetak PDF universal dengan penguncian ukuran konsisten & posisi kop yang lebih ke atas
+        // Fungsi cetak PDF yang ukurannya fleksibel mengikuti isi konten (tidak terpotong / menggantung)
     window.downloadPdf = (data) => {
       const areaCetak = document.getElementById("areaCetakPdf");
       areaCetak.style.display = "block";
       areaCetak.innerHTML = `
-        <div style="padding: 10px 30px 20px 30px; font-family: Arial, sans-serif; color: #000; width: 794px; min-height: 1123px; margin: 0 auto; background: #fff; box-sizing: border-box;">
+        <div style="padding: 10px 30px 15px 30px; font-family: Arial, sans-serif; color: #000; width: 794px; background: #fff; box-sizing: border-box;">
           
           <!-- Kop Surat Resmi dengan Logo di Kiri -->
           <div style="display: flex; align-items: center; border-bottom: 3px double #000; padding-bottom: 8px; margin-bottom: 15px;">
@@ -341,7 +341,7 @@
           </div>
 
           <!-- Informasi Detail Tamu -->
-          <div style="font-size: 12px; color: #000; line-height: 1.8; margin-bottom: 15px;">
+          <div style="font-size: 12px; color: #000; line-height: 1.8; margin-bottom: 12px;">
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
                 <td style="width: 150px; font-weight: normal;">Nama Tamu</td>
@@ -377,18 +377,18 @@
           </div>
 
           <!-- Kotak Daftar Obat yang Diterima -->
-          <div style="margin-top: 10px; padding: 12px 18px; background: #fcfcfc; border: 1px solid #d1d5db; border-radius: 8px;">
+          <div style="margin-top: 5px; padding: 12px 18px; background: #fcfcfc; border: 1px solid #d1d5db; border-radius: 8px;">
             <p style="margin: 0 0 8px 0; font-weight: bold; color: #1e3a8a; font-size: 11.5px; text-transform: uppercase;">💊 DAFTAR OBAT / BARANG YANG DITERIMA:</p>
             <div style="margin: 0; white-space: pre-line; color: #1f2937; font-size: 12px; line-height: 1.6;">${data.obatTerimaFormatted || '-'}</div>
           </div>
 
           <!-- Catatan / Footer Dokumen & Tanda Tangan -->
-          <div style="margin-top: 35px; display: flex; justify-content: space-between; align-items: flex-end;">
+          <div style="margin-top: 25px; display: flex; justify-content: space-between; align-items: flex-end;">
             <div style="font-size: 9px; color: #6b7280; max-width: 300px; line-height: 1.4;">
               <p style="margin: 0;">Dokumen ini diterbitkan secara elektronik dan sah melalui Sistem UPTD Farmasi Tangsel.</p>
             </div>
             <div style="text-align: center; font-size: 11.5px; color: #000; min-width: 170px;">
-              <p style="margin: 0 0 45px 0;">Penerima / Tamu,</p>
+              <p style="margin: 0 0 35px 0;">Penerima / Tamu,</p>
               <p style="margin: 0; font-weight: bold; text-decoration: underline;">${data.nama || '......................................'}</p>
             </div>
           </div>
@@ -396,9 +396,9 @@
         </div>
       `;
 
-      // Konfigurasi ukuran F4 dengan margin atas diperkecil agar kop surat lebih naik ke atas
+      // Konfigurasi ukuran dengan margin bawah yang menyesuaikan
       const opt = {
-        margin:       [2, 4, 4, 4], // [atas, kanan, bawah, kiri] dalam satuan mm
+        margin:       [2, 4, 10, 4], // [atas, kanan, bawah, kiri]
         filename:     `Bukti_Pengambilan_Obat_${data.nama || 'Tamu'}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true, letterRendering: true, windowWidth: 794 },
