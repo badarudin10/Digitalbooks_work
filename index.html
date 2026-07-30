@@ -143,8 +143,8 @@ Telepon (021) 29307897 Faksimili (021) 29307989
       snapshot.forEach((doc) => {
         const url = doc.data().url;
         galeriContainer.innerHTML += `
-          <div class="aspect-square overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition border-2 border-blue-900 bg-white p-1">
-             <img src="${url}" onclick="bukaZoom('${url}')" class="w-full h-full object-cover rounded">
+          <div class="aspect-square overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition">
+             <img src="${url}" onclick="bukaZoom('${url}')" class="w-full h-full object-cover">
           </div>
         `;
       });
