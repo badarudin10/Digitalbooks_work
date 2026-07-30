@@ -19,25 +19,22 @@
       height: auto;
     }
 
-    /* Penyesuaian layout grid PC/Laptop Modern & Profesional */
+    /* Penyesuaian layout grid PC/Laptop mengacu pada gaya MyASN */
     @media (min-width: 1024px) {
       .app-layout-wrapper {
-        max-width: 1400px !important;
+        max-width: 1440px !important;
         margin-left: auto;
         margin-right: auto;
         display: grid;
         grid-template-columns: repeat(12, minmax(0, 1fr));
-        gap: 24px;
-        padding: 24px;
+        gap: 20px;
+        padding: 20px;
       }
       .pc-sidebar {
         grid-column: span 3 / span 3;
         display: flex !important;
         flex-direction: column;
         gap: 16px;
-        position: sticky;
-        top: 24px;
-        height: fit-content;
       }
       .pc-main-content {
         grid-column: span 6 / span 6;
@@ -46,10 +43,7 @@
         grid-column: span 3 / span 3;
         display: flex !important;
         flex-direction: column;
-        gap: 20px;
-        position: sticky;
-        top: 24px;
-        height: fit-content;
+        gap: 16px;
       }
       .bottom-nav-wrapper {
         display: none !important;
@@ -116,86 +110,58 @@
   <!-- KONTROL UTAMA LAYOUT RESPONSIF -->
   <div class="app-layout-wrapper">
 
-    <!-- SIDEBAR KIRI KHUSUS PC (Terpisah-pisah per Kotak, Warna Gelap, Teks Putih, & Aksentuasi Mencolok) -->
-    <aside class="pc-sidebar">
+    <!-- SIDEBAR KIRI (Gaya Kartu Profil & Menu Kotak Terpisah ala Referensi) -->
+    <aside class="pc-sidebar space-y-4">
       
-      <!-- 1. Kartu Profil Pegawai -->
-      <a href="profil.html" class="block bg-slate-900 text-white p-4 rounded-2xl shadow-xl border border-slate-700 hover:border-cyan-400 hover:scale-[1.02] transition-all text-center group">
-        <div class="flex flex-col items-center gap-2.5">
-          <div class="h-24 w-24 flex items-center justify-center flex-shrink-0 bg-slate-800 rounded-2xl p-2 border border-slate-700 group-hover:bg-slate-700 transition duration-300">
-            <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain">
+      <!-- Kartu Profil Pegawai (Kolom Kiri Atas) -->
+      <div class="bg-white/95 backdrop-blur-md p-5 rounded-2xl shadow-md border border-white/60 text-center relative">
+        <div class="flex flex-col items-center">
+          <div class="h-28 w-28 rounded-full p-1 bg-gradient-to-tr from-blue-600 to-emerald-400 shadow-md mb-3 flex items-center justify-center">
+            <div class="w-full h-full bg-white rounded-full overflow-hidden flex items-center justify-center p-1">
+              <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain">
+            </div>
           </div>
-          <div>
-            <h2 class="text-xs font-black text-cyan-300 tracking-wider uppercase">Profil Pegawai</h2>
-            <p class="text-[10px] text-slate-300 font-semibold tracking-wide mt-0.5">UPTD FARMASI</p>
-          </div>
+          <h2 class="text-xs font-black text-gray-900 tracking-wide">UPTD FARMASI</h2>
+          <p class="text-[10px] text-blue-900 font-mono font-bold mt-0.5">TANGERANG SELATAN</p>
+          <p class="text-[10px] text-gray-500 mt-1 px-2 leading-tight">BIDANG KESEHATAN MASYARAKAT</p>
         </div>
-      </a>
 
-      <!-- Judul Kecil Pemisah Navigasi -->
-      <div class="px-2 pt-1">
-        <p class="text-[10px] font-black text-slate-700 uppercase tracking-widest">Navigasi Menu Utama</p>
+        <div class="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-gray-100">
+          <a href="profil.html" class="flex items-center justify-center gap-1 py-2 px-3 rounded-xl border border-blue-200 bg-blue-50/50 hover:bg-blue-100 text-blue-900 font-bold text-[11px] transition">
+            <span>👤</span> Lihat Profil
+          </a>
+          <a href="profil.html" class="flex items-center justify-center gap-1 py-2 px-3 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold text-[11px] transition">
+            <span>✏️</span> Edit Profil
+          </a>
+        </div>
       </div>
 
-      <!-- 2. Menu Kotak Pembungkus: Registrasi -->
-      <a href="index.html#registrasi" class="flex items-center gap-3 p-3.5 bg-slate-900 text-white rounded-2xl shadow-xl border border-slate-700 hover:border-emerald-400 hover:scale-[1.02] transition-all group">
-        <div class="w-10 h-10 flex items-center justify-center flex-shrink-0 bg-emerald-500/20 rounded-xl border border-emerald-500/40 group-hover:bg-emerald-500 group-hover:text-slate-900 transition duration-300">
-          <img src="https://i.ibb.co.com/Xf1wsJ41/Picsart-26-07-25-12-29-14-940.png" class="w-6 h-6 object-contain filter brightness-200">
-        </div>
-        <div class="flex-1">
-          <span class="text-xs font-black text-emerald-400 tracking-wide uppercase block">Registrasi</span>
-          <span class="text-[10px] text-slate-300 font-medium">Formulir pendaftaran layanan</span>
-        </div>
-        <span class="text-emerald-400 font-bold text-xs group-hover:translate-x-1 transition">→</span>
-      </a>
+      <!-- Menu Navigasi Samping Terpisah Per Kotak -->
+      <div class="space-y-2">
+        <!-- Menu 1: Dashboard -->
+        <a href="#" onclick="kembaliKeDashboard(); return false;" class="flex items-center gap-3 p-3.5 bg-blue-900 text-white rounded-2xl shadow-md border border-blue-800 hover:bg-blue-800 transition group">
+          <div class="w-8 h-8 flex items-center justify-center bg-white/10 rounded-xl">
+            <img src="https://i.ibb.co.com/Xf1wsJ41/Picsart-26-07-25-12-29-14-940.png" class="w-5 h-5 object-contain filter brightness-200">
+          </div>
+          <span class="text-xs font-bold tracking-wide">Dashboard</span>
+        </a>
 
-      <!-- 3. Menu Kotak Pembungkus: Maps -->
-      <a href="maps.html" class="flex items-center gap-3 p-3.5 bg-slate-900 text-white rounded-2xl shadow-xl border border-slate-700 hover:border-blue-400 hover:scale-[1.02] transition-all group">
-        <div class="w-10 h-10 flex items-center justify-center flex-shrink-0 bg-blue-500/20 rounded-xl border border-blue-500/40 group-hover:bg-blue-500 group-hover:text-slate-900 transition duration-300">
-          <img src="https://i.ibb.co.com/5PtXnK6/Picsart-26-07-25-12-25-33-560.png" class="w-6 h-6 object-contain filter brightness-200">
-        </div>
-        <div class="flex-1">
-          <span class="text-xs font-black text-blue-400 tracking-wide uppercase block">Maps</span>
-          <span class="text-[10px] text-slate-300 font-medium">Peta lokasi & distribusi</span>
-        </div>
-        <span class="text-blue-400 font-bold text-xs group-hover:translate-x-1 transition">→</span>
-      </a>
+        <!-- Menu 2: Layanan ASN -->
+        <a href="index.html#registrasi" class="flex items-center gap-3 p-3.5 bg-white/90 backdrop-blur-md text-gray-800 rounded-2xl shadow-sm border border-white/60 hover:bg-blue-50/80 hover:border-blue-200 transition group">
+          <div class="w-8 h-8 flex items-center justify-center bg-blue-50 rounded-xl group-hover:bg-blue-100 transition">
+            <img src="https://i.ibb.co.com/5PtXnK6/Picsart-26-07-25-12-25-33-560.png" class="w-5 h-5 object-contain">
+          </div>
+          <span class="text-xs font-bold tracking-wide text-gray-800 group-hover:text-blue-900">Layanan ASN</span>
+        </a>
 
-      <!-- 4. Menu Kotak Pembungkus: Tamu -->
-      <a href="tamu.html" class="flex items-center gap-3 p-3.5 bg-slate-900 text-white rounded-2xl shadow-xl border border-slate-700 hover:border-amber-400 hover:scale-[1.02] transition-all group">
-        <div class="w-10 h-10 flex items-center justify-center flex-shrink-0 bg-amber-500/20 rounded-xl border border-amber-500/40 group-hover:bg-amber-500 group-hover:text-slate-900 transition duration-300">
-          <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-6 h-6 object-contain filter brightness-200">
-        </div>
-        <div class="flex-1">
-          <span class="text-xs font-black text-amber-400 tracking-wide uppercase block">Tamu</span>
-          <span class="text-[10px] text-slate-300 font-medium">Buku tamu kunjungan</span>
-        </div>
-        <span class="text-amber-400 font-bold text-xs group-hover:translate-x-1 transition">→</span>
-      </a>
-
-      <!-- 5. Menu Kotak Pembungkus: Konsultasi -->
-      <a href="konsultasi.html" class="flex items-center gap-3 p-3.5 bg-slate-900 text-white rounded-2xl shadow-xl border border-slate-700 hover:border-purple-400 hover:scale-[1.02] transition-all group">
-        <div class="w-10 h-10 flex items-center justify-center flex-shrink-0 bg-purple-500/20 rounded-xl border border-purple-500/40 group-hover:bg-purple-500 group-hover:text-slate-900 transition duration-300">
-          <img src="https://i.ibb.co.com/2YtR7Hdj/Picsart-26-07-27-12-54-41-199.png" class="w-6 h-6 object-contain filter brightness-200">
-        </div>
-        <div class="flex-1">
-          <span class="text-xs font-black text-purple-400 tracking-wide uppercase block">Konsultasi</span>
-          <span class="text-[10px] text-slate-300 font-medium">Layanan aduan & tanya jawab</span>
-        </div>
-        <span class="text-purple-400 font-bold text-xs group-hover:translate-x-1 transition">→</span>
-      </a>
-
-      <!-- 6. Menu Kotak Pembungkus: Survei -->
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex items-center gap-3 p-3.5 bg-slate-900 text-white rounded-2xl shadow-xl border border-slate-700 hover:border-rose-400 hover:scale-[1.02] transition-all group">
-        <div class="w-10 h-10 flex items-center justify-center flex-shrink-0 bg-rose-500/20 rounded-xl border border-rose-500/40 group-hover:bg-rose-500 group-hover:text-slate-900 transition duration-300">
-          <img src="https://i.ibb.co.com/M5D0s0t9/Picsart-26-07-25-11-29-02-111.png" class="w-6 h-6 object-contain filter brightness-200">
-        </div>
-        <div class="flex-1">
-          <span class="text-xs font-black text-rose-400 tracking-wide uppercase block">Survei</span>
-          <span class="text-[10px] text-slate-300 font-medium">Indeks kepuasan masyarakat</span>
-        </div>
-        <span class="text-rose-400 font-bold text-xs group-hover:translate-x-1 transition">→</span>
-      </a>
+        <!-- Menu 3: Layanan Lainnya -->
+        <a href="konsultasi.html" class="flex items-center gap-3 p-3.5 bg-white/90 backdrop-blur-md text-gray-800 rounded-2xl shadow-sm border border-white/60 hover:bg-blue-50/80 hover:border-blue-200 transition group">
+          <div class="w-8 h-8 flex items-center justify-center bg-blue-50 rounded-xl group-hover:bg-blue-100 transition">
+            <img src="https://i.ibb.co.com/2YtR7Hdj/Picsart-26-07-27-12-54-41-199.png" class="w-5 h-5 object-contain">
+          </div>
+          <span class="text-xs font-bold tracking-wide text-gray-800 group-hover:text-blue-900">Layanan Lainnya</span>
+        </a>
+      </div>
 
     </aside>
 
@@ -203,22 +169,34 @@
     <div class="pc-main-content w-full">
       <main id="mainDashboard" class="main-container lg:max-w-none space-y-4 pt-1 pb-3">
         
-        <!-- Header Khusus Desktop (Modern & Professional) -->
-        <div class="pc-header-desktop hidden bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-md border border-white/40 items-center justify-between mb-4">
-          <div class="flex items-center gap-4">
-            <div class="p-2 bg-blue-50 rounded-xl">
-              <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-12 w-12 object-contain">
+        <!-- Header Atas PC (Logo & Brand) -->
+        <div class="pc-header-desktop hidden bg-white/90 backdrop-blur-md px-6 py-4 rounded-2xl shadow-md border border-white/40 items-center justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-10 w-10 object-contain">
+            <div>
+              <h1 class="font-black text-blue-900 text-sm tracking-wider">UPTD FARMASI</h1>
+              <p class="text-[10px] text-gray-500 font-semibold tracking-wider uppercase">Kota Tangerang Selatan</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-bold text-gray-700">Pusat Layanan Digital</span>
+          </div>
+        </div>
+
+        <!-- Banner Selamat Datang Utama (Mirip Kartu Banner MyASN) -->
+        <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-md border border-white/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-4 text-left w-full">
+            <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center flex-shrink-0 border border-blue-100">
+              <span class="text-2xl">👤</span>
             </div>
             <div>
-              <h1 class="font-extrabold text-blue-900 text-lg tracking-wide leading-tight">UPTD FARMASI TANGERANG SELATAN</h1>
-              <p class="text-xs text-gray-500 font-medium mt-0.5">Sistem Informasi Layanan Digital & Manajemen Logistik Obat</p>
+              <h2 class="text-sm sm:text-base font-extrabold text-blue-900">Selamat Datang, UPTD FARMASI</h2>
+              <p class="text-xs text-gray-500 font-mono mt-0.5">Sistem Informasi & Manajemen Layanan Publik</p>
             </div>
           </div>
-          <div class="text-right">
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              ● Sistem Aktif & Terhubung
-            </span>
-          </div>
+          <span class="bg-emerald-100 text-emerald-800 text-[11px] font-extrabold px-3 py-1 rounded-full border border-emerald-200 whitespace-nowrap">
+            Aktif & Terverifikasi
+          </span>
         </div>
 
         <!-- Kartu Profil Pegawai (Hanya tampil di Mobile/HP) -->
@@ -326,8 +304,26 @@
       </div>
     </div>
 
-    <!-- PANEL KANAN KHUSUS PC (Widget Galeri & Informasi Ekstra) -->
+    <!-- PANEL KANAN KHUSUS PC (Widget Sambutan & Galeri ala Referensi Kanan) -->
     <aside class="pc-right-panel space-y-4">
+      
+      <!-- Widget Sambutan Kanan -->
+      <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-md border border-white/40">
+        <h3 class="font-black text-blue-900 text-xs tracking-wide mb-2">Selamat Datang di UPTD Farmasi</h3>
+        <p class="text-[11px] text-gray-600 leading-relaxed">
+          Sistem Informasi resmi UPTD Farmasi Kota Tangerang Selatan yang digunakan untuk mengakses layanan publik, distribusi obat, dan pengelolaan logistik secara mandiri.
+        </p>
+        <div class="mt-3 pt-3 border-t border-gray-100 space-y-1.5">
+          <p class="text-[11px] font-bold text-blue-900 flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span> Layanan Prima & Akuntabel
+          </p>
+          <p class="text-[11px] font-bold text-blue-900 flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Akses Data & Logistik Cepat
+          </p>
+        </div>
+      </div>
+
+      <!-- Widget Galeri Dokumentasi -->
       <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-md border border-white/40">
         <div class="flex justify-between items-center mb-3 border-b pb-2">
           <div class="flex items-center gap-2">
@@ -336,10 +332,11 @@
           </div>
           <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md font-bold">Live Feed</span>
         </div>
-        <div id="gridGaleri" class="grid grid-cols-2 gap-2.5 max-h-[500px] overflow-y-auto pr-1">
+        <div id="gridGaleri" class="grid grid-cols-2 gap-2 max-h-[350px] overflow-y-auto pr-1">
           <div class="col-span-2 text-center py-6 text-xs text-gray-400">Memuat galeri kegiatan...</div>
         </div>
       </div>
+
     </aside>
 
   </div>
