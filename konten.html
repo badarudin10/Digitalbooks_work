@@ -63,44 +63,34 @@
       }
     }
 
-    @media (max-width: 1023px) {
+    @media (min-width: 1024px) {
+      .app-layout-wrapper {
+        max-width: 1350px !important;
+        margin-left: auto;
+        margin-right: auto;
+        display: grid;
+        /* Ubah ukuran kolom kiri dan kanan menjadi lebih kecil (misal: 2 bagian dari 12) */
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 20px;
+        padding: 20px;
+        align-items: start;
+      }
       .pc-sidebar-left {
-        display: none !important;
+        grid-column: span 2 / span 2; /* Diubah dari span 3 ke span 2 */
+        display: flex !important;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .pc-main-content {
+        grid-column: span 8 / span 8; /* Konten tengah diperlebar menjadi span 8 */
       }
       .pc-sidebar-right {
-        display: none !important;
+        grid-column: span 2 / span 2; /* Diubah dari span 3 ke span 2 */
+        display: flex !important;
+        flex-direction: column;
+        gap: 12px;
       }
-      .pc-header-desktop {
-        display: none !important;
-      }
-      .mobile-header-bar {
-        display: block !important;
-      }
-      .desktop-gallery-wrapper {
-        display: none !important;
-      }
-      .mobile-gallery-wrapper {
-        display: block !important;
-      }
-      .main-container {
-        max-width: 448px;
-        margin-left: auto;
-        margin-right: auto;
-        width: 100%;
-        padding-left: 12px;
-        padding-right: 12px;
-        box-sizing: border-box;
-      }
-      .bottom-nav-wrapper {
-        max-width: 448px;
-        margin-left: auto;
-        margin-right: auto;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        position: fixed;
-        z-index: 40;
-      }
+      /* ... kode lainnya tetap ... */
     }
   </style>
   <title>Dashboard & Layanan - UPTD Farmasi Tangsel</title>
@@ -124,57 +114,51 @@
   <div class="app-layout-wrapper">
 
     <!-- KOLOM 1 (KIRI): PROFIL & NAVIGASI (KHUSUS PC) -->
-    <aside class="pc-sidebar-left space-y-4">
+    <aside class="pc-sidebar-left space-y-3">
       <!-- Kartu Profil Pegawai -->
-      <a href="profil.html" class="block bg-white p-4 rounded-2xl shadow-sm border border-gray-100 relative hover:border-blue-300 transition text-center">
+      <a href="profil.html" class="block bg-white p-3 rounded-2xl shadow-sm border border-gray-100 relative hover:border-blue-300 transition text-center">
         <div class="flex flex-col items-center gap-2">
-          <div class="h-28 w-28 flex items-center justify-center flex-shrink-0 bg-transparent">
+          <div class="h-20 w-20 flex items-center justify-center flex-shrink-0 bg-transparent">
             <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain">
           </div>
           <div>
-            <h2 class="text-xs font-extrabold text-gray-800">Profil Pegawai</h2>
-            <p class="text-[11px] text-blue-900 font-extrabold uppercase tracking-wide mt-0.5">UPTD FARMASI</p>
+            <h2 class="text-[11px] font-extrabold text-gray-800">Profil Pegawai</h2>
+            <p class="text-[9px] text-blue-900 font-extrabold uppercase tracking-wide mt-0.5">UPTD FARMASI</p>
           </div>
         </div>
       </a>
 
-      <!-- Menu Navigasi Samping -->
-      <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-        <nav class="space-y-1.5">
-          <a href="index.html#registrasi" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-24 h-24 flex items-center justify-center flex-shrink-0">
-              <img src="https://i.ibb.co.com/Xf1wsJ41/Picsart-26-07-25-12-29-14-940.png" class="w-full h-full object-contain">
-            </div>
-            <span class="text-xs">Registrasi</span>
-          </a>
-          <a href="maps.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-24 h-24 flex items-center justify-center flex-shrink-0">
-              <img src="https://i.ibb.co.com/5PtXnK6/Picsart-26-07-25-12-25-33-560.png" class="w-full h-full object-contain">
-            </div>
-            <span class="text-xs">Maps</span>
-          </a>
-          <a href="tamu.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-24 h-24 flex items-center justify-center flex-shrink-0">
-              <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-full h-full object-contain">
-            </div>
-            <span class="text-xs">Tamu</span>
-          </a>
-          <a href="konsultasi.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-24 h-24 flex items-center justify-center flex-shrink-0">
-              <img src="https://i.ibb.co.com/2YtR7Hdj/Picsart-26-07-27-12-54-41-199.png" class="w-full h-full object-contain">
-            </div>
-            <span class="text-xs">Konsultasi</span>
-          </a>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-            <div class="w-24 h-24 flex items-center justify-center flex-shrink-0">
-              <img src="https://i.ibb.co.com/M5D0s0t9/Picsart-26-07-25-11-29-02-111.png" class="w-full h-full object-contain">
-            </div>
-            <span class="text-xs">Survei</span>
-          </a>
-        </nav>
+      <!-- Menu Navigasi Samping (Satu Menu Satu Kotak) -->
+      <div class="space-y-2">
+        <a href="index.html#registrasi" class="flex items-center gap-2.5 p-2.5 bg-white rounded-2xl shadow-sm border border-gray-100 hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
+          <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
+            <img src="https://i.ibb.co.com/Xf1wsJ41/Picsart-26-07-25-12-29-14-940.png" class="w-full h-full object-contain">
+          </div>
+          <span class="text-[11px]">Registrasi</span>
+        </a>
+
+        <a href="maps.html" class="flex items-center gap-2.5 p-2.5 bg-white rounded-2xl shadow-sm border border-gray-100 hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
+          <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
+            <img src="https://i.ibb.co.com/5PtXnK6/Picsart-26-07-25-12-25-33-560.png" class="w-full h-full object-contain">
+          </div>
+          <span class="text-[11px]">Maps</span>
+        </a>
+
+        <a href="tamu.html" class="flex items-center gap-2.5 p-2.5 bg-white rounded-2xl shadow-sm border border-gray-100 hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
+          <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
+            <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-full h-full object-contain">
+          </div>
+          <span class="text-[11px]">Tamu</span>
+        </a>
+
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex items-center gap-2.5 p-2.5 bg-white rounded-2xl shadow-sm border border-gray-100 hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
+          <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
+            <img src="https://i.ibb.co.com/M5D0s0t9/Picsart-26-07-25-11-29-02-111.png" class="w-full h-full object-contain">
+          </div>
+          <span class="text-[11px]">Survei</span>
+        </a>
       </div>
     </aside>
-
     <!-- KOLOM 2 (TENGAH): KONTEN UTAMA -->
     <div class="pc-main-content w-full">
       <main id="mainDashboard" class="main-container lg:max-w-none space-y-3 pt-1 pb-3">
@@ -328,7 +312,7 @@
     <nav class="bg-[#d1e7dd] border border-blue-200 shadow-lg py-2.5 px-4 flex justify-around items-center rounded-t-2xl">
       <a href="index.html#registrasi" class="flex flex-col items-center justify-center text-blue-900 font-bold">
         <div class="w-7 h-7 flex items-center justify-center overflow-visible">
-          <img src="https://i.ibb.co.com/k2H9XQMH/Picsart-26-07-29-23-12-02-981.png" class="w-24 h-24 max-w-none object-contain">
+          <img src="https://i.ibb.co.com/k2H9XQMH/Picsart-26-07-29-23-12-02-981.png" class="w-20 h-20 max-w-none object-contain">
         </div>
         <span class="text-[9px] mt-2 font-bold tracking-tight text-center">Registrasi</span>
       </a>
