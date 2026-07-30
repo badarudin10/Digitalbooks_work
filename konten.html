@@ -19,7 +19,14 @@
       height: auto;
     }
 
-    /* Penyesuaian layout grid 3 Kolom khusus PC/Laptop */
+    /* Default untuk Mobile: Sembunyikan elemen khusus PC */
+    .pc-sidebar-left,
+    .pc-sidebar-right,
+    .pc-header-desktop {
+      display: none !important;
+    }
+
+    /* Penyesuaian layout grid 3 Kolom khusus PC/Laptop (Layar >= 1024px) */
     @media (min-width: 1024px) {
       .app-layout-wrapper {
         max-width: 1350px !important;
@@ -68,7 +75,7 @@
 <body class="bg-[#d1e7dd] font-sans min-h-screen pb-24 lg:pb-6">
   
   <!-- Header Atas (Hanya tampil di Mobile/HP) -->
-  <header class="mobile-header-bar bg-[#d1e7dd] px-4 py-3 shadow-sm sticky top-0 z-30 border border-blue-200">
+  <header class="mobile-header-bar bg-[#d1e7dd] px-4 py-3 shadow-sm sticky top-0 z-30 border border-blue-200 lg:hidden">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-3">
         <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-10 w-10 object-contain">
@@ -85,7 +92,7 @@
 
     <!-- KOLOM 1 (KIRI): PROFIL & NAVIGASI (KHUSUS PC) -->
     <aside class="pc-sidebar-left space-y-3">
-      <!-- Kartu Profil Pegawai -->
+      <!-- Kartu Profil Pegawai (PC) -->
       <a href="profil.html" class="block bg-white p-3 rounded-2xl shadow-sm border border-gray-100 relative hover:border-blue-300 transition text-center">
         <div class="flex flex-col items-center gap-2">
           <div class="h-20 w-20 flex items-center justify-center flex-shrink-0 bg-transparent">
@@ -98,7 +105,7 @@
         </div>
       </a>
 
-      <!-- Menu Navigasi Samping (Satu Menu Satu Kotak, Tinggi Diperkecil) -->
+      <!-- Menu Navigasi Samping (PC) -->
       <div class="space-y-1.5">
         <a href="index.html#registrasi" class="flex items-center gap-2 py-1.5 px-2.5 bg-white rounded-xl shadow-sm border border-gray-100 hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
           <div class="w-6 h-6 flex items-center justify-center flex-shrink-0">
@@ -135,7 +142,7 @@
       <main id="mainDashboard" class="main-container lg:max-w-none space-y-3 pt-1 pb-3">
         
         <!-- Header Khusus Desktop -->
-        <div class="pc-header-desktop hidden bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-3">
+        <div class="pc-header-desktop bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-3">
           <div class="flex items-center gap-3">
             <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-16 w-16 object-contain">
             <div>
@@ -145,7 +152,7 @@
           </div>
         </div>
 
-        <!-- Kartu Profil Pegawai (Hanya tampil di Mobile/HP) -->
+        <!-- Kartu Profil Pegawai (Hanya tampil di Mobile/HP seperti semula) -->
         <a href="profil.html" class="block lg:hidden bg-white p-3 rounded-2xl shadow-sm border border-blue-400 relative hover:border-blue-700 transition">
           <div class="flex items-center justify-between gap-3 text-left">
             <div>
@@ -223,8 +230,8 @@
           </a>
         </div>
 
-        <!-- Galeri Kegiatan UPTD Farmasi (Khusus Mobile - Di bawah Aksi Cepat) -->
-        <div class="mobile-gallery-wrapper bg-white p-3 rounded-2xl shadow-sm border border-blue-400">
+        <!-- Galeri Kegiatan UPTD Farmasi (Khusus Mobile - Tampil di bawah Aksi Cepat) -->
+        <div class="mobile-gallery-wrapper bg-white p-3 rounded-2xl shadow-sm border border-blue-400 lg:hidden">
           <div class="flex justify-between items-center mb-2">
             <div class="flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
@@ -278,7 +285,7 @@
   </div>
 
   <!-- Bottom Navigation Bar (Hanya tampil di Mobile/HP) -->
-  <div class="bottom-nav-wrapper">
+  <div class="bottom-nav-wrapper lg:hidden fixed bottom-0 left-0 right-0 z-30">
     <nav class="bg-[#d1e7dd] border border-blue-200 shadow-lg py-2.5 px-4 flex justify-around items-center rounded-t-2xl">
       <a href="index.html#registrasi" class="flex flex-col items-center justify-center text-blue-900 font-bold">
         <div class="w-7 h-7 flex items-center justify-center overflow-visible">
@@ -320,13 +327,13 @@
       const gridGaleriDesktop = document.getElementById('gridGaleriDesktop');
 
       onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snapshot) => {
-        gridGaleriMobile.innerHTML = "";
-        gridGaleriDesktop.innerHTML = "";
+        if (gridGaleriMobile) gridGaleriMobile.innerHTML = "";
+        if (gridGaleriDesktop) gridGaleriDesktop.innerHTML = "";
 
         if (snapshot.empty) {
           const emptyMsg = `<p class="text-xs text-gray-400 text-center col-span-full py-3">Belum ada foto galeri kegiatan.</p>`;
-          gridGaleriMobile.innerHTML = emptyMsg;
-          gridGaleriDesktop.innerHTML = emptyMsg;
+          if (gridGaleriMobile) gridGaleriMobile.innerHTML = emptyMsg;
+          if (gridGaleriDesktop) gridGaleriDesktop.innerHTML = emptyMsg;
           return;
         }
 
@@ -334,24 +341,28 @@
           const item = docSnap.data();
           
           // Render Mobile Item
-          const fotoDivMobile = document.createElement('div');
-          fotoDivMobile.className = "rounded-xl overflow-hidden h-24 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2 cursor-pointer";
-          fotoDivMobile.innerHTML = `<img src="${item.url}" class="w-full h-full object-cover hover:scale-105 transition">`;
-          fotoDivMobile.onclick = () => bukaZoom(item.url);
-          gridGaleriMobile.appendChild(fotoDivMobile);
+          if (gridGaleriMobile) {
+            const fotoDivMobile = document.createElement('div');
+            fotoDivMobile.className = "rounded-xl overflow-hidden h-24 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2 cursor-pointer";
+            fotoDivMobile.innerHTML = `<img src="${item.url}" class="w-full h-full object-cover hover:scale-105 transition">`;
+            fotoDivMobile.onclick = () => bukaZoom(item.url);
+            gridGaleriMobile.appendChild(fotoDivMobile);
+          }
 
           // Render Desktop Item
-          const fotoDivDesktop = document.createElement('div');
-          fotoDivDesktop.className = "rounded-xl overflow-hidden h-24 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2 cursor-pointer";
-          fotoDivDesktop.innerHTML = `<img src="${item.url}" class="w-full h-full object-cover hover:scale-105 transition">`;
-          fotoDivDesktop.onclick = () => bukaZoom(item.url);
-          gridGaleriDesktop.appendChild(fotoDivDesktop);
+          if (gridGaleriDesktop) {
+            const fotoDivDesktop = document.createElement('div');
+            fotoDivDesktop.className = "rounded-xl overflow-hidden h-24 border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-2 cursor-pointer";
+            fotoDivDesktop.innerHTML = `<img src="${item.url}" class="w-full h-full object-cover hover:scale-105 transition">`;
+            fotoDivDesktop.onclick = () => bukaZoom(item.url);
+            gridGaleriDesktop.appendChild(fotoDivDesktop);
+          }
         });
       }, (error) => {
         console.error("Gagal memuat galeri:", error);
         const errorMsg = `<p class="text-xs text-red-400 text-center col-span-full py-3">Gagal memuat galeri.</p>`;
-        gridGaleriMobile.innerHTML = errorMsg;
-        gridGaleriDesktop.innerHTML = errorMsg;
+        if (gridGaleriMobile) gridGaleriMobile.innerHTML = errorMsg;
+        if (gridGaleriDesktop) gridGaleriDesktop.innerHTML = errorMsg;
       });
     });
 
