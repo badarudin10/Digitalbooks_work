@@ -19,7 +19,7 @@
       height: auto;
     }
 
-    /* Penyesuaian layout grid PC/Laptop mengacu pada gaya MyASN */
+    /* Penyesuaian layout grid PC/Laptop Posisi Rapi */
     @media (min-width: 1024px) {
       .app-layout-wrapper {
         max-width: 1440px !important;
@@ -110,20 +110,17 @@
   <!-- KONTROL UTAMA LAYOUT RESPONSIF -->
   <div class="app-layout-wrapper">
 
-    <!-- SIDEBAR KIRI (Gaya Kartu Profil & Menu Kotak Terpisah ala Referensi) -->
+    <!-- SIDEBAR KIRI (Posisi Kiri Rapi: Profil & Menu Asli) -->
     <aside class="pc-sidebar space-y-4">
       
       <!-- Kartu Profil Pegawai (Kolom Kiri Atas) -->
       <div class="bg-white/95 backdrop-blur-md p-5 rounded-2xl shadow-md border border-white/60 text-center relative">
         <div class="flex flex-col items-center">
-          <div class="h-28 w-28 rounded-full p-1 bg-gradient-to-tr from-blue-600 to-emerald-400 shadow-md mb-3 flex items-center justify-center">
-            <div class="w-full h-full bg-white rounded-full overflow-hidden flex items-center justify-center p-1">
-              <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain">
-            </div>
+          <div class="h-24 w-24 flex items-center justify-center flex-shrink-0 bg-transparent mb-2">
+            <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain">
           </div>
           <h2 class="text-xs font-black text-gray-900 tracking-wide">UPTD FARMASI</h2>
-          <p class="text-[10px] text-blue-900 font-mono font-bold mt-0.5">TANGERANG SELATAN</p>
-          <p class="text-[10px] text-gray-500 mt-1 px-2 leading-tight">BIDANG KESEHATAN MASYARAKAT</p>
+          <p class="text-[10px] text-blue-900 font-mono font-bold mt-0.5">KOTA TANGERANG SELATAN</p>
         </div>
 
         <div class="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-gray-100">
@@ -136,9 +133,8 @@
         </div>
       </div>
 
-      <!-- Menu Navigasi Samping Terpisah Per Kotak -->
+      <!-- Menu Navigasi Samping Terpisah Per Kotak (Asli) -->
       <div class="space-y-2">
-        <!-- Menu 1: Dashboard -->
         <a href="#" onclick="kembaliKeDashboard(); return false;" class="flex items-center gap-3 p-3.5 bg-blue-900 text-white rounded-2xl shadow-md border border-blue-800 hover:bg-blue-800 transition group">
           <div class="w-8 h-8 flex items-center justify-center bg-white/10 rounded-xl">
             <img src="https://i.ibb.co.com/Xf1wsJ41/Picsart-26-07-25-12-29-14-940.png" class="w-5 h-5 object-contain filter brightness-200">
@@ -146,57 +142,57 @@
           <span class="text-xs font-bold tracking-wide">Dashboard</span>
         </a>
 
-        <!-- Menu 2: Layanan ASN -->
         <a href="index.html#registrasi" class="flex items-center gap-3 p-3.5 bg-white/90 backdrop-blur-md text-gray-800 rounded-2xl shadow-sm border border-white/60 hover:bg-blue-50/80 hover:border-blue-200 transition group">
           <div class="w-8 h-8 flex items-center justify-center bg-blue-50 rounded-xl group-hover:bg-blue-100 transition">
             <img src="https://i.ibb.co.com/5PtXnK6/Picsart-26-07-25-12-25-33-560.png" class="w-5 h-5 object-contain">
           </div>
-          <span class="text-xs font-bold tracking-wide text-gray-800 group-hover:text-blue-900">Layanan ASN</span>
+          <span class="text-xs font-bold tracking-wide text-gray-800 group-hover:text-blue-900">Registrasi</span>
         </a>
 
-        <!-- Menu 3: Layanan Lainnya -->
-        <a href="konsultasi.html" class="flex items-center gap-3 p-3.5 bg-white/90 backdrop-blur-md text-gray-800 rounded-2xl shadow-sm border border-white/60 hover:bg-blue-50/80 hover:border-blue-200 transition group">
+        <a href="maps.html" class="flex items-center gap-3 p-3.5 bg-white/90 backdrop-blur-md text-gray-800 rounded-2xl shadow-sm border border-white/60 hover:bg-blue-50/80 hover:border-blue-200 transition group">
+          <div class="w-8 h-8 flex items-center justify-center bg-blue-50 rounded-xl group-hover:bg-blue-100 transition">
+            <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-5 h-5 object-contain">
+          </div>
+          <span class="text-xs font-bold tracking-wide text-gray-800 group-hover:text-blue-900">Maps</span>
+        </a>
+
+        <a href="tamu.html" class="flex items-center gap-3 p-3.5 bg-white/90 backdrop-blur-md text-gray-800 rounded-2xl shadow-sm border border-white/60 hover:bg-blue-50/80 hover:border-blue-200 transition group">
           <div class="w-8 h-8 flex items-center justify-center bg-blue-50 rounded-xl group-hover:bg-blue-100 transition">
             <img src="https://i.ibb.co.com/2YtR7Hdj/Picsart-26-07-27-12-54-41-199.png" class="w-5 h-5 object-contain">
           </div>
-          <span class="text-xs font-bold tracking-wide text-gray-800 group-hover:text-blue-900">Layanan Lainnya</span>
+          <span class="text-xs font-bold tracking-wide text-gray-800 group-hover:text-blue-900">Tamu</span>
+        </a>
+
+        <a href="konsultasi.html" class="flex items-center gap-3 p-3.5 bg-white/90 backdrop-blur-md text-gray-800 rounded-2xl shadow-sm border border-white/60 hover:bg-blue-50/80 hover:border-blue-200 transition group">
+          <div class="w-8 h-8 flex items-center justify-center bg-blue-50 rounded-xl group-hover:bg-blue-100 transition">
+            <img src="https://i.ibb.co.com/M5D0s0t9/Picsart-26-07-25-11-29-02-111.png" class="w-5 h-5 object-contain">
+          </div>
+          <span class="text-xs font-bold tracking-wide text-gray-800 group-hover:text-blue-900">Konsultasi</span>
         </a>
       </div>
 
     </aside>
 
-    <!-- KONTEN UTAMA (TENGAH) -->
+    <!-- KONTROL UTAMA KONTEN (TENGAH) -->
     <div class="pc-main-content w-full">
       <main id="mainDashboard" class="main-container lg:max-w-none space-y-4 pt-1 pb-3">
         
-        <!-- Header Atas PC (Logo & Brand) -->
-        <div class="pc-header-desktop hidden bg-white/90 backdrop-blur-md px-6 py-4 rounded-2xl shadow-md border border-white/40 items-center justify-between mb-4">
-          <div class="flex items-center gap-3">
-            <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-10 w-10 object-contain">
-            <div>
-              <h1 class="font-black text-blue-900 text-sm tracking-wider">UPTD FARMASI</h1>
-              <p class="text-[10px] text-gray-500 font-semibold tracking-wider uppercase">Kota Tangerang Selatan</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="text-xs font-bold text-gray-700">Pusat Layanan Digital</span>
-          </div>
-        </div>
-
-        <!-- Banner Selamat Datang Utama (Mirip Kartu Banner MyASN) -->
-        <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-md border border-white/40 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div class="flex items-center gap-4 text-left w-full">
-            <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center flex-shrink-0 border border-blue-100">
-              <span class="text-2xl">👤</span>
+        <!-- Header Khusus Desktop (Modern & Professional) -->
+        <div class="pc-header-desktop hidden bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-md border border-white/40 items-center justify-between mb-4">
+          <div class="flex items-center gap-4">
+            <div class="p-2 bg-blue-50 rounded-xl">
+              <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-12 w-12 object-contain">
             </div>
             <div>
-              <h2 class="text-sm sm:text-base font-extrabold text-blue-900">Selamat Datang, UPTD FARMASI</h2>
-              <p class="text-xs text-gray-500 font-mono mt-0.5">Sistem Informasi & Manajemen Layanan Publik</p>
+              <h1 class="font-extrabold text-blue-900 text-lg tracking-wide leading-tight">UPTD FARMASI TANGERANG SELATAN</h1>
+              <p class="text-xs text-gray-500 font-medium mt-0.5">Sistem Informasi Layanan Digital & Manajemen Logistik Obat</p>
             </div>
           </div>
-          <span class="bg-emerald-100 text-emerald-800 text-[11px] font-extrabold px-3 py-1 rounded-full border border-emerald-200 whitespace-nowrap">
-            Aktif & Terverifikasi
-          </span>
+          <div class="text-right">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              ● Sistem Aktif & Terhubung
+            </span>
+          </div>
         </div>
 
         <!-- Kartu Profil Pegawai (Hanya tampil di Mobile/HP) -->
@@ -304,26 +300,8 @@
       </div>
     </div>
 
-    <!-- PANEL KANAN KHUSUS PC (Widget Sambutan & Galeri ala Referensi Kanan) -->
+    <!-- PANEL KANAN KHUSUS PC (Widget Galeri Dokumentasi) -->
     <aside class="pc-right-panel space-y-4">
-      
-      <!-- Widget Sambutan Kanan -->
-      <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-md border border-white/40">
-        <h3 class="font-black text-blue-900 text-xs tracking-wide mb-2">Selamat Datang di UPTD Farmasi</h3>
-        <p class="text-[11px] text-gray-600 leading-relaxed">
-          Sistem Informasi resmi UPTD Farmasi Kota Tangerang Selatan yang digunakan untuk mengakses layanan publik, distribusi obat, dan pengelolaan logistik secara mandiri.
-        </p>
-        <div class="mt-3 pt-3 border-t border-gray-100 space-y-1.5">
-          <p class="text-[11px] font-bold text-blue-900 flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span> Layanan Prima & Akuntabel
-          </p>
-          <p class="text-[11px] font-bold text-blue-900 flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Akses Data & Logistik Cepat
-          </p>
-        </div>
-      </div>
-
-      <!-- Widget Galeri Dokumentasi -->
       <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-md border border-white/40">
         <div class="flex justify-between items-center mb-3 border-b pb-2">
           <div class="flex items-center gap-2">
@@ -332,11 +310,10 @@
           </div>
           <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md font-bold">Live Feed</span>
         </div>
-        <div id="gridGaleri" class="grid grid-cols-2 gap-2 max-h-[350px] overflow-y-auto pr-1">
+        <div id="gridGaleri" class="grid grid-cols-2 gap-2.5 max-h-[500px] overflow-y-auto pr-1">
           <div class="col-span-2 text-center py-6 text-xs text-gray-400">Memuat galeri kegiatan...</div>
         </div>
       </div>
-
     </aside>
 
   </div>
