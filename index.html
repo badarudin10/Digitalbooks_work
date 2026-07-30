@@ -11,49 +11,18 @@
   </style>
   <title>Buku Tamu - UPTD Farmasi Tangsel</title>
 </head>
-<body class="bg-[#d1e7dd] font-sans p-4 md:p-8 relative">
+<body class="bg-[#d1e7dd] font-sans p-4 md:p-8">
 
-  <!-- ==================== SIDEBAR KHUSUS PC (POSISI FIXED DI KIRI, TIDAK MENGUANGGU TENGAH) ==================== -->
-  <aside class="hidden xl:flex flex-col w-64 bg-white rounded-2xl shadow-xl border-2 border-[#5A6B53] p-4 fixed left-6 top-8 z-30 space-y-2">
-    <div class="pb-4 mb-2 border-b border-gray-200 text-center">
-      <h2 class="font-bold text-[#5A6B53] text-base">UPTD FARMASI</h2>
-      <p class="text-xs text-gray-500">Panel Navigasi</p>
-    </div>
-
-    <!-- Menu dengan Garis Pemisah (Border-b) -->
-    <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-[#5A6B53] text-white font-medium border-b border-gray-100 shadow-sm">
-      <span>📋</span> Registrasi / Tamu
-    </a>
-    <a href="konten.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-[#5A6B53] hover:text-white transition font-medium border-b border-gray-100">
-      <span>📖</span> Informasi & Layanan
-    </a>
-    <a href="konsultasi.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-[#5A6B53] hover:text-white transition font-medium border-b border-gray-100">
-      <span>💬</span> Konsultasi
-    </a>
-    <a href="tamu.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-[#5A6B53] hover:text-white transition font-medium border-b border-gray-100">
-      <span>👥</span> Daftar Tamu
-    </a>
-    <a href="profil.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-[#5A6B53] hover:text-white transition font-medium border-b border-gray-100">
-      <span>🏢</span> Profil Pegawai
-    </a>
-    <a href="panduan.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-[#5A6B53] hover:text-white transition font-medium">
-      <span>📚</span> Panduan Aplikasi
-    </a>
-  </aside>
-
-  <!-- ==================== KONTEN UTAMA (TETAP DI TENGAH, MODE HP AMAN) ==================== -->
-  <div class="max-w-4xl mx-auto">
-
-    <!-- Judul Utama dengan Logo -->
-    <div class="flex items-center justify-center gap-4 mb-2">
-      <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-16 w-16 object-contain">
-      <div class="text-center">
-        <h1 class="text-3xl font-extrabold text-blue-900">UPTD FARMASI</h1>
-        <h2 class="text-sm text-gray-600 uppercase">Kota Tangerang Selatan</h2>
-      </div>
-    </div>
-    <p class="italic text-center text-sm text-gray-500 mb-6">"Pelayanan Optimal: Menjadi unit penunjang distribusi obat dan perbekalan kesehatan yang efektif, efisien, serta dapat dipertanggungjawabkan."</p>
-        
+ <!-- Judul Utama dengan Logo -->
+<div class="flex items-center justify-center gap-4 mb-2">
+  <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-16 w-16 object-contain">
+  <div class="text-center">
+    <h1 class="text-3xl font-extrabold text-blue-900">UPTD FARMASI</h1>
+    <h2 class="text-sm text-gray-600 uppercase">Kota Tangerang Selatan</h2>
+  </div>
+</div>
+<p class="italic text-center text-sm text-gray-500 mb-6">"Pelayanan Optimal: Menjadi unit penunjang distribusi obat dan perbekalan kesehatan yang efektif, efisien, serta dapat dipertanggungjawabkan."</p>
+    
     <!-- Grid Layout: Registrasi (Kiri), Menu (Kanan) -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
       
@@ -95,7 +64,7 @@
           Wajib Isi Survei Kepuasan Masyarakat
         </a>
 
-        <!-- Tombol Panduan Aplikasi -->
+        <!-- Tombol Panduan Aplikasi (Ditambahkan persis di bawah Survei) -->
         <a href="panduan.html" class="block w-full bg-blue-900 text-white text-center p-4 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg">
          Panduan Penggunaan Aplikasi
         </a>
@@ -111,46 +80,44 @@
 
     <!-- Galeri -->
     <div class="mt-8">
-      <h3 class="font-bold text-blue-900 mb-4">Kegiatan UPTD FARMASI</h3>
-      <div id="galeriPublik" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 border border-blue-800 p-3 rounded-2xl bg-white shadow-sm"></div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="mt-12 border-t border-[#1e3a8a] pt-6 pb-4 text-center text-[#1e3a8a] text-sm">
-      <div class="max-w-4xl mx-auto px-2 space-y-3">
-        <p class="font-bold text-base">UPTD Farmasi Kota Tangerang Selatan</p>
-        <p class="text-blue-900 text-xs sm:text-sm">Jalan Cendekia, Ciater, Serpong, Kota Tangerang Selatan-Banten 
-  Telepon (021) 29307897 Faksimili (021) 29307989
-   Laman dinkes.tangerangselatankota.go.id , pos-el uptd_farmasi@tangerangselatankota.go.id</p>
-        
-        <!-- Bagian Ikon Media Sosial (Sesuai mode HP) -->
-        <div class="flex flex-wrap justify-center items-center gap-4 text-sm font-medium pt-2">
-          <!-- WhatsApp -->
-          <a href="https://wa.me/62881080698977" target="_blank" class="hover:opacity-80 transition" title="WhatsApp">
-            <img src="https://i.ibb.co.com/v6wYHRJB/Picsart-26-07-30-09-23-28-344.png" alt="WhatsApp" class="w-16 h-16 object-contain">
-          </a>
-          
-          <!-- Instagram -->
-          <a href="https://instagram.com" target="_blank" class="hover:opacity-80 transition" title="Instagram">
-            <img src="https://i.ibb.co.com/5gp37W1P/Picsart-26-07-30-09-26-58-677.png" alt="Instagram" class="w-16 h-16 object-contain">
-          </a>
-          
-          <!-- TikTok -->
-          <a href="https://tiktok.com" target="_blank" class="hover:opacity-80 transition" title="TikTok">
-            <img src="https://i.ibb.co.com/kgvJ7Gqw/Picsart-26-07-30-09-24-35-037.png" alt="TikTok" class="w-16 h-16 object-contain">
-          </a>
-          
-          <!-- YouTube -->
-          <a href="https://youtube.com" target="_blank" class="hover:opacity-80 transition" title="YouTube">
-            <img src="https://i.ibb.co.com/hxpYdj5L/Picsart-26-07-30-09-31-31-407.png" alt="YouTube" class="w-16 h-16 object-contain">
-          </a>
-        </div>
-
-        <p class="text-xs text-blue-900 mt-2">&copy; 2026 UPTD Farmasi Tangsel</p>
-      </div>
-    </footer>
-
+  <h3 class="font-bold text-blue-900 mb-4">Kegiatan UPTD FARMASI</h3>
+  <div id="galeriPublik" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 border border-blue-800 p-3 rounded-2xl bg-white shadow-sm"></div>
+</div>
   </div>
+
+  <footer class="mt-12 border-t border-[#1e3a8a] pt-6 pb-4 text-center text-[#1e3a8a] text-sm">
+    <div class="max-w-4xl mx-auto px-2 space-y-3">
+      <p class="font-bold text-base">UPTD Farmasi Kota Tangerang Selatan</p>
+      <p class="text-blue-900 text-xs sm:text-sm">Jalan Cendekia, Ciater, Serpong, Kota Tangerang Selatan-Banten 
+Telepon (021) 29307897 Faksimili (021) 29307989
+ Laman dinkes.tangerangselatankota.go.id , pos-el uptd_farmasi@tangerangselatankota.go.id</p>
+      
+      <!-- Bagian Ikon Media Sosial (Hanya Logo Saja) -->
+      <div class="flex flex-wrap justify-center items-center gap-4 text-sm font-medium pt-2">
+        <!-- WhatsApp -->
+        <a href="https://wa.me/62881080698977" target="_blank" class="hover:opacity-80 transition" title="WhatsApp">
+          <img src="https://i.ibb.co.com/v6wYHRJB/Picsart-26-07-30-09-23-28-344.png" alt="WhatsApp" class="w-16 h-16 object-contain">
+        </a>
+        
+        <!-- Instagram -->
+        <a href="https://instagram.com" target="_blank" class="hover:opacity-80 transition" title="Instagram">
+          <img src="https://i.ibb.co.com/5gp37W1P/Picsart-26-07-30-09-26-58-677.png" alt="Instagram" class="w-16 h-16 object-contain">
+        </a>
+        
+        <!-- TikTok -->
+        <a href="https://tiktok.com" target="_blank" class="hover:opacity-80 transition" title="TikTok">
+          <img src="https://i.ibb.co.com/kgvJ7Gqw/Picsart-26-07-30-09-24-35-037.png" alt="TikTok" class="w-16 h-16 object-contain">
+        </a>
+        
+        <!-- YouTube -->
+        <a href="https://youtube.com" target="_blank" class="hover:opacity-80 transition" title="YouTube">
+          <img src="https://i.ibb.co.com/hxpYdj5L/Picsart-26-07-30-09-31-31-407.png" alt="YouTube" class="w-16 h-16 object-contain">
+        </a>
+      </div>
+
+      <p class="text-xs text-blue-900 mt-2">&copy; 2026 UPTD Farmasi Tangsel</p>
+    </div>
+  </footer>
 
   <!-- Modal -->
   <div id="modalAntrian" class="hidden fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
@@ -171,14 +138,15 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
+    // Konfigurasi nomor WhatsApp per kategori
     const daftarWA = {
-      "OBAT_PKD": "6281214090200",
-      "VAKSIN": "628126449487",
-      "REAGEN": "62881080698977",
-      "TB_KUSTA": "6285311642234",
-      "HIV_PKG": "628989979798",
-      "DBD_MALARIA": "628568838556",
-      "HEPATITIS_VAKSIN_PROGRAM": "6287829700205",
+      "OBAT_PKD": "6281214090200",    // Ganti nomor ini
+      "VAKSIN": "628126449487",      // Ganti nomor ini
+      "REAGEN": "62881080698977",      // Ganti nomor ini
+      "TB_KUSTA": "6285311642234",    // Ganti nomor ini
+      "HIV_PKG": "628989979798",    // Ganti nomor ini
+      "DBD_MALARIA": "628568838556", // Ganti nomor ini
+      "HEPATITIS_VAKSIN_PROGRAM": "6287829700205",   // Ganti nomor ini
     };
 
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
@@ -186,16 +154,14 @@
 
     onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snapshot) => {
       const galeriContainer = document.getElementById("galeriPublik");
-      if(galeriContainer) galeriContainer.innerHTML = "";
+      galeriContainer.innerHTML = "";
       snapshot.forEach((doc) => {
         const url = doc.data().url;
-        if(galeriContainer) {
-          galeriContainer.innerHTML += `
-            <div class="aspect-square overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition border-2 border-[#5A6B53]">
-               <img src="${url}" onclick="bukaZoom('${url}')" class="w-full h-full object-cover">
-            </div>
-          `;
-        }
+        galeriContainer.innerHTML += `
+          <div class="aspect-square overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition">
+             <img src="${url}" onclick="bukaZoom('${url}')" class="w-full h-full object-cover">
+          </div>
+        `;
       });
     });
 
@@ -220,6 +186,7 @@
       document.getElementById("modalAntrian").className = "visible fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40";
 
       document.getElementById("btnLanjutWA").onclick = () => {
+        // Ambil nomor dari daftarWA, jika tidak ada pakai nomor admin default
         const tujuanWA = daftarWA[keperluan] || "62881080698977";
         const pesan = `Halo Admin, Saya Ingin Check-in.%0ANama: ${nama}%0AInstansi: ${instansi}%0AKeperluan: ${keperluan}%0ANomor Antrian: ${kode}`;
         window.open(`https://wa.me/${tujuanWA}?text=${pesan}`, '_blank');
@@ -229,4 +196,3 @@
   </script>
 </body>
 </html>
-
