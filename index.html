@@ -11,150 +11,146 @@
   </style>
   <title>Buku Tamu - UPTD Farmasi Tangsel</title>
 </head>
-<body class="bg-[#d1e7dd] font-sans p-4 md:p-8">
+<body class="bg-[#d1e7dd] font-sans p-4 md:p-8 relative">
 
-  <!-- ==================== TAMPILAN UTAMA (RESPONSIF: SIDEBAR DI PC, NORMAL DI HP) ==================== -->
-  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-    
-    <!-- SIDEBAR / MENU NAVIGASI (Tampil di Laptop/PC dengan Garis Pemisah, Tersembunyi otomatis di HP) -->
-    <aside class="hidden lg:flex flex-col bg-white rounded-2xl shadow-lg border-2 border-[#5A6B53] p-4 sticky top-8 space-y-2 lg:col-span-1">
-      <div class="pb-4 mb-2 border-b border-gray-200 text-center">
-        <h2 class="font-bold text-[#5A6B53] text-base">UPTD FARMASI</h2>
-        <p class="text-xs text-gray-500">Panel Navigasi</p>
+  <!-- ==================== SIDEBAR KHUSUS PC (POSISI FIXED DI KIRI, TIDAK MENGUANGGU TENGAH) ==================== -->
+  <aside class="hidden xl:flex flex-col w-64 bg-white rounded-2xl shadow-xl border-2 border-[#5A6B53] p-4 fixed left-6 top-8 z-30 space-y-2">
+    <div class="pb-4 mb-2 border-b border-gray-200 text-center">
+      <h2 class="font-bold text-[#5A6B53] text-base">UPTD FARMASI</h2>
+      <p class="text-xs text-gray-500">Panel Navigasi</p>
+    </div>
+
+    <!-- Menu dengan Garis Pemisah (Border-b) -->
+    <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-[#5A6B53] text-white font-medium border-b border-gray-100 shadow-sm">
+      <span>📋</span> Registrasi / Tamu
+    </a>
+    <a href="konten.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-[#5A6B53] hover:text-white transition font-medium border-b border-gray-100">
+      <span>📖</span> Informasi & Layanan
+    </a>
+    <a href="konsultasi.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-[#5A6B53] hover:text-white transition font-medium border-b border-gray-100">
+      <span>💬</span> Konsultasi
+    </a>
+    <a href="tamu.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-[#5A6B53] hover:text-white transition font-medium border-b border-gray-100">
+      <span>👥</span> Daftar Tamu
+    </a>
+    <a href="profil.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-[#5A6B53] hover:text-white transition font-medium border-b border-gray-100">
+      <span>🏢</span> Profil Pegawai
+    </a>
+    <a href="panduan.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-[#5A6B53] hover:text-white transition font-medium">
+      <span>📚</span> Panduan Aplikasi
+    </a>
+  </aside>
+
+  <!-- ==================== KONTEN UTAMA (TETAP DI TENGAH, MODE HP AMAN) ==================== -->
+  <div class="max-w-4xl mx-auto">
+
+    <!-- Judul Utama dengan Logo -->
+    <div class="flex items-center justify-center gap-4 mb-2">
+      <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-16 w-16 object-contain">
+      <div class="text-center">
+        <h1 class="text-3xl font-extrabold text-blue-900">UPTD FARMASI</h1>
+        <h2 class="text-sm text-gray-600 uppercase">Kota Tangerang Selatan</h2>
       </div>
-
-      <!-- Menu dengan Garis Pemisah (Border-b) -->
-      <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-[#5A6B53] text-white font-medium border-b border-gray-100 shadow-sm">
-        <span>📋</span> Registrasi / Tamu
-      </a>
-      <a href="konten.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-[#5A6B53] hover:text-white transition font-medium border-b border-gray-100">
-        <span>📖</span> Informasi & Layanan
-      </a>
-      <a href="konsultasi.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-[#5A6B53] hover:text-white transition font-medium border-b border-gray-100">
-        <span>💬</span> Konsultasi
-      </a>
-      <a href="tamu.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-[#5A6B53] hover:text-white transition font-medium border-b border-gray-100">
-        <span>👥</span> Daftar Tamu
-      </a>
-      <a href="profil.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-[#5A6B53] hover:text-white transition font-medium border-b border-gray-100">
-        <span>🏢</span> Profil Pegawai
-      </a>
-      <a href="panduan.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-700 hover:bg-[#5A6B53] hover:text-white transition font-medium">
-        <span>📚</span> Panduan Aplikasi
-      </a>
-    </aside>
-
-    <!-- KONTEN UTAMA (Menyesuaikan lebar di PC dan HP) -->
-    <div class="lg:col-span-3 space-y-6">
+    </div>
+    <p class="italic text-center text-sm text-gray-500 mb-6">"Pelayanan Optimal: Menjadi unit penunjang distribusi obat dan perbekalan kesehatan yang efektif, efisien, serta dapat dipertanggungjawabkan."</p>
+        
+    <!-- Grid Layout: Registrasi (Kiri), Menu (Kanan) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
       
-      <!-- Judul Utama dengan Logo -->
-      <div class="flex items-center justify-center lg:justify-start gap-4 mb-2 bg-white lg:bg-transparent p-4 lg:p-0 rounded-2xl shadow-sm lg:shadow-none">
-        <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-16 w-16 object-contain">
-        <div class="text-center lg:text-left">
-          <h1 class="text-3xl font-extrabold text-blue-900">UPTD FARMASI</h1>
-          <h2 class="text-sm text-gray-600 uppercase">Kota Tangerang Selatan</h2>
-        </div>
-      </div>
-      <p class="italic text-center lg:text-left text-sm text-gray-500 mb-6">"Pelayanan Optimal: Menjadi unit penunjang distribusi obat dan perbekalan kesehatan yang efektif, efisien, serta dapat dipertanggungjawabkan."</p>
+      <!-- Kolom Kiri: Registrasi Tamu -->
+      <div class="bg-white p-6 rounded-2xl shadow-lg border border-blue-800">
+        <h3 class="font-bold text-gray-700 mb-4">Registrasi Tamu</h3>
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input id="nama" placeholder="Nama Lengkap" class="w-full p-3 border rounded-lg">
+            <input id="instansi" placeholder="Instansi" class="w-full p-3 border rounded-lg">
+          </div>
+
+          <input id="hp" placeholder="No. Telepon (Contoh: 08123456789)" class="w-full p-3 border rounded-lg">
           
-      <!-- Grid Layout: Registrasi (Kiri), Menu (Kanan) -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-        
-        <!-- Kolom Kiri: Registrasi Tamu -->
-        <div class="bg-white p-6 rounded-2xl shadow-lg border border-blue-800">
-          <h3 class="font-bold text-gray-700 mb-4">Registrasi Tamu</h3>
-          <div class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input id="nama" placeholder="Nama Lengkap" class="w-full p-3 border rounded-lg">
-              <input id="instansi" placeholder="Instansi" class="w-full p-3 border rounded-lg">
-            </div>
-
-            <input id="hp" placeholder="No. Telepon (Contoh: 08123456789)" class="w-full p-3 border rounded-lg">
-            
-            <select id="keperluan" class="w-full p-3 border rounded-lg">
-              <option value="">Pilih Keperluan:</option>
-              <option value="OBAT_PKD">A. OBAT PKD</option>
-              <option value="VAKSIN">B. VAKSIN</option>
-              <option value="REAGEN">C. REAGEN</option>
-              <option value="TB_KUSTA">D. TB dan KUSTA</option>
-              <option value="HIV_PKG">E. HIV dan PKG</option>
-              <option value="DBD_MALARIA">F. DBD dan MALARIA</option>
-              <option value="HEPATITIS_VAKSIN_PROGRAM">G. HEPATITIS_VAKSIN_PROGRAM</option>
-            </select>
-            
-            <button id="btnSubmit" class="w-full bg-blue-900 text-white p-4 rounded-lg font-bold hover:bg-blue-900 transition">
-              Check-In & Ambil Antrian
-            </button>
-          </div>
-        </div>
-
-        <!-- Kolom Kanan: Tombol Menu & Jam Operasional -->
-        <div class="flex flex-col gap-4">
-          <a href="konten.html" class="bg-blue-900 text-white p-4 rounded-xl text-center font-bold shadow-lg hover:bg-blue-800 transition">
-            Buka Menu Informasi & Layanan
-          </a>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank"
-              class="block w-full bg-green-600 text-white text-center p-4 rounded-xl font-bold hover:bg-green-700 transition">
-            Wajib Isi Survei Kepuasan Masyarakat
-          </a>
-
-          <!-- Tombol Panduan Aplikasi -->
-          <a href="panduan.html" class="block w-full bg-blue-900 text-white text-center p-4 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg">
-           Panduan Penggunaan Aplikasi
-          </a>
-
-          <!-- Jam Operasional -->
-          <div class="bg-white p-6 rounded-xl shadow-lg border border-blue-800">
-            <h3 class="font-bold text-gray-700 text-sm mb-2">Jam Operasional:</h3>
-            <p class="text-gray-800 text-sm">SENIN - KAMIS: 08.00 - 16.00</p>
-            <p class="text-gray-800 text-sm">JUMAT: 08.30 - 16.30</p>
-          </div>
+          <select id="keperluan" class="w-full p-3 border rounded-lg">
+            <option value="">Pilih Keperluan:</option>
+            <option value="OBAT_PKD">A. OBAT PKD</option>
+            <option value="VAKSIN">B. VAKSIN</option>
+            <option value="REAGEN">C. REAGEN</option>
+            <option value="TB_KUSTA">D. TB dan KUSTA</option>
+            <option value="HIV_PKG">E. HIV dan PKG</option>
+            <option value="DBD_MALARIA">F. DBD dan MALARIA</option>
+            <option value="HEPATITIS_VAKSIN_PROGRAM">G. HEPATITIS_VAKSIN_PROGRAM</option>
+          </select>
+          
+          <button id="btnSubmit" class="w-full bg-blue-900 text-white p-4 rounded-lg font-bold hover:bg-blue-900 transition">
+            Check-In & Ambil Antrian
+          </button>
         </div>
       </div>
 
-      <!-- Galeri -->
-      <div class="mt-8 bg-white p-6 rounded-2xl shadow-lg border border-blue-800">
-        <h3 class="font-bold text-blue-900 mb-4">Kegiatan UPTD FARMASI</h3>
-        <div id="galeriPublik" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 p-3 rounded-2xl bg-white shadow-sm"></div>
-      </div>
+      <!-- Kolom Kanan: Tombol Menu & Jam Operasional -->
+      <div class="flex flex-col gap-4">
+        <a href="konten.html" class="bg-blue-900 text-white p-4 rounded-xl text-center font-bold shadow-lg hover:bg-blue-800 transition">
+          Buka Menu Informasi & Layanan
+        </a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank"
+            class="block w-full bg-green-600 text-white text-center p-4 rounded-xl font-bold hover:bg-green-700 transition">
+          Wajib Isi Survei Kepuasan Masyarakat
+        </a>
 
+        <!-- Tombol Panduan Aplikasi -->
+        <a href="panduan.html" class="block w-full bg-blue-900 text-white text-center p-4 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg">
+         Panduan Penggunaan Aplikasi
+        </a>
+
+        <!-- Jam Operasional -->
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-blue-800">
+          <h3 class="font-bold text-gray-700 text-sm mb-2">Jam Operasional:</h3>
+          <p class="text-gray-800 text-sm">SENIN - KAMIS: 08.00 - 16.00</p>
+          <p class="text-gray-800 text-sm">JUMAT: 08.30 - 16.30</p>
+        </div>
+      </div>
     </div>
+
+    <!-- Galeri -->
+    <div class="mt-8">
+      <h3 class="font-bold text-blue-900 mb-4">Kegiatan UPTD FARMASI</h3>
+      <div id="galeriPublik" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 border border-blue-800 p-3 rounded-2xl bg-white shadow-sm"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-12 border-t border-[#1e3a8a] pt-6 pb-4 text-center text-[#1e3a8a] text-sm">
+      <div class="max-w-4xl mx-auto px-2 space-y-3">
+        <p class="font-bold text-base">UPTD Farmasi Kota Tangerang Selatan</p>
+        <p class="text-blue-900 text-xs sm:text-sm">Jalan Cendekia, Ciater, Serpong, Kota Tangerang Selatan-Banten 
+  Telepon (021) 29307897 Faksimili (021) 29307989
+   Laman dinkes.tangerangselatankota.go.id , pos-el uptd_farmasi@tangerangselatankota.go.id</p>
+        
+        <!-- Bagian Ikon Media Sosial (Sesuai mode HP) -->
+        <div class="flex flex-wrap justify-center items-center gap-4 text-sm font-medium pt-2">
+          <!-- WhatsApp -->
+          <a href="https://wa.me/62881080698977" target="_blank" class="hover:opacity-80 transition" title="WhatsApp">
+            <img src="https://i.ibb.co.com/v6wYHRJB/Picsart-26-07-30-09-23-28-344.png" alt="WhatsApp" class="w-16 h-16 object-contain">
+          </a>
+          
+          <!-- Instagram -->
+          <a href="https://instagram.com" target="_blank" class="hover:opacity-80 transition" title="Instagram">
+            <img src="https://i.ibb.co.com/5gp37W1P/Picsart-26-07-30-09-26-58-677.png" alt="Instagram" class="w-16 h-16 object-contain">
+          </a>
+          
+          <!-- TikTok -->
+          <a href="https://tiktok.com" target="_blank" class="hover:opacity-80 transition" title="TikTok">
+            <img src="https://i.ibb.co.com/kgvJ7Gqw/Picsart-26-07-30-09-24-35-037.png" alt="TikTok" class="w-16 h-16 object-contain">
+          </a>
+          
+          <!-- YouTube -->
+          <a href="https://youtube.com" target="_blank" class="hover:opacity-80 transition" title="YouTube">
+            <img src="https://i.ibb.co.com/hxpYdj5L/Picsart-26-07-30-09-31-31-407.png" alt="YouTube" class="w-16 h-16 object-contain">
+          </a>
+        </div>
+
+        <p class="text-xs text-blue-900 mt-2">&copy; 2026 UPTD Farmasi Tangsel</p>
+      </div>
+    </footer>
+
   </div>
-
-  <!-- ==================== FOOTER ==================== -->
-  <footer class="mt-12 border-t border-[#1e3a8a] pt-6 pb-4 text-center text-[#1e3a8a] text-sm">
-    <div class="max-w-4xl mx-auto px-2 space-y-3">
-      <p class="font-bold text-base">UPTD Farmasi Kota Tangerang Selatan</p>
-      <p class="text-blue-900 text-xs sm:text-sm">Jalan Cendekia, Ciater, Serpong, Kota Tangerang Selatan-Banten 
-Telepon (021) 29307897 Faksimili (021) 29307989
- Laman dinkes.tangerangselatankota.go.id , pos-el uptd_farmasi@tangerangselatankota.go.id</p>
-      
-      <!-- Bagian Ikon Media Sosial (Sesuai mode HP) -->
-      <div class="flex flex-wrap justify-center items-center gap-4 text-sm font-medium pt-2">
-        <!-- WhatsApp -->
-        <a href="https://wa.me/62881080698977" target="_blank" class="hover:opacity-80 transition" title="WhatsApp">
-          <img src="https://i.ibb.co.com/v6wYHRJB/Picsart-26-07-30-09-23-28-344.png" alt="WhatsApp" class="w-16 h-16 object-contain">
-        </a>
-        
-        <!-- Instagram -->
-        <a href="https://instagram.com" target="_blank" class="hover:opacity-80 transition" title="Instagram">
-          <img src="https://i.ibb.co.com/5gp37W1P/Picsart-26-07-30-09-26-58-677.png" alt="Instagram" class="w-16 h-16 object-contain">
-        </a>
-        
-        <!-- TikTok -->
-        <a href="https://tiktok.com" target="_blank" class="hover:opacity-80 transition" title="TikTok">
-          <img src="https://i.ibb.co.com/kgvJ7Gqw/Picsart-26-07-30-09-24-35-037.png" alt="TikTok" class="w-16 h-16 object-contain">
-        </a>
-        
-        <!-- YouTube -->
-        <a href="https://youtube.com" target="_blank" class="hover:opacity-80 transition" title="YouTube">
-          <img src="https://i.ibb.co.com/hxpYdj5L/Picsart-26-07-30-09-31-31-407.png" alt="YouTube" class="w-16 h-16 object-contain">
-        </a>
-      </div>
-
-      <p class="text-xs text-blue-900 mt-2">&copy; 2026 UPTD Farmasi Tangsel</p>
-    </div>
-  </footer>
 
   <!-- Modal -->
   <div id="modalAntrian" class="hidden fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
@@ -175,7 +171,6 @@ Telepon (021) 29307897 Faksimili (021) 29307989
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    // Konfigurasi nomor WhatsApp per kategori
     const daftarWA = {
       "OBAT_PKD": "6281214090200",
       "VAKSIN": "628126449487",
