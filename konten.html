@@ -34,7 +34,7 @@
         grid-column: span 3 / span 3;
         display: flex !important;
         flex-direction: column;
-        gap: 20px;
+        gap: 16px;
         position: sticky;
         top: 24px;
         height: fit-content;
@@ -116,57 +116,87 @@
   <!-- KONTROL UTAMA LAYOUT RESPONSIF -->
   <div class="app-layout-wrapper">
 
-    <!-- SIDEBAR KIRI KHUSUS PC (Navigasi & Profil) -->
-    <aside class="pc-sidebar space-y-4">
-      <!-- Kartu Profil Pegawai -->
-      <a href="profil.html" class="block bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-md border border-white/40 relative hover:border-blue-400 hover:shadow-lg transition-all text-center group">
-        <div class="flex flex-col items-center gap-3">
-          <div class="h-28 w-28 flex items-center justify-center flex-shrink-0 bg-blue-50/50 rounded-2xl p-2 group-hover:scale-105 transition duration-300">
+    <!-- SIDEBAR KIRI KHUSUS PC (Terpisah-pisah per Kotak, Warna Gelap, Teks Putih, & Aksentuasi Mencolok) -->
+    <aside class="pc-sidebar">
+      
+      <!-- 1. Kartu Profil Pegawai -->
+      <a href="profil.html" class="block bg-slate-900 text-white p-4 rounded-2xl shadow-xl border border-slate-700 hover:border-cyan-400 hover:scale-[1.02] transition-all text-center group">
+        <div class="flex flex-col items-center gap-2.5">
+          <div class="h-24 w-24 flex items-center justify-center flex-shrink-0 bg-slate-800 rounded-2xl p-2 border border-slate-700 group-hover:bg-slate-700 transition duration-300">
             <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain">
           </div>
           <div>
-            <h2 class="text-xs font-extrabold text-gray-800 tracking-wide">Profil Pegawai</h2>
-            <p class="text-[11px] text-blue-900 font-extrabold uppercase tracking-wider mt-1">UPTD FARMASI</p>
+            <h2 class="text-xs font-black text-cyan-300 tracking-wider uppercase">Profil Pegawai</h2>
+            <p class="text-[10px] text-slate-300 font-semibold tracking-wide mt-0.5">UPTD FARMASI</p>
           </div>
         </div>
       </a>
 
-      <!-- Menu Navigasi Samping -->
-      <div class="bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-md border border-white/40">
-        <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest px-3 mb-2">Navigasi Utama</p>
-        <nav class="space-y-1">
-          <a href="index.html#registrasi" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition group">
-            <div class="w-8 h-8 flex items-center justify-center flex-shrink-0 bg-emerald-50 rounded-lg group-hover:bg-emerald-100 transition">
-              <img src="https://i.ibb.co.com/Xf1wsJ41/Picsart-26-07-25-12-29-14-940.png" class="w-24 h-24 object-contain">
-            </div>
-            <span class="text-xs">Registrasi</span>
-          </a>
-          <a href="maps.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition group">
-            <div class="w-8 h-8 flex items-center justify-center flex-shrink-0 bg-emerald-50 rounded-lg group-hover:bg-emerald-100 transition">
-              <img src="https://i.ibb.co.com/5PtXnK6/Picsart-26-07-25-12-25-33-560.png" class="w-24 h-24 object-contain">
-            </div>
-            <span class="text-xs">Maps</span>
-          </a>
-          <a href="tamu.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition group">
-            <div class="w-8 h-8 flex items-center justify-center flex-shrink-0 bg-emerald-50 rounded-lg group-hover:bg-emerald-100 transition">
-              <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-24 h-24 object-contain">
-            </div>
-            <span class="text-xs">Tamu</span>
-          </a>
-          <a href="konsultasi.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition group">
-            <div class="w-8 h-8 flex items-center justify-center flex-shrink-0 bg-emerald-50 rounded-lg group-hover:bg-emerald-100 transition">
-              <img src="https://i.ibb.co.com/2YtR7Hdj/Picsart-26-07-27-12-54-41-199.png" class="w-24 h-24 object-contain">
-            </div>
-            <span class="text-xs">Konsultasi</span>
-          </a>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition group">
-            <div class="w-8 h-8 flex items-center justify-center flex-shrink-0 bg-emerald-50 rounded-lg group-hover:bg-emerald-100 transition">
-              <img src="https://i.ibb.co.com/M5D0s0t9/Picsart-26-07-25-11-29-02-111.png" class="w-24 h-24 object-contain">
-            </div>
-            <span class="text-xs">Survei</span>
-          </a>
-        </nav>
+      <!-- Judul Kecil Pemisah Navigasi -->
+      <div class="px-2 pt-1">
+        <p class="text-[10px] font-black text-slate-700 uppercase tracking-widest">Navigasi Menu Utama</p>
       </div>
+
+      <!-- 2. Menu Kotak Pembungkus: Registrasi -->
+      <a href="index.html#registrasi" class="flex items-center gap-3 p-3.5 bg-slate-900 text-white rounded-2xl shadow-xl border border-slate-700 hover:border-emerald-400 hover:scale-[1.02] transition-all group">
+        <div class="w-10 h-10 flex items-center justify-center flex-shrink-0 bg-emerald-500/20 rounded-xl border border-emerald-500/40 group-hover:bg-emerald-500 group-hover:text-slate-900 transition duration-300">
+          <img src="https://i.ibb.co.com/Xf1wsJ41/Picsart-26-07-25-12-29-14-940.png" class="w-6 h-6 object-contain filter brightness-200">
+        </div>
+        <div class="flex-1">
+          <span class="text-xs font-black text-emerald-400 tracking-wide uppercase block">Registrasi</span>
+          <span class="text-[10px] text-slate-300 font-medium">Formulir pendaftaran layanan</span>
+        </div>
+        <span class="text-emerald-400 font-bold text-xs group-hover:translate-x-1 transition">→</span>
+      </a>
+
+      <!-- 3. Menu Kotak Pembungkus: Maps -->
+      <a href="maps.html" class="flex items-center gap-3 p-3.5 bg-slate-900 text-white rounded-2xl shadow-xl border border-slate-700 hover:border-blue-400 hover:scale-[1.02] transition-all group">
+        <div class="w-10 h-10 flex items-center justify-center flex-shrink-0 bg-blue-500/20 rounded-xl border border-blue-500/40 group-hover:bg-blue-500 group-hover:text-slate-900 transition duration-300">
+          <img src="https://i.ibb.co.com/5PtXnK6/Picsart-26-07-25-12-25-33-560.png" class="w-6 h-6 object-contain filter brightness-200">
+        </div>
+        <div class="flex-1">
+          <span class="text-xs font-black text-blue-400 tracking-wide uppercase block">Maps</span>
+          <span class="text-[10px] text-slate-300 font-medium">Peta lokasi & distribusi</span>
+        </div>
+        <span class="text-blue-400 font-bold text-xs group-hover:translate-x-1 transition">→</span>
+      </a>
+
+      <!-- 4. Menu Kotak Pembungkus: Tamu -->
+      <a href="tamu.html" class="flex items-center gap-3 p-3.5 bg-slate-900 text-white rounded-2xl shadow-xl border border-slate-700 hover:border-amber-400 hover:scale-[1.02] transition-all group">
+        <div class="w-10 h-10 flex items-center justify-center flex-shrink-0 bg-amber-500/20 rounded-xl border border-amber-500/40 group-hover:bg-amber-500 group-hover:text-slate-900 transition duration-300">
+          <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-6 h-6 object-contain filter brightness-200">
+        </div>
+        <div class="flex-1">
+          <span class="text-xs font-black text-amber-400 tracking-wide uppercase block">Tamu</span>
+          <span class="text-[10px] text-slate-300 font-medium">Buku tamu kunjungan</span>
+        </div>
+        <span class="text-amber-400 font-bold text-xs group-hover:translate-x-1 transition">→</span>
+      </a>
+
+      <!-- 5. Menu Kotak Pembungkus: Konsultasi -->
+      <a href="konsultasi.html" class="flex items-center gap-3 p-3.5 bg-slate-900 text-white rounded-2xl shadow-xl border border-slate-700 hover:border-purple-400 hover:scale-[1.02] transition-all group">
+        <div class="w-10 h-10 flex items-center justify-center flex-shrink-0 bg-purple-500/20 rounded-xl border border-purple-500/40 group-hover:bg-purple-500 group-hover:text-slate-900 transition duration-300">
+          <img src="https://i.ibb.co.com/2YtR7Hdj/Picsart-26-07-27-12-54-41-199.png" class="w-6 h-6 object-contain filter brightness-200">
+        </div>
+        <div class="flex-1">
+          <span class="text-xs font-black text-purple-400 tracking-wide uppercase block">Konsultasi</span>
+          <span class="text-[10px] text-slate-300 font-medium">Layanan aduan & tanya jawab</span>
+        </div>
+        <span class="text-purple-400 font-bold text-xs group-hover:translate-x-1 transition">→</span>
+      </a>
+
+      <!-- 6. Menu Kotak Pembungkus: Survei -->
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex items-center gap-3 p-3.5 bg-slate-900 text-white rounded-2xl shadow-xl border border-slate-700 hover:border-rose-400 hover:scale-[1.02] transition-all group">
+        <div class="w-10 h-10 flex items-center justify-center flex-shrink-0 bg-rose-500/20 rounded-xl border border-rose-500/40 group-hover:bg-rose-500 group-hover:text-slate-900 transition duration-300">
+          <img src="https://i.ibb.co.com/M5D0s0t9/Picsart-26-07-25-11-29-02-111.png" class="w-6 h-6 object-contain filter brightness-200">
+        </div>
+        <div class="flex-1">
+          <span class="text-xs font-black text-rose-400 tracking-wide uppercase block">Survei</span>
+          <span class="text-[10px] text-slate-300 font-medium">Indeks kepuasan masyarakat</span>
+        </div>
+        <span class="text-rose-400 font-bold text-xs group-hover:translate-x-1 transition">→</span>
+      </a>
+
     </aside>
 
     <!-- KONTEN UTAMA (TENGAH) -->
@@ -185,6 +215,9 @@
             </div>
           </div>
           <div class="text-right">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              ● Sistem Aktif & Terhubung
+            </span>
           </div>
         </div>
 
@@ -255,7 +288,7 @@
           <a href="konsultasi.html" class="mt-3.5 flex items-center justify-between p-3.5 rounded-xl border border-blue-200 bg-gradient-to-r from-blue-50/80 to-emerald-50/80 hover:shadow-md hover:border-blue-400 transition-all group">
             <div class="flex items-center gap-3">
               <div class="w-12 h-12 flex items-center justify-center flex-shrink-0 bg-white/80 rounded-xl shadow-xs">
-                <img src="https://i.ibb.co.com/zV8Xy9vz/Picsart-26-07-29-23-11-15-140.png" class="w-24 h-24 object-contain">
+                <img src="https://i.ibb.co.com/zV8Xy9vz/Picsart-26-07-29-23-11-15-140.png" class="w-10 h-10 object-contain">
               </div>
               <div>
                 <h3 class="font-extrabold text-xs text-blue-900 group-hover:underline leading-tight">Konsultasi & Pengaduan Keluhan</h3>
@@ -266,7 +299,7 @@
           </a>
         </div>
 
-        <!-- Galeri Kegiatan UPTD Farmasi (Hanya tampil di Mobile/HP, karena di PC pindah ke panel kanan) -->
+        <!-- Galeri Kegiatan UPTD Farmasi (Hanya tampil di Mobile/HP) -->
         <div class="block lg:hidden bg-white p-3 rounded-2xl shadow-sm border border-blue-400">
           <div class="flex justify-between items-center mb-2">
             <div class="flex items-center gap-2">
