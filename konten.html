@@ -20,7 +20,7 @@
     }
 
     /* Penyesuaian layout grid PC/Laptop */
-   @media (min-width: 1024px) {
+    @media (min-width: 1024px) {
       .app-layout-wrapper {
         max-width: 1350px !important;
         margin-left: auto;
@@ -42,12 +42,12 @@
         padding: 8px 12px !important;
       }
       
-      /* Tambahan: Mengurangi tinggi pembungkus Profil Pegawai di Sidebar PC */
+      /* Mengurangi tinggi pembungkus Profil Pegawai di Sidebar PC */
       .pc-sidebar-left a.bg-white {
         padding: 8px 12px !important;
       }
       .pc-sidebar-left a.bg-white img {
-        height: 70px !important; /* Mengurangi tinggi gambar profil (semula lebih besar) */
+        height: 70px !important;
         width: 70px !important;
       }
 
@@ -117,7 +117,7 @@
   <div class="app-layout-wrapper">
 
     <!-- Menu Navigasi Samping (Dipisah Menjadi Kartu Terpisah) -->
-<aside class="pc-sidebar-left space-y-3">
+    <aside class="pc-sidebar-left space-y-3">
       <!-- Kartu Profil Pegawai -->
       <a href="profil.html" class="block bg-white p-4 rounded-2xl shadow-sm border-2 border-gray-100 relative hover:border-blue-300 transition text-center">
         <div class="flex flex-col items-center gap-2">
@@ -131,55 +131,55 @@
         </div>
       </a>
   
-  <!-- Kotak 1: Registrasi -->
-  <div class="bg-white p-3 rounded-2xl shadow-sm border-2 border-gray-100">
-    <nav>
-      <a href="index.html#registrasi" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-        <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
-          <img src="https://i.ibb.co.com/k2H9XQMH/Picsart-26-07-29-23-12-02-981.png" class="w-full h-full object-contain">
-        </div>
-        <span class="text-xs">Registrasi</span>
-      </a>
-    </nav>
-  </div>
+      <!-- Kotak 1: Registrasi -->
+      <div class="bg-white p-3 rounded-2xl shadow-sm border-2 border-gray-100">
+        <nav>
+          <a href="index.html#registrasi" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
+            <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
+              <img src="https://i.ibb.co.com/k2H9XQMH/Picsart-26-07-29-23-12-02-981.png" class="w-full h-full object-contain">
+            </div>
+            <span class="text-xs">Registrasi</span>
+          </a>
+        </nav>
+      </div>
 
-  <!-- Kotak 2: Maps -->
-  <div class="bg-white p-3 rounded-2xl shadow-sm border-2 border-gray-100">
-    <nav>
-      <a href="maps.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-        <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
-          <img src="https://i.ibb.co.com/4RhdPmBn/Picsart-26-07-30-01-18-55-191.png" class="w-full h-full object-contain">
-        </div>
-        <span class="text-xs">Maps</span>
-      </a>
-    </nav>
-  </div>
+      <!-- Kotak 2: Maps -->
+      <div class="bg-white p-3 rounded-2xl shadow-sm border-2 border-gray-100">
+        <nav>
+          <a href="maps.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
+            <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
+              <img src="https://i.ibb.co.com/4RhdPmBn/Picsart-26-07-30-01-18-55-191.png" class="w-full h-full object-contain">
+            </div>
+            <span class="text-xs">Maps</span>
+          </a>
+        </nav>
+      </div>
 
-  <!-- Kotak 3: Tamu -->
-  <div class="bg-white p-3 rounded-2xl shadow-sm border-2 border-gray-100">
-    <nav>
-      <a href="tamu.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-        <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
-          <img src="https://i.ibb.co.com/KcX3dhTq/Picsart-26-07-30-01-19-44-361.png" class="w-full h-full object-contain">
-        </div>
-        <span class="text-xs">Tamu</span>
-      </a>
-    </nav>
-  </div>
+      <!-- Kotak 3: Tamu -->
+      <div class="bg-white p-3 rounded-2xl shadow-sm border-2 border-gray-100">
+        <nav>
+          <a href="tamu.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
+            <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
+              <img src="https://i.ibb.co.com/KcX3dhTq/Picsart-26-07-30-01-19-44-361.png" class="w-full h-full object-contain">
+            </div>
+            <span class="text-xs">Tamu</span>
+          </a>
+        </nav>
+      </div>
 
-  <!-- Kotak 5: Survei -->
-  <div class="bg-white p-3 rounded-2xl shadow-sm border-2 border-gray-100">
-    <nav>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
-        <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
-          <img src="https://i.ibb.co.com/WpFvvtry/Picsart-26-07-29-23-12-41-517.png" class="w-full h-full object-contain">
-        </div>
-        <span class="text-xs">Survei</span>
-      </a>
-    </nav>
-  </div>
+      <!-- Kotak 5: Survei -->
+      <div class="bg-white p-3 rounded-2xl shadow-sm border-2 border-gray-100">
+        <nav>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
+            <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
+              <img src="https://i.ibb.co.com/WpFvvtry/Picsart-26-07-29-23-12-41-517.png" class="w-full h-full object-contain">
+            </div>
+            <span class="text-xs">Survei</span>
+          </a>
+        </nav>
+      </div>
+    </aside>
 
-</aside>
     <!-- KONTEN UTAMA -->
     <div class="pc-main-content w-full">
       <main id="mainDashboard" class="main-container lg:max-w-none space-y-3 pt-1 pb-3">
@@ -197,23 +197,23 @@
 
         <!-- Kartu Profil Pegawai (Hanya tampil di Mobile/HP) -->
         <a href="profil.html" class="block lg:hidden bg-white p-3 rounded-2xl shadow-sm border border-blue-400 relative hover:border-blue-700 transition">
-  <div class="flex items-center justify-between gap-3 text-left">
-    <div>
-      <p class="text-[9px] text-blue-900 font-extrabold uppercase tracking-wide">PROFIL PEGAWAI</p>
-      <h2 class="text-xs font-extrabold text-gray-800 mt-0.5">UPTD FARMASI</h2>
-      <p class="text-[9px] text-gray-600 font-mono mt-0.5">Kota Tangerang Selatan</p>
-    </div>
-    <div class="h-24 w-24 flex items-center justify-center flex-shrink-0 bg-transparent">
-      <img src="https://i.ibb.co.com/Fkn1GM2k/Picsart-26-07-29-23-07-44-990.png" class="w-full h-full object-contain">
-    </div>
-  </div>
-</a>
+          <div class="flex items-center justify-between gap-3 text-left">
+            <div>
+              <p class="text-[9px] text-blue-900 font-extrabold uppercase tracking-wide">PROFIL PEGAWAI</p>
+              <h2 class="text-xs font-extrabold text-gray-800 mt-0.5">UPTD FARMASI</h2>
+              <p class="text-[9px] text-gray-600 font-mono mt-0.5">Kota Tangerang Selatan</p>
+            </div>
+            <div class="h-24 w-24 flex items-center justify-center flex-shrink-0 bg-transparent">
+              <img src="https://i.ibb.co.com/Fkn1GM2k/Picsart-26-07-29-23-07-44-990.png" class="w-full h-full object-contain">
+            </div>
+          </div>
+        </a>
 
         <!-- Kotak Aksi Cepat -->
         <div class="bg-white p-3 rounded-2xl shadow-sm border border-blue-400">
-  <div class="flex items-center gap-2 mb-2 text-gray-700 font-bold text-xs">
-    <span class="text-blue-900">⇄</span> Aksi Cepat
-  </div>
+          <div class="flex items-center gap-2 mb-2 text-gray-700 font-bold text-xs">
+            <span class="text-blue-900">⇄</span> Aksi Cepat
+          </div>
 
           <div class="grid grid-cols-2 gap-2">
             <!-- Informasi -->
@@ -258,7 +258,7 @@
             </button>
           </div>
 
-          <!-- Tombol Menu Konsultasi / Keluhan (Ditambahkan di bawah menu aksi cepat sesuai instruksi) -->
+          <!-- Tombol Menu Konsultasi / Keluhan -->
           <a href="konsultasi.html" class="mt-3 flex items-center justify-between p-3 rounded-xl border border-blue-400 bg-gradient-to-r from-blue-50/60 to-emerald-50/60 hover:bg-blue-100/60 transition group">
             <div class="flex items-center gap-3">
               <div class="w-20 h-20 flex items-center justify-center flex-shrink-0">
@@ -342,7 +342,7 @@
     </nav>
   </div>
 
-  <!-- SKRIP FIREBASE -->
+  <!-- SKRIP FIREBASE & INTERAKTIVITAS -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, getDocs, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
@@ -436,7 +436,6 @@
     };
 
     window.kembaliKeDashboard = () => {
-      document.getElementById('pageDiatas' = document.getElementById('pageDaftar'));
       document.getElementById('pageDaftar').className = 'hidden-custom';
       document.getElementById('pageBaca').className = 'hidden-custom';
       document.getElementById('mainDashboard').className = 'visible-custom main-container lg:max-w-none space-y-3 pt-1 pb-3';
