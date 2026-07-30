@@ -22,15 +22,16 @@
     /* Penyesuaian layout grid PC/Laptop */
     @media (min-width: 1024px) {
       .app-layout-wrapper {
-        max-width: 1200px !important;
+        max-width: 1350px !important;
         margin-left: auto;
         margin-right: auto;
         display: grid;
         grid-template-columns: repeat(12, minmax(0, 1fr));
         gap: 20px;
         padding: 20px;
+        align-items: start;
       }
-      .pc-sidebar {
+      .pc-sidebar-left {
         grid-column: span 3 / span 3;
         display: flex !important;
         flex-direction: column;
@@ -51,7 +52,7 @@
     }
 
     @media (max-width: 1023px) {
-      .pc-sidebar {
+      .pc-sidebar-left {
         display: none !important;
       }
       .pc-header-desktop {
@@ -421,6 +422,7 @@
     };
 
     window.kembaliKeDashboard = () => {
+      document.getElementById('pageDiatas' = document.getElementById('pageDaftar'));
       document.getElementById('pageDaftar').className = 'hidden-custom';
       document.getElementById('pageBaca').className = 'hidden-custom';
       document.getElementById('mainDashboard').className = 'visible-custom main-container lg:max-w-none space-y-3 pt-1 pb-3';
