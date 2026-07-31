@@ -536,9 +536,12 @@
       });
     };
 
-    window.downloadPDFKeluhan = () => {
+        window.downloadPDFKeluhan = () => {
       const element = document.getElementById('printAreaKeluhan');
+      // Tampilkan elemen secara inline agar html2canvas dapat membaca isinya dengan sempurna
+      element.style.display = 'block';
       element.classList.remove('hidden');
+
       const opt = {
         margin:       5,
         filename:     'Laporan_Konsultasi_Dan_Pengaduan_UPTD.pdf',
@@ -546,7 +549,9 @@
         html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
+
       html2pdf().from(element).set(opt).save().then(() => {
+        element.style.display = 'none';
         element.classList.add('hidden');
       });
     };
