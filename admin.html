@@ -184,7 +184,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy, updateDoc, doc, serverTimestamp, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, updateDoc, doc, serverTimestamp, addDoc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
@@ -291,8 +291,8 @@
               </div>
               
               <div class="flex gap-1 flex-wrap pt-1">
-                ${data.status !== 'selesai' && data.status !== 'proses' ? `<button onclick="updateStatus('${docSnap.id}', 'proses', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-yellow-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-yellow-600">Proses</button>` : ''}
-                <button onclick="updateStatus('${docSnap.id}', 'selesai', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-green-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-green-700">Simpan & Selesai</button>
+                ${data.status !== 'selesai' && data.status !== 'proses' ? `<button onclick="updateStatus('${docSnap.id}', 'proses', '${data.hp || ''}', '${data.nama || ''}', '${data.nomorAntrian || ''}', '${data.petugas || ''}')" class="bg-yellow-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-yellow-600">Proses</button>` : ''}
+                <button onclick="updateStatus('${docSnap.id}', 'selesai', '${data.hp || ''}', '${data.nama || ''}', '${data.nomorAntrian || ''}', '${data.petugas || ''}')" class="bg-green-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-green-700">Simpan & Selesai</button>
                 <button onclick="downloadPdf(${dataObjStr})" class="bg-blue-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-blue-700">📄 Download PDF Resmi</button>
                 <button onclick="hapusAntrian('${docSnap.id}')" class="bg-red-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-red-700">Hapus</button>
               </div>
@@ -551,16 +551,41 @@
       });
     };
 
-    window.updateStatus = async (id, status, hp, nama, antrian) => {
+    window.updateStatus = async (id, status, hpTamu, namaTamu, antrian, namaPetugas) => {
       let updateData = { 
         status: status, 
         [status === 'proses' ? 'waktuProses' : 'waktuSelesai']: serverTimestamp() 
       };
       await updateDoc(doc(db, "tamu", id), updateData);
       
-      const pesan = status === 'proses' ? `Halo ${nama}, antrian (${antrian}) Anda sedang diproses.` : `Halo ${nama}, antrian (${antrian}) Anda sudah selesai. Silakan unduh dokumen bukti pengambilan obat Anda.`;
-      let phone = hp.startsWith('0') ? '62' + hp.substring(1) : (hp.startsWith('8') ? '62' + hp : hp);
-      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(pesan)}`, '_blank');
+      // Cari nomor WhatsApp pemegang program yang dipilih dari koleksi pegawai
+      let noWaPetugas = '';
+      if (namaPetugas && namaPetugas !== '-') {
+        try {
+          const pegawaiSnap = await getDocs(collection(db, "pegawai"));
+          pegawaiSnap.forEach((docP) => {
+            const pData = docP.data();
+            if (pData.nama && pData.nama.toLowerCase() === namaPetugas.toLowerCase()) {
+              noWaPetugas = pData.hp || pData.noWa || pData.whatsapp || '';
+            }
+          });
+        } catch (err) {
+          console.error("Gagal mengambil data pegawai:", err);
+        }
+      }
+
+      // Format nomor WhatsApp pemegang program atau kirim ke tamu
+      if (noWaPetugas) {
+        let cleanWa = noWaPetugas.startsWith('0') ? '62' + noWaPetugas.substring(1) : (noWaPetugas.startsWith('8') ? '62' + noWaPetugas : noWaPetugas);
+        let pesanPetugas = status === 'proses' 
+          ? `Halo ${namaPetugas}, tamu atas nama *${namaTamu}* (No Antrian: ${antrian}) sedang diproses.` 
+          : `Halo ${namaPetugas}, pelayanan tamu atas nama *${namaTamu}* (No Antrian: ${antrian}) telah selesai.`;
+        window.open(`https://wa.me/${cleanWa}?text=${encodeURIComponent(pesanPetugas)}`, '_blank');
+      } else if (hpTamu) {
+        let phone = hpTamu.startsWith('0') ? '62' + hpTamu.substring(1) : (hpTamu.startsWith('8') ? '62' + hpTamu : hpTamu);
+        let pesanTamu = status === 'proses' ? `Halo ${namaTamu}, antrian (${antrian}) Anda sedang diproses.` : `Halo ${namaTamu}, antrian (${antrian}) Anda sudah selesai. Silakan unduh dokumen bukti pengambilan obat Anda.`;
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(pesanTamu)}`, '_blank');
+      }
     };
 
     window.hapusAntrian = async (id) => {
@@ -606,8 +631,9 @@
     window.tambahPegawaiAdmin = async () => {
       const nama = document.getElementById("inputPegawaiNama").value.trim();
       const jabatan = document.getElementById("inputPegawaiJabatan").value.trim();
+      const hp = document.getElementById("inputPegawaiPj").value.trim(); // Disesuaikan untuk input nomor WA/PJ
       if (!nama || !jabatan) { alert("Nama & Jabatan wajib diisi!"); return; }
-      await addDoc(collection(db, "pegawai"), { nama, jabatan, waktuInput: Date.now() });
+      await addDoc(collection(db, "pegawai"), { nama, jabatan, hp, waktuInput: Date.now() });
       alert("Pegawai ditambah!");
     };
 
@@ -617,3 +643,4 @@
   </script>
 </body>
 </html>
+
