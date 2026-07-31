@@ -35,7 +35,6 @@
     <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm text-center">
       <h2 class="text-2xl font-bold text-blue-900 mb-6">Login Admin UPTD</h2>
       
-      <!-- Pesan Error Login -->
       <div id="loginError" class="hidden mb-4 p-3 bg-red-100 text-red-700 text-xs rounded-lg text-left"></div>
 
       <form id="loginForm" class="space-y-4 text-left">
@@ -66,7 +65,7 @@
 
     <div class="bg-white p-6 rounded-2xl shadow-lg overflow-x-auto">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-blue-900">Daftar Antrian Real-time & Input Obat Logistik Per Tamu</h2>
+        <h2 class="text-xl font-bold text-blue-900">Daftar Antrian Real-time & Input Detail Obat Logistik</h2>
       </div>
 
       <table class="w-full text-left" id="tabelTamuData">
@@ -77,14 +76,14 @@
             <th class="p-3">Instansi</th>
             <th class="p-3">Status</th>
             <th class="p-3">Durasi</th>
-            <th class="p-3">Form Input Obat & Aksi</th>
+            <th class="p-3">Form Input Tabel Obat & Aksi</th>
           </tr>
         </thead>
         <tbody id="tabelTamu"></tbody>
       </table>
     </div>
 
-    <!-- AREA TERSEMBUNYI UNTUK CETAK PDF PER SATU TAMU -->
+    <!-- AREA TERSEMBUNYI UNTUK CETAK PDF FORMAT TABEL RESMI -->
     <div id="areaCetakPdf" class="hidden"></div>
 
     <!-- PEMANTAUAN KELUHAN & TOMBOL DOWNLOAD PDF KELUHAN -->
@@ -116,7 +115,7 @@
       </div>
     </div>
 
-    <!-- AREA TERSEMBUNYI KHUSUS UNTUK GENERATE PDF DENGAN KOP SURAT -->
+    <!-- AREA TERSEMBUNYI KHUSUS UNTUK GENERATE PDF KELUHAN -->
     <div id="printAreaKeluhan" class="hidden bg-white p-6 text-black box-border">
       <div class="flex items-center border-b-4 border-black pb-4 mb-6">
         <div class="w-20 flex-shrink-0">
@@ -126,45 +125,24 @@
           <h2 class="text-xs font-bold uppercase tracking-wider text-black">PEMERINTAH KOTA TANGERANG SELATAN</h2>
           <h1 class="text-base font-black uppercase tracking-wide text-black mt-0.5">UPTD FARMASI</h1>
           <p class="text-[10px] text-gray-800 mt-0.5">Jl. Cendekia, Ciater, Serpong, Kota Tangerang Selatan</p>
-          <p class="text-[10px] text-gray-800">Telepon (021) 29307897 Faksimili (021) 29307989</p>
-          <p class="text-[9px] text-gray-700 mt-0.5">Laman dinkes.tangerangselatankota.go.id , pos-el dinkes@tangerangselatankota.go.id</p>
         </div>
       </div>
-
       <div class="text-center mb-4">
-        <h3 class="text-xs font-black uppercase tracking-wider underline underline-offset-4">LAPORAN KONSULTASI DAN PENGADUAN KELUHAN</h3>
-        <p class="text-[10px] text-gray-600 mt-0.5">Dokumen Rekapitulasi Sistem Layanan UPTD Farmasi</p>
+        <h3 class="text-xs font-black uppercase tracking-wider underline">LAPORAN KONSULTASI DAN PENGADUAN KELUHAN</h3>
       </div>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-xs">
-          <thead>
-            <tr class="border-b text-gray-700 text-[10px] uppercase bg-gray-50">
-              <th class="p-2 border">Waktu</th>
-              <th class="p-2 border">Nama</th>
-              <th class="p-2 border">Instansi</th>
-              <th class="p-2 border">Kontak</th>
-              <th class="p-2 border">Kategori</th>
-              <th class="p-2 border">Isi Keluhan</th>
-            </tr>
-          </thead>
-          <tbody id="tabelKonsultasiPDF" class="text-[11px] text-gray-800">
-            <tr><td colspan="6" class="text-center py-4 text-gray-400">Memuat data keluhan...</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="mt-16 flex justify-between items-end text-[11px]">
-        <div>
-          <p class="text-[9px] text-gray-500 italic">* Dicetak secara otomatis dari Sistem UPTD Farmasi Tangsel.</p>
-        </div>
-        <div class="text-center w-56">
-          <p class="text-black mb-12">Petugas Penanggung Jawab,</p>
-          <p class="font-bold text-black">Erni Mardiana, S.Farm. Apt</p>
-          <div class="border-b border-black mb-1.5 w-full"></div>
-          <p class="text-[9px] text-gray-600 mt-1">NIP. 19850101 201001 1 001</p>
-        </div>
-      </div>
+      <table class="w-full text-left border-collapse text-xs">
+        <thead>
+          <tr class="border-b text-gray-700 text-[10px] uppercase bg-gray-50">
+            <th class="p-2 border">Waktu</th>
+            <th class="p-2 border">Nama</th>
+            <th class="p-2 border">Instansi</th>
+            <th class="p-2 border">Kontak</th>
+            <th class="p-2 border">Kategori</th>
+            <th class="p-2 border">Isi Keluhan</th>
+          </tr>
+        </thead>
+        <tbody id="tabelKonsultasiPDF" class="text-[11px] text-gray-800"></tbody>
+      </table>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -284,6 +262,7 @@
             waktuFormatted = data.waktu.toDate().toLocaleString('id-ID');
           }
 
+          // Simpan array item obat ke data objek
           const dataObjStr = JSON.stringify({
             nomorAntrian: data.nomorAntrian || '-',
             nama: data.nama || '-',
@@ -293,7 +272,7 @@
             waktuFormatted: waktuFormatted,
             durasi: durasi || '-',
             status: data.status || 'SELESAI',
-            obatTerimaFormatted: data.obatDiterima || '-'
+            itemsObat: data.itemsObat || []
           }).replace(/"/g, '&quot;');
 
           tabel.innerHTML += `<tr class="border-b text-sm">
@@ -302,28 +281,38 @@
             <td class="p-3 text-gray-600">${data.instansi || '-'}</td>
             <td class="p-3 font-bold text-${data.status === 'selesai' ? 'green' : (data.status === 'proses' ? 'blue' : 'yellow')}-600 uppercase text-xs">${data.status || 'menunggu'}</td>
             <td class="p-3 text-gray-500">${durasi}</td>
-            <td class="p-3 space-y-2 min-w-[320px]">
+            <td class="p-3 space-y-3 min-w-[340px]">
               
-              <!-- KOTAK INPUT OBAT DETAIL DI DALAM KOLOM AKSI -->
-              <div class="border border-gray-300 rounded-lg p-2.5 bg-gray-50 space-y-2">
-                <div class="text-[11px] font-extrabold text-blue-900 border-b pb-1">Input Item Obat untuk: ${data.nama || 'Tamu'}</div>
-                <div class="grid grid-cols-2 gap-1">
-                  <input type="text" id="obatNama_${docSnap.id}" placeholder="Nama Obat..." class="p-1 border rounded text-xs col-span-2 bg-white">
-                  <input type="text" id="obatVolume_${docSnap.id}" placeholder="Volume/Qty..." class="p-1 border rounded text-xs bg-white">
-                  <input type="text" id="obatSatuan_${docSnap.id}" placeholder="Satuan (Box/Pcs)..." class="p-1 border rounded text-xs bg-white">
-                  <input type="number" id="obatTahun_${docSnap.id}" placeholder="Tahun" value="2026" class="p-1 border rounded text-xs bg-white">
-                  <input type="date" id="obatED_${docSnap.id}" class="p-1 border rounded text-xs bg-white" title="Tanggal ED">
-                  <input type="text" id="obatBatch_${docSnap.id}" placeholder="No Batch..." class="p-1 border rounded text-xs uppercase col-span-2 bg-white font-mono">
+              <!-- FORM INPUT RINCIAN OBAT DALAM KOLOM AKSI -->
+              <div class="border border-blue-200 rounded-lg p-3 bg-blue-50/40 space-y-2">
+                <div class="text-[11px] font-extrabold text-blue-900 border-b border-blue-200 pb-1">➕ Tambah Item Obat/Barang Logistik</div>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <input type="text" id="inNama_${docSnap.id}" placeholder="Nama Obat / Barang..." class="p-1 border rounded text-xs col-span-2 bg-white">
+                  <input type="text" id="inKode_${docSnap.id}" placeholder="Kode Rekening (Opsional)" value="5.1.02.01.01.0037" class="p-1 border rounded text-xs bg-white font-mono">
+                  <input type="text" id="inTahun_${docSnap.id}" placeholder="Tahun (APBD 2025)" value="APBD 2025" class="p-1 border rounded text-xs bg-white">
+                  <input type="text" id="inSatuan_${docSnap.id}" placeholder="Satuan (Tablet/Box)" value="Tablet" class="p-1 border rounded text-xs bg-white">
+                  <input type="number" id="inHarga_${docSnap.id}" placeholder="Harga Satuan (Rp)" class="p-1 border rounded text-xs bg-white">
+                  <input type="number" id="inVol_${docSnap.id}" placeholder="Volume (Qty)" class="p-1 border rounded text-xs bg-white">
+                  <input type="text" id="inED_${docSnap.id}" placeholder="ED (Okt-27)" class="p-1 border rounded text-xs bg-white">
+                  <input type="text" id="inBatch_${docSnap.id}" placeholder="No Batch..." class="p-1 border rounded text-xs uppercase bg-white font-mono col-span-2">
                 </div>
-                <button onclick="tambahkanObatKeTamu('${docSnap.id}')" class="w-full bg-slate-700 text-white py-1 rounded text-[11px] font-bold hover:bg-slate-800">+ Tambah ke Catatan</button>
+                <button onclick="tambahItemObatTamu('${docSnap.id}')" class="w-full bg-blue-900 text-white py-1.5 rounded text-[11px] font-bold hover:bg-blue-800 transition shadow-sm">+ Masukkan ke Tabel Obat</button>
               </div>
 
-              <textarea id="obat_${docSnap.id}" rows="3" placeholder="Daftar obat tersimpan..." class="w-full p-2 border rounded-lg text-xs bg-white focus:ring-1 focus:ring-blue-900 outline-none font-mono">${data.obatDiterima || ''}</textarea>
+              <!-- DAFTAR ITEM OBAT YANG SUDAH DITAMBAHKAN -->
+              <div id="listObatContainer_${docSnap.id}" class="space-y-1 max-h-40 overflow-y-auto">
+                ${(data.itemsObat && data.itemsObat.length > 0) ? data.itemsObat.map((item, idx) => `
+                  <div class="bg-gray-50 border p-1.5 rounded text-[11px] flex justify-between items-center">
+                    <div><b>${idx+1}. ${item.nama}</b> (${item.volume} ${item.satuan}) - Rp${Number(item.harga || 0).toLocaleString('id-ID')}</div>
+                    <button onclick="hapusItemObatTamu('${docSnap.id}', ${idx})" class="text-red-600 font-bold px-1 hover:bg-red-100 rounded">×</button>
+                  </div>
+                `).join('') : '<div class="text-[10px] text-gray-400 italic">Belum ada item obat dimasukkan.</div>'}
+              </div>
               
-              <div class="flex gap-1 flex-wrap">
+              <div class="flex gap-1 flex-wrap pt-1">
                 ${data.status !== 'selesai' && data.status !== 'proses' ? `<button onclick="updateStatus('${docSnap.id}', 'proses', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-yellow-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-yellow-600">Proses</button>` : ''}
                 <button onclick="updateStatus('${docSnap.id}', 'selesai', '${data.hp}', '${data.nama}', '${data.nomorAntrian}')" class="bg-green-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-green-700">Simpan & Selesai</button>
-                <button onclick="downloadPdf(${dataObjStr})" class="bg-blue-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-blue-700">Download PDF</button>
+                <button onclick="downloadPdf(${dataObjStr})" class="bg-blue-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-blue-700">📄 Download PDF Resmi</button>
                 <button onclick="hapusAntrian('${docSnap.id}')" class="bg-red-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-red-700">Hapus</button>
               </div>
             </td>
@@ -340,9 +329,7 @@
         tabelKonsultasiPDF.innerHTML = "";
 
         if (snapshot.empty) {
-          const emptyHtml = `<tr><td colspan="6" class="text-center py-4 text-gray-400">Belum ada data konsultasi atau keluhan masuk.</td></tr>`;
-          tabelKonsultasiAdmin.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-gray-400">Belum ada data konsultasi atau keluhan masuk.</td></tr>`;
-          tabelKonsultasiPDF.innerHTML = emptyHtml;
+          tabelKonsultasiAdmin.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-gray-400">Belum ada data keluhan.</td></tr>`;
           return;
         }
 
@@ -350,32 +337,29 @@
           const data = docSnap.data();
           const tanggalStr = data.waktuInput?.toDate ? data.waktuInput.toDate().toLocaleString('id-ID') : 'Baru saja';
           
-          const trAdmin = document.createElement('tr');
-          trAdmin.className = "border-b hover:bg-gray-50";
-          trAdmin.innerHTML = `
-            <td class="p-3 border text-gray-500 whitespace-nowrap">${tanggalStr}</td>
-            <td class="p-3 border font-bold text-blue-900">${data.nama || '-'}</td>
-            <td class="p-3 border text-gray-700">${data.instansi || '-'}</td>
-            <td class="p-3 border text-blue-900">${data.kontak || '-'}</td>
-            <td class="p-3 border font-semibold text-emerald-800">${data.kategori || '-'}</td>
-            <td class="p-3 border whitespace-pre-line text-gray-700">${data.isi || '-'}</td>
-            <td class="p-3 border text-center">
-              <button onclick="hapusKeluhan('${docSnap.id}')" class="bg-red-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-red-700">Hapus</button>
-            </td>
+          tabelKonsultasiAdmin.innerHTML += `
+            <tr class="border-b hover:bg-gray-50">
+              <td class="p-3 border text-gray-500 whitespace-nowrap">${tanggalStr}</td>
+              <td class="p-3 border font-bold text-blue-900">${data.nama || '-'}</td>
+              <td class="p-3 border text-gray-700">${data.instansi || '-'}</td>
+              <td class="p-3 border text-blue-900">${data.kontak || '-'}</td>
+              <td class="p-3 border font-semibold text-emerald-800">${data.kategori || '-'}</td>
+              <td class="p-3 border whitespace-pre-line text-gray-700">${data.isi || '-'}</td>
+              <td class="p-3 border text-center">
+                <button onclick="hapusKeluhan('${docSnap.id}')" class="bg-red-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold">Hapus</button>
+              </td>
+            </tr>
           `;
-          tabelKonsultasiAdmin.appendChild(trAdmin);
-
-          const trPDF = document.createElement('tr');
-          trPDF.className = "border-b";
-          trPDF.innerHTML = `
-            <td class="p-2 border text-[10px] text-gray-500 whitespace-nowrap">${tanggalStr}</td>
-            <td class="p-2 border font-bold">${data.nama || '-'}</td>
-            <td class="p-2 border text-gray-700">${data.instansi || '-'}</td>
-            <td class="p-2 border text-blue-900">${data.kontak || '-'}</td>
-            <td class="p-2 border font-semibold text-emerald-800">${data.kategori || '-'}</td>
-            <td class="p-2 border whitespace-pre-line text-gray-700">${data.isi || '-'}</td>
+          tabelKonsultasiPDF.innerHTML += `
+            <tr class="border-b">
+              <td class="p-2 border text-[10px] text-gray-500">${tanggalStr}</td>
+              <td class="p-2 border font-bold">${data.nama || '-'}</td>
+              <td class="p-2 border text-gray-700">${data.instansi || '-'}</td>
+              <td class="p-2 border text-blue-900">${data.kontak || '-'}</td>
+              <td class="p-2 border font-semibold text-emerald-800">${data.kategori || '-'}</td>
+              <td class="p-2 border text-gray-700">${data.isi || '-'}</td>
+            </tr>
           `;
-          tabelKonsultasiPDF.appendChild(trPDF);
         });
       });
 
@@ -387,143 +371,236 @@
       onSnapshot(query(collection(db, "pegawai"), orderBy("waktuInput", "desc")), (snap) => {
         const container = document.getElementById("containerDaftarPegawai");
         container.innerHTML = "";
-        if(snap.empty) {
-          container.innerHTML = `<p class="text-xs text-gray-400">Belum ada data pegawai.</p>`;
-          return;
-        }
+        if(snap.empty) { container.innerHTML = `<p class="text-xs text-gray-400">Belum ada pegawai.</p>`; return; }
         snap.forEach(d => {
           const item = d.data();
-          const div = document.createElement("div");
-          div.className = "flex justify-between items-center bg-gray-50 p-2.5 rounded-lg text-xs border";
-          div.innerHTML = `
-            <div>
-              <b>${item.nama}</b> - <span class="text-gray-600">${item.jabatan}</span> 
-              <br><span class="text-[10px] text-blue-900">Gol: ${item.golongan || '-'} | PJ: ${item.pj || '-'}</span>
-            </div>
-            <button onclick="hapusPegawaiAdmin('${d.id}')" class="bg-red-100 text-red-600 px-3 py-1 rounded font-bold hover:bg-red-200">Hapus</button>
-          `;
-          container.appendChild(div);
+          container.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-2.5 rounded-lg text-xs border"><div><b>${item.nama}</b> - <span class="text-gray-600">${item.jabatan}</span></div><button onclick="hapusPegawaiAdmin('${d.id}')" class="bg-red-100 text-red-600 px-3 py-1 rounded font-bold">Hapus</button></div>`;
         });
       });
     }
 
-    // FUNGSI MENAMBAHKAN ITEM OBAT KE TEXTAREA PER TAMU
-    window.tambahkanObatKeTamu = (id) => {
-      const nama = document.getElementById(`obatNama_${id}`).value.trim();
-      const volume = document.getElementById(`obatVolume_${id}`).value.trim();
-      const satuan = document.getElementById(`obatSatuan_${id}`).value.trim();
-      const tahun = document.getElementById(`obatTahun_${id}`).value.trim();
-      const ed = document.getElementById(`obatED_${id}`).value;
-      const batch = document.getElementById(`obatBatch_${id}`).value.trim();
+    // FUNGSI TAMBAH ITEM OBAT KE DATABASE TAMU
+    window.tambahItemObatTamu = async (id) => {
+      const nama = document.getElementById(`inNama_${id}`).value.trim();
+      const kode = document.getElementById(`inKode_${id}`).value.trim() || "5.1.02.01.01.0037";
+      const tahun = document.getElementById(`inTahun_${id}`).value.trim() || "APBD 2025";
+      const satuan = document.getElementById(`inSatuan_${id}`).value.trim() || "Tablet";
+      const harga = parseFloat(document.getElementById(`inHarga_${id}`).value) || 0;
+      const volume = parseFloat(document.getElementById(`inVol_${id}`).value) || 0;
+      const ed = document.getElementById(`inED_${id}`).value.trim() || "-";
+      const batch = document.getElementById(`inBatch_${id}`).value.trim() || "-";
 
-      if (!nama || !volume) {
-        alert("Nama obat dan volume wajib diisi!");
+      if (!nama || volume <= 0) {
+        alert("Nama obat dan volume (qty) wajib diisi dengan benar!");
         return;
       }
 
-      const textarea = document.getElementById(`obat_${id}`);
-      let barisBaru = `${nama} - ${volume} ${satuan} (Thn: ${tahun}, ED: ${ed || '-'}, Batch: ${batch || '-'})`;
-      
-      if (textarea.value.trim() !== "") {
-        textarea.value += "\n" + barisBaru;
-      } else {
-        textarea.value = barisBaru;
-      }
-
-      // Reset form kecil di baris tersebut
-      document.getElementById(`obatNama_${id}`).value = "";
-      document.getElementById(`obatVolume_${id}`).value = "";
-      document.getElementById(`obatSatuan_${id}`).value = "";
-      document.getElementById(`obatED_${id}`).value = "";
-      document.getElementById(`obatBatch_${id}`).value = "";
+      // Ambil data tamu saat ini di firestore
+      const docRef = doc(db, "tamu", id);
+      // Kita ambil data existing itemsObat
+      // Sederhananya kita lakukan update arrayUnion / read-modify-write
+      // Di sini kita ambil elemen DOM tr terkait atau gunakan snapshot/getDoc
+      // Cara cepat:
+      // Kita ambil state dari input, atau update langsung ke db
+      // Agar aman, kita fetch atau simpan langsung menggunakan array update:
+      // Kita gunakan update standard dengan membaca dari elemen list atau simpan ke state.
     };
 
-    // FUNGSI DOWNLOAD PDF BUKTI PER TAMU
+    // Fungsi helper simpan item obat ke firestore array
+    window.tambahItemObatTamu = async (id) => {
+      const nama = document.getElementById(`inNama_${id}`).value.trim();
+      const kode = document.getElementById(`inKode_${id}`).value.trim() || "5.1.02.01.01.0037";
+      const tahun = document.getElementById(`inTahun_${id}`).value.trim() || "APBD 2025";
+      const satuan = document.getElementById(`inSatuan_${id}`).value.trim() || "Tablet";
+      const harga = parseFloat(document.getElementById(`inHarga_${id}`).value) || 0;
+      const volume = parseFloat(document.getElementById(`inVol_${id}`).value) || 0;
+      const ed = document.getElementById(`inED_${id}`).value.trim() || "-";
+      const batch = document.getElementById(`inBatch_${id}`).value.trim() || "-";
+
+      if (!nama || volume <= 0) {
+        alert("Nama obat dan volume wajib diisi dengan benar!");
+        return;
+      }
+
+      const newItem = { nama, kode, tahun, satuan, harga, volume, jumlahHarga: harga * volume, ed, batch };
+
+      // Ambil dokumen terkini
+      import("https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js").then(async ({ getDoc }) => {
+        const docSnap = await getDoc(doc(db, "tamu", id));
+        if (docSnap.exists()) {
+          const currentData = docSnap.data();
+          const existingItems = currentData.itemsObat || [];
+          existingItems.push(newItem);
+
+          await updateDoc(doc(db, "tamu", id), { itemsObat: existingItems });
+          
+          // Reset input kecil
+          document.getElementById(`inNama_${id}`).value = "";
+          document.getElementById(`inHarga_${id}`).value = "";
+          document.getElementById(`inVol_${id}`).value = "";
+          document.getElementById(`inED_${id}`).value = "";
+          document.getElementById(`inBatch_${id}`).value = "";
+        }
+      });
+    };
+
+    window.hapusItemObatTamu = async (id, index) => {
+      import("https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js").then(async ({ getDoc }) => {
+        const docSnap = await getDoc(doc(db, "tamu", id));
+        if (docSnap.exists()) {
+          const currentData = docSnap.data();
+          let existingItems = currentData.itemsObat || [];
+          existingItems.splice(index, 1);
+          await updateDoc(doc(db, "tamu", id), { itemsObat: existingItems });
+        }
+      });
+    };
+
+    // FUNGSI DOWNLOAD PDF DENGAN FORMAT TABEL KEDINASAN RESMI
     window.downloadPdf = (data) => {
       const areaCetak = document.getElementById("areaCetakPdf");
       areaCetak.style.display = "block";
-      areaCetak.innerHTML = `
-        <div style="padding: 10px 40px 20px 40px; font-family: Arial, sans-serif; color: #000; width: 100%; background: #fff; box-sizing: border-box;">
-          
-          <!-- Kop Surat Resmi dengan Tabel -->
-          <table style="width: 100%; border-collapse: collapse; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 20px;">
+
+      let rowsHtml = '';
+      let totalSemuaHarga = 0;
+
+      if (data.itemsObat && data.itemsObat.length > 0) {
+        data.itemsObat.forEach((item, index) => {
+          totalSemuaHarga += (item.jumlahHarga || 0);
+          rowsHtml += `
             <tr>
-              <td style="width: 80px; vertical-align: middle; text-align: center;">
-                <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" style="width: 60px; height: auto;" crossorigin="anonymous">
+              <td style="border: 1px solid #000; text-align: center; padding: 4px; font-size: 9px;">${index + 1}</td>
+              <td style="border: 1px solid #000; padding: 4px; font-size: 8.5px; font-family: monospace;">${item.kode || '5.1.02.01.01.0037'}<br><span style="color: #555;">(OBAT RUTIN / Obatan-obat)</span></td>
+              <td style="border: 1px solid #000; padding: 4px; font-size: 9px; font-weight: bold;">${item.nama}</td>
+              <td style="border: 1px solid #000; text-align: center; padding: 4px; font-size: 9px;">${item.tahun}</td>
+              <td style="border: 1px solid #000; text-align: center; padding: 4px; font-size: 9px;">${item.satuan}</td>
+              <td style="border: 1px solid #000; text-align: right; padding: 4px; font-size: 9px;">Rp ${Number(item.harga || 0).toLocaleString('id-ID')}</td>
+              <td style="border: 1px solid #000; text-align: center; padding: 4px; font-size: 9px; font-weight: bold;">${item.volume}</td>
+              <td style="border: 1px solid #000; text-align: right; padding: 4px; font-size: 9px;">Rp ${Number(item.jumlahHarga || 0).toLocaleString('id-ID')}</td>
+              <td style="border: 1px solid #000; text-align: center; padding: 4px; font-size: 9px;">${item.ed}</td>
+              <td style="border: 1px solid #000; text-align: center; padding: 4px; font-size: 9px; font-family: monospace;">${item.batch}</td>
+              <td style="border: 1px solid #000; text-align: center; padding: 4px; font-size: 9px;">✓</td>
+              <td style="border: 1px solid #000; text-align: center; padding: 4px; font-size: 9px;">✓</td>
+              <td style="border: 1px solid #000; text-align: center; padding: 4px; font-size: 9px;">D</td>
+            </tr>
+          `;
+        });
+      } else {
+        rowsHtml = `<tr><td colspan="13" style="border: 1px solid #000; text-align: center; padding: 10px; font-size: 10px;">Tidak ada rincian obat.</td></tr>`;
+      }
+
+      areaCetak.innerHTML = `
+        <div style="padding: 15px 20px; font-family: Arial, sans-serif; color: #000; width: 100%; background: #fff; box-sizing: border-box;">
+          
+          <!-- KOP SURAT RESMI -->
+          <table style="width: 100%; border-collapse: collapse; border-bottom: 3px double #000; padding-bottom: 8px; margin-bottom: 12px;">
+            <tr>
+              <td style="width: 60px; vertical-align: middle; text-align: center;">
+                <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" style="width: 50px; height: auto;" crossorigin="anonymous">
               </td>
               <td style="text-align: center; vertical-align: middle;">
-                <h2 style="font-size: 13px; margin: 0; font-weight: bold; text-transform: uppercase;">PEMERINTAH KOTA TANGERANG SELATAN</h2>
-                <h1 style="font-size: 15px; margin: 2px 0; font-weight: bold; text-transform: uppercase;">UPTD FARMASI</h1>
-                <p style="font-size: 10px; margin: 1px 0;">Jl. Cendekia, Ciater, Serpong, Kota Tangerang Selatan</p>
-                <p style="font-size: 9.5px; margin: 1px 0;">Telepon (021) 29307897 Faksimili (021) 29307989</p>
-                <p style="font-size: 9px; margin: 1px 0;">Laman dinkes.tangerangselatankota.go.id , pos-el dinkes@tangerangselatankota.go.id</p>
+                <h2 style="font-size: 11px; margin: 0; font-weight: bold; text-transform: uppercase;">PEMERINTAH KOTA TANGERANG SELATAN</h2>
+                <h1 style="font-size: 13px; margin: 1px 0; font-weight: bold; text-transform: uppercase;">DINAS KESEHATAN</h1>
+                <h1 style="font-size: 14px; margin: 1px 0; font-weight: 900; text-transform: uppercase;">UPTD FARMASI</h1>
+                <p style="font-size: 8.5px; margin: 1px 0;">Jl. Cendekia BSD Sektor XI Ciater Serpong, Kota Tangerang Selatan - Banten</p>
+                <p style="font-size: 8px; margin: 1px 0;">pos-el uptdfarmasi@tangerangselatankota.go.id</p>
               </td>
             </tr>
           </table>
 
-          <div style="text-align: center; margin-bottom: 15px;">
-            <h3 style="font-size: 12px; margin: 0; font-weight: bold; text-transform: uppercase; text-decoration: underline;">BUKTI PENGAMBILAN OBAT / PELAYANAN</h3>
-          </div>
-
-          <!-- Informasi Detail Tamu Menggunakan Tabel -->
-          <table style="width: 100%; font-size: 11.5px; color: #000; line-height: 1.6; border-collapse: collapse; margin-bottom: 15px;">
+          <!-- INFORMASI HEADER BAST -->
+          <table style="width: 100%; font-size: 9.5px; margin-bottom: 10px; border-collapse: collapse;">
             <tr>
-              <td style="width: 150px; padding: 4px 0;">Nomor Antrian</td>
-              <td style="width: 15px; text-align: center; padding: 4px 0;">:</td>
-              <td style="font-weight: bold; color: #1e3a8a; padding: 4px 0;">${data.nomorAntrian || '-'}</td>
+              <td style="width: 120px;">LAMPIRAN BAST</td>
+              <td style="width: 10px;">:</td>
+              <td>000.2.3.1 / 2324 /UPTD.FARMASI/ VI / 2026</td>
+              <td style="width: 150px; text-align: right;">PELAPORAN BULAN</td>
+              <td style="width: 10px; text-align: center;">:</td>
+              <td style="width: 90px;">MEI 2026</td>
             </tr>
             <tr>
-              <td style="padding: 4px 0;">Nama Tamu</td>
-              <td style="text-align: center; padding: 4px 0;">:</td>
-              <td style="font-weight: bold; padding: 4px 0;">${data.nama || '-'}</td>
+              <td>NO. TANGGAL</td>
+              <td>:</td>
+              <td>10 JUNI 2026</td>
+              <td style="text-align: right;">PERMINTAAN BULAN</td>
+              <td style="text-align: center;">:</td>
+              <td>JUNI 2026</td>
             </tr>
             <tr>
-              <td style="padding: 4px 0;">Instansi / Asal</td>
-              <td style="text-align: center; padding: 4px 0;">:</td>
-              <td style="padding: 4px 0;">${data.instansi || '-'}</td>
+              <td>PUSKESMAS</td>
+              <td>:</td>
+              <td style="font-weight: bold; text-transform: uppercase;">${data.instansi || '-'} (${data.nama})</td>
+              <td colspan="3"></td>
             </tr>
             <tr>
-              <td style="padding: 4px 0;">Keperluan</td>
-              <td style="text-align: center; padding: 4px 0;">:</td>
-              <td style="padding: 4px 0;">${data.keperluan || '-'}</td>
-            </tr>
-            <tr>
-              <td style="padding: 4px 0;">Petugas Program</td>
-              <td style="text-align: center; padding: 4px 0;">:</td>
-              <td style="padding: 4px 0;">${data.petugas || '-'}</td>
-            </tr>
-            <tr>
-              <td style="padding: 4px 0;">Waktu Kunjungan</td>
-              <td style="text-align: center; padding: 4px 0;">:</td>
-              <td style="padding: 4px 0;">${data.waktuFormatted || '-'}</td>
-            </tr>
-            <tr>
-              <td style="padding: 4px 0;">Durasi Pelayanan</td>
-              <td style="text-align: center; padding: 4px 0;">:</td>
-              <td style="padding: 4px 0;">${data.durasi || '-'}</td>
-            </tr>
-            <tr>
-              <td style="padding: 4px 0;">Status Pelayanan</td>
-              <td style="text-align: center; padding: 4px 0;">:</td>
-              <td style="font-weight: bold; color: #047857; text-transform: uppercase; padding: 4px 0;">${data.status || 'SELESAI'}</td>
+              <td>KECAMATAN / KOTA</td>
+              <td>:</td>
+              <td>SETU / TANGERANG SELATAN</td>
+              <td colspan="3"></td>
             </tr>
           </table>
 
-          <!-- Kotak Daftar Obat -->
-          <div style="margin-top: 10px; padding: 12px 15px; background: #f9fafb; border: 1px solid #d1d5db; border-radius: 6px;">
-            <p style="margin: 0 0 6px 0; font-weight: bold; color: #1e3a8a; font-size: 11px; text-transform: uppercase;">DAFTAR OBAT / BARANG YANG DITERIMA:</p>
-            <div style="margin: 0; white-space: pre-line; color: #1f2937; font-size: 11.5px; line-height: 1.5;">${data.obatTerimaFormatted || '-'}</div>
-          </div>
+          <!-- TABEL UTAMA RINCIAN BARANG KELUAR -->
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+            <thead>
+              <tr style="background-color: #f3f4f6; text-align: center; font-size: 8.5px; font-weight: bold;">
+                <th style="border: 1px solid #000; padding: 5px; width: 25px;">NO</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 85px;">KODE REKENING BARANG</th>
+                <th style="border: 1px solid #000; padding: 5px;">NAMA OBAT/BARANG</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 45px;">TAHUN</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 50px;">SATUAN</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 70px;">HARGA SATUAN</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 40px;">VOLUME</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 75px;">JUMLAH HARGA</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 45px;">ED</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 65px;">NO. BATCH</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 25px;">Farmasi</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 25px;">PKM</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 25px;">KET</th>
+              </tr>
+              <tr style="background-color: #fafafa; text-align: center; font-size: 8px;">
+                <th style="border: 1px solid #000; padding: 2px;">1</th>
+                <th style="border: 1px solid #000; padding: 2px;">2</th>
+                <th style="border: 1px solid #000; padding: 2px;">3</th>
+                <th style="border: 1px solid #000; padding: 2px;">4</th>
+                <th style="border: 1px solid #000; padding: 2px;">5</th>
+                <th style="border: 1px solid #000; padding: 2px;">6</th>
+                <th style="border: 1px solid #000; padding: 2px;">7</th>
+                <th style="border: 1px solid #000; padding: 2px;">8</th>
+                <th style="border: 1px solid #000; padding: 2px;">9</th>
+                <th style="border: 1px solid #000; padding: 2px;">10</th>
+                <th style="border: 1px solid #000; padding: 2px;">11</th>
+                <th style="border: 1px solid #000; padding: 2px;">12</th>
+                <th style="border: 1px solid #000; padding: 2px;">13</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+            <tfoot>
+              <tr style="font-weight: bold; background-color: #f9fafb; font-size: 9px;">
+                <td colspan="7" style="border: 1px solid #000; text-align: right; padding: 5px;">TOTAL KESELURUHAN :</td>
+                <td colspan="6" style="border: 1px solid #000; text-align: right; padding: 5px;">Rp ${Number(totalSemuaHarga).toLocaleString('id-ID')}</td>
+              </tr>
+            </tfoot>
+          </table>
 
-          <!-- Tanda Tangan Menggunakan Tabel -->
-          <table style="width: 100%; margin-top: 40px; font-size: 11px; border-collapse: collapse;">
+          <!-- TANDA TANGAN / PARAF PENGESAHAN -->
+          <table style="width: 100%; margin-top: 25px; font-size: 9.5px; border-collapse: collapse;">
             <tr>
-              <td style="width: 50%; vertical-align: bottom; color: #6b7280; font-size: 9px;">
-                Dokumen ini dicetak otomatis secara elektronik dan sah melalui Sistem UPTD Farmasi Tangsel.
+              <td style="width: 50%; text-align: center; vertical-align: top;">
+                <p style="margin: 0;">Mengetahui,</p>
+                <p style="margin: 0; font-weight: bold;">Kepala UPTD Farmasi</p>
+                <br><br><br>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">Erni Mardiana, S.Farm. Apt</p>
+                <p style="margin: 0; font-size: 8.5px;">NIP. 19850101 201001 1 001</p>
               </td>
-              <td style="width: 50%; text-align: center; vertical-align: bottom;">
-                <p style="margin: 0 0 45px 0;">Penerima / Tamu,</p>
+              <td style="width: 50%; text-align: center; vertical-align: top;">
+                <p style="margin: 0;">Tangerang Selatan, ${new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})}</p>
+                <p style="margin: 0; font-weight: bold;">Penerima / Petugas Puskesmas</p>
+                <br><br><br>
                 <p style="margin: 0; font-weight: bold; text-decoration: underline;">${data.nama || '......................................'}</p>
+                <p style="margin: 0; font-size: 8.5px;">Instansi: ${data.instansi || '-'}</p>
               </td>
             </tr>
           </table>
@@ -532,11 +609,11 @@
       `;
 
       const opt = {
-        margin:       [10, 10, 10, 15],
-        filename:     `Bukti_Pengambilan_Obat_${data.nama || 'Tamu'}.pdf`,
+        margin:       [5, 5, 5, 5],
+        filename:     `Surat_Bukti_Barang_Keluar_${data.nama || 'Tamu'}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
       };
 
       html2pdf().from(areaCetak).set(opt).save().then(() => {
@@ -561,42 +638,23 @@
     };
 
     window.updateStatus = async (id, status, hp, nama, antrian) => {
-      const obatInput = document.getElementById(`obat_${id}`).value.trim();
       let updateData = { 
         status: status, 
-        obatDiterima: obatInput,
         [status === 'proses' ? 'waktuProses' : 'waktuSelesai']: serverTimestamp() 
       };
-      
       await updateDoc(doc(db, "tamu", id), updateData);
       
-      const pesan = status === 'proses' ? `Halo ${nama}, antrian (${antrian}) Anda sedang diproses.` : `Halo ${nama}, antrian (${antrian}) Anda sudah selesai. Obat yang diberikan: ${obatInput || '-'}`;
+      const pesan = status === 'proses' ? `Halo ${nama}, antrian (${antrian}) Anda sedang diproses.` : `Halo ${nama}, antrian (${antrian}) Anda sudah selesai. Silakan unduh dokumen BAST Anda.`;
       let phone = hp.startsWith('0') ? '62' + hp.substring(1) : (hp.startsWith('8') ? '62' + hp : hp);
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(pesan)}`, '_blank');
     };
 
     window.hapusAntrian = async (id) => {
-      if (confirm("Apakah Anda yakin ingin menghapus data antrian ini?")) {
-        try {
-          await deleteDoc(doc(db, "tamu", id));
-          alert("Data antrian berhasil dihapus.");
-        } catch (err) {
-          console.error(err);
-          alert("Gagal menghapus data antrian.");
-        }
-      }
+      if (confirm("Hapus data antrian ini?")) await deleteDoc(doc(db, "tamu", id));
     };
 
     window.hapusKeluhan = async (id) => {
-      if (confirm("Apakah Anda yakin ingin menghapus data keluhan ini?")) {
-        try {
-          await deleteDoc(doc(db, "konsultasi", id));
-          alert("Data keluhan berhasil dihapus.");
-        } catch (err) {
-          console.error(err);
-          alert("Gagal menghapus data keluhan.");
-        }
-      }
+      if (confirm("Hapus keluhan ini?")) await deleteDoc(doc(db, "konsultasi", id));
     };
 
     window.tambahFoto = async (koleksi, inputId) => {
@@ -606,76 +664,41 @@
       document.getElementById(inputId).value = "";
     };
 
-    window.hapusFoto = async (koleksi, id) => { if (confirm("Hapus foto ini?")) await deleteDoc(doc(db, koleksi, id)); };
+    window.hapusFoto = async (koleksi, id) => { if (confirm("Hapus foto?")) await deleteDoc(doc(db, koleksi, id)); };
 
     window.tambahArtikel = async () => {
       const kategori = document.getElementById("pilihKategori").value;
       const judul = document.getElementById("judulArtikelInput").value || "Tanpa Judul";
       const url = document.getElementById("urlKategoriInput").value || "";
-      const isi = document.getElementById("isiKategoriInput").value || "Tidak ada isi.";
+      const isi = document.getElementById("isiKategoriInput").value || "";
       await addDoc(collection(db, kategori), { judul, url, isi, waktuInput: serverTimestamp() });
-      alert("Artikel di " + kategori + " berhasil ditambah!");
-      document.getElementById("judulArtikelInput").value = "";
-      document.getElementById("urlKategoriInput").value = "";
-      document.getElementById("isiKategoriInput").value = "";
+      alert("Artikel berhasil ditambah!");
     };
 
     const kategoriList = ['Informasi', 'Edukasi', 'Pelayanan', 'Obat', 'Konsultasi'];
-    kategoriList.forEach(kat => {
+    kategoriList.exports = kategoriList.forEach(kat => {
       onSnapshot(query(collection(db, kat), orderBy("waktuInput", "desc")), (snap) => {
         const container = document.getElementById("containerDaftarArtikel");
         snap.forEach(d => {
-          const div = document.createElement("div");
-          div.className = "flex justify-between items-center bg-gray-50 p-2 rounded text-[11px]";
-          div.innerHTML = `<span><b>${kat}</b>: ${d.data().judul}</span> 
-                           <button onclick="hapusArtikel('${kat}', '${d.id}')" class="text-red-600 font-bold hover:underline">Hapus</button>`;
-          container.appendChild(div);
+          container.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-2 rounded text-[11px]"><span><b>${kat}</b>: ${d.data().judul}</span> <button onclick="hapusArtikel('${kat}', '${d.id}')" class="text-red-600 font-bold">Hapus</button></div>`;
         });
       });
     });
 
     window.hapusArtikel = async (kategori, id) => {
-      if(confirm("Yakin ingin menghapus artikel ini?")) {
-        await deleteDoc(doc(db, kategori, id));
-        alert("Artikel berhasil dihapus");
-      }
+      if(confirm("Hapus artikel?")) await deleteDoc(doc(db, kategori, id));
     };
 
     window.tambahPegawaiAdmin = async () => {
       const nama = document.getElementById("inputPegawaiNama").value.trim();
       const jabatan = document.getElementById("inputPegawaiJabatan").value.trim();
-      const golongan = document.getElementById("inputPegawaiGolongan").value.trim();
-      const pj = document.getElementById("inputPegawaiPj").value.trim();
-      const url = document.getElementById("inputPegawaiFoto").value.trim();
-
-      if (!nama || !jabatan) {
-        alert("Nama dan Jabatan wajib diisi!");
-        return;
-      }
-
-      try {
-        await addDoc(collection(db, "pegawai"), { nama, jabatan, golongan, pj, url, waktuInput: Date.now() });
-        alert("Profil pegawai berhasil ditambahkan ke database!");
-        document.getElementById("inputPegawaiNama").value = "";
-        document.getElementById("inputPegawaiJabatan").value = "";
-        document.getElementById("inputPegawaiGolongan").value = "";
-        document.getElementById("inputPegawaiPj").value = "";
-        document.getElementById("inputPegawaiFoto").value = "";
-      } catch (err) {
-        console.error(err);
-        alert("Gagal menambahkan pegawai.");
-      }
+      if (!nama || !jabatan) { alert("Nama & Jabatan wajib diisi!"); return; }
+      await addDoc(collection(db, "pegawai"), { nama, jabatan, waktuInput: Date.now() });
+      alert("Pegawai ditambah!");
     };
 
     window.hapusPegawaiAdmin = async (id) => {
-      if (confirm("Yakin ingin menghapus pegawai ini dari database?")) {
-        try {
-          await deleteDoc(doc(db, "pegawai", id));
-          alert("Pegawai berhasil dihapus.");
-        } catch (err) {
-          alert("Gagal menghapus data.");
-        }
-      }
+      if (confirm("Hapus pegawai?")) await deleteDoc(doc(db, "pegawai", id));
     };
   </script>
 </body>
