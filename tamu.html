@@ -264,7 +264,12 @@
           statusColor = "bg-emerald-50 text-emerald-800 border-emerald-200";
         }
 
-        // 3. Tangani Daftar Obat (Mendukung berbagai variasi nama field dari data lama)
+        // 3. Tangani Daftar Obat (Mendukung struktur itemsObat array dari admin atau field teks lama)
+        let itemsObatArr = [];
+        if (Array.isArray(item.itemsObat) && item.itemsObat.length > 0) {
+          itemsObatArr = item.itemsObat;
+        }
+
         const obatTerima = item.obatDiterima || item.daftarObat || item.obat || item.keteranganObat || '-';
 
         // 4. NORMALISASI DATA: Menyatukan data baru dan data lama ke format standar yang aman
@@ -276,11 +281,62 @@
           waktuFormatted: waktuStr,
           status: statusText,
           obatTerimaFormatted: obatTerima,
+          itemsObat: itemsObatArr,
           nomorAntrian: item.nomorAntrian || item.noAntrian || ''
         };
 
         const card = document.createElement("div");
         card.className = "bg-white p-4 rounded-2xl shadow-sm border border-blue-400 space-y-3";
+        
+        // Render tampilan tabel obat jika tersedia dari input admin, jika tidak tampilkan teks biasa
+        let bagianObatHtml = '';
+        if (normalizedData.itemsObat.length > 0) {
+          let rowsHtml = '';
+          normalizedData.itemsObat.forEach((ob, idx) => {
+            rowsHtml += `
+              <tr class="border-b text-[10px]">
+                <td class="border p-1 text-center">${idx + 1}</td>
+                <td class="border p-1 font-bold">${ob.nama || '-'}</td>
+                <td class="border p-1 text-center">${ob.tahun || '-'}</td>
+                <td class="border p-1 text-center">${ob.satuan || '-'}</td>
+                <td class="border p-1 text-center">${ob.volume || '-'}</td>
+                <td class="border p-1 text-center">${ob.ed || '-'}</td>
+                <td class="border p-1 text-center font-mono">${ob.batch || '-'}</td>
+              </tr>
+            `;
+          });
+          bagianObatHtml = `
+            <div class="border-t pt-2 space-y-1.5">
+              <p class="text-[10px] text-blue-900 font-bold">Tabel Rincian Obat / Barang:</p>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-[10px] bg-white">
+                  <thead>
+                    <tr class="bg-gray-100 text-center font-bold text-[9px] uppercase">
+                      <th class="border p-1 w-6">No</th>
+                      <th class="border p-1">Nama Barang</th>
+                      <th class="border p-1 w-12">Tahun</th>
+                      <th class="border p-1 w-12">Satuan</th>
+                      <th class="border p-1 w-10">Vol</th>
+                      <th class="border p-1 w-12">Ed</th>
+                      <th class="border p-1 w-16">No Batch</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${rowsHtml}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+        } else {
+          bagianObatHtml = `
+            <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100 text-[10px] space-y-1">
+              <p class="text-blue-900 font-bold">Obat yang Diterima:</p>
+              <p class="text-gray-700 whitespace-pre-line">${normalizedData.obatTerimaFormatted}</p>
+            </div>
+          `;
+        }
+
         card.innerHTML = `
           <div class="flex justify-between items-start gap-2">
             <div class="space-y-0.5">
@@ -294,11 +350,7 @@
             </span>
           </div>
 
-          <!-- Bagian Informasi Obat yang Diterima -->
-          <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100 text-[10px] space-y-1">
-            <p class="text-blue-900 font-bold">Obat yang Diterima:</p>
-            <p class="text-gray-700 whitespace-pre-line">${normalizedData.obatTerimaFormatted}</p>
-          </div>
+          ${bagianObatHtml}
 
           <div class="border-t pt-2 flex justify-between items-center text-[10px] text-gray-500">
             <span><b>Waktu:</b> ${normalizedData.waktuFormatted}</span>
@@ -318,10 +370,58 @@
       `;
     });
 
-    // Fungsi cetak PDF universal yang menjamin data lama maupun baru tercetak rapi secara konsisten
+    // Fungsi cetak PDF universal yang menjamin format 8 kolom persis admin ketika data itemsObat ada
     window.downloadPdf = (data) => {
       const areaCetak = document.getElementById("areaCetakPdf");
       areaCetak.style.display = "block";
+
+      let tabelPdfHtml = '';
+      if (data.itemsObat && data.itemsObat.length > 0) {
+        let rowsHtml = '';
+        const totalBarisMinimal = 20;
+        for (let i = 0; i < totalBarisMinimal; i++) {
+          let item = (data.itemsObat && data.itemsObat[i]) ? data.itemsObat[i] : null;
+          rowsHtml += `
+            <tr>
+              <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px; height: 18px;">${i + 1}</td>
+              <td style="border: 1px solid #000; padding: 5px; font-size: 9px; font-weight: ${item ? 'bold' : 'normal'};">${item ? (item.nama || '') : ''}</td>
+              <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px;">${item ? (item.tahun || '') : ''}</td>
+              <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px;">${item ? (item.satuan || '') : ''}</td>
+              <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px;">${item ? (item.volume || '') : ''}</td>
+              <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px;">${item ? (item.ed || '') : ''}</td>
+              <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px; font-family: monospace;">${item ? (item.batch || '') : ''}</td>
+              <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px;"></td>
+            </tr>
+          `;
+        }
+        tabelPdfHtml = `
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px;">
+            <thead>
+              <tr style="background-color: #f3f4f6; text-align: center; font-size: 9px; font-weight: bold;">
+                <th style="border: 1px solid #000; padding: 5px; width: 30px;">No</th>
+                <th style="border: 1px solid #000; padding: 5px;">Nama Barang</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 65px;">Tahun</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 65px;">Satuan</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 55px;">Volume</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 60px;">Ed</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 75px;">No Batch</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 50px;">Paraf</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+        `;
+      } else {
+        tabelPdfHtml = `
+          <div style="margin-top: 10px; padding: 12px 18px; background: #fcfcfc; border: 1px solid #d1d5db; border-radius: 8px;">
+            <p style="margin: 0 0 8px 0; font-weight: bold; color: #1e3a8a; font-size: 11.5px; text-transform: uppercase;">DAFTAR OBAT / BARANG YANG DITERIMA:</p>
+            <div style="margin: 0; white-space: pre-line; color: #1f2937; font-size: 12px; line-height: 1.6;">${data.obatTerimaFormatted || '-'}</div>
+          </div>
+        `;
+      }
+
       areaCetak.innerHTML = `
         <div style="padding: 20px 30px; font-family: Arial, sans-serif; color: #000; width: 100%; max-width: 700px; margin: 0 auto; background: #fff; box-sizing: border-box;">
           
@@ -375,11 +475,8 @@
             </table>
           </div>
 
-          <!-- Kotak Daftar Obat yang Diterima -->
-          <div style="margin-top: 10px; padding: 12px 18px; background: #fcfcfc; border: 1px solid #d1d5db; border-radius: 8px;">
-            <p style="margin: 0 0 8px 0; font-weight: bold; color: #1e3a8a; font-size: 11.5px; text-transform: uppercase;">DAFTAR OBAT / BARANG YANG DITERIMA:</p>
-            <div style="margin: 0; white-space: pre-line; color: #1f2937; font-size: 12px; line-height: 1.6;">${data.obatTerimaFormatted || '-'}</div>
-          </div>
+          <!-- Tabel atau Kotak Daftar Obat -->
+          ${tabelPdfHtml}
 
           <!-- Catatan / Footer Dokumen & Tanda Tangan -->
           <div style="margin-top: 35px; display: flex; justify-content: space-between; align-items: flex-end;">
@@ -411,3 +508,4 @@
   </script>
 </body>
 </html>
+
