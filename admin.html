@@ -66,8 +66,69 @@
 
     <div class="bg-white p-6 rounded-2xl shadow-lg overflow-x-auto">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-blue-900">Daftar Antrian Real-time</h2>
+        <h2 class="text-xl font-bold text-blue-900">Daftar Antrian Real-time & Input Obat Logistik</h2>
       </div>
+
+      <!-- TABEL INPUT OBAT & BARANG DETAIL YANG DITAMBAHKAN -->
+      <div class="mb-6 border border-gray-200 rounded-xl p-4 bg-gray-50/50">
+        <h3 class="font-extrabold text-blue-900 text-sm mb-3">Form Input Data Obat & Barang Logistik</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-gray-700 min-w-[850px] border-collapse bg-white rounded-lg shadow-sm">
+            <thead class="bg-gray-100 border-b border-gray-200 text-gray-800 font-extrabold">
+              <tr>
+                <th class="py-2.5 px-3 w-10 text-center">No</th>
+                <th class="py-2.5 px-3 w-48">Nama Obat / Barang</th>
+                <th class="py-2.5 px-3 w-20">Tahun</th>
+                <th class="py-2.5 px-3 w-24">Satuan</th>
+                <th class="py-2.5 px-3 w-20">Volume</th>
+                <th class="py-2.5 px-3 w-32">ED</th>
+                <th class="py-2.5 px-3 w-32">No Batch</th>
+                <th class="py-2.5 px-3 w-24 text-center">Paraf / Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Baris Input Baru -->
+              <tr class="border-b border-gray-100 bg-emerald-50/30">
+                <td class="py-2 px-3 text-center text-gray-400 font-mono">-</td>
+                <td class="py-2 px-3">
+                  <input type="text" id="inputNamaObat" placeholder="Ketik nama obat..." class="w-full p-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs">
+                </td>
+                <td class="py-2 px-3">
+                  <input type="number" id="inputTahun" value="2026" class="w-full p-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs">
+                </td>
+                <td class="py-2 px-3">
+                  <select id="inputSatuan" class="w-full p-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs bg-white">
+                    <option value="Box">Box</option>
+                    <option value="Botol">Botol</option>
+                    <option value="Vial">Vial</option>
+                    <option value="Strip">Strip</option>
+                    <option value="Pcs">Pcs</option>
+                  </select>
+                </td>
+                <td class="py-2 px-3">
+                  <input type="number" id="inputVolume" placeholder="Qty" class="w-full p-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs">
+                </td>
+                <td class="py-2 px-3">
+                  <input type="date" id="inputED" class="w-full p-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs">
+                </td>
+                <td class="py-2 px-3">
+                  <input type="text" id="inputBatch" placeholder="No batch..." class="w-full p-1.5 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 outline-none text-xs uppercase font-mono">
+                </td>
+                <td class="py-2 px-3 text-center">
+                  <button onclick="simpanDataObatBarang()" class="bg-blue-900 hover:bg-blue-800 text-white font-bold py-1.5 px-3 rounded text-[10px] w-full transition shadow-sm">
+                    Simpan
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+            <tbody id="tabelDataObatDinamis">
+              <!-- Data obat yang tersimpan akan muncul di sini secara dinamis -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- AKHIR TAMBAHAN TABEL INPUT OBAT -->
+
       <table class="w-full text-left" id="tabelTamuData">
         <thead>
           <tr class="border-b text-gray-500 text-xs uppercase">
@@ -76,7 +137,7 @@
             <th class="p-3">Instansi</th>
             <th class="p-3">Status</th>
             <th class="p-3">Durasi</th>
-            <th class="p-3">Input Obat & Aksi</th>
+            <th class="p-3">Catatan Obat & Aksi</th>
           </tr>
         </thead>
         <tbody id="tabelTamu"></tbody>
@@ -389,6 +450,49 @@
         });
       });
     }
+
+    // FUNGSI SIMPAN DATA OBAT/BARANG LOGISTIK
+    window.simpanDataObatBarang = () => {
+      const namaObat = document.getElementById("inputNamaObat").value.trim();
+      const tahun = document.getElementById("inputTahun").value.trim();
+      const satuan = document.getElementById("inputSatuan").value;
+      const volume = document.getElementById("inputVolume").value.trim();
+      const ed = document.getElementById("inputED").value;
+      const batch = document.getElementById("inputBatch").value.trim();
+
+      if (!namaObat || !volume) {
+        alert("Nama obat/barang dan volume wajib diisi!");
+        return;
+      }
+
+      const tabelDinamis = document.getElementById("tabelDataObatDinamis");
+      const rowCount = tabelDinamis.rows.length + 1;
+
+      const newRow = document.createElement("tr");
+      newRow.className = "border-b border-gray-100 hover:bg-gray-50 transition";
+      newRow.innerHTML = `
+        <td class="py-2 px-3 text-center font-bold">${rowCount}</td>
+        <td class="py-2 px-3 font-semibold text-gray-800">${namaObat}</td>
+        <td class="py-2 px-3 text-gray-600">${tahun || '-'}</td>
+        <td class="py-2 px-3 text-gray-600">${satuan}</td>
+        <td class="py-2 px-3 font-mono font-bold text-gray-800">${volume}</td>
+        <td class="py-2 px-3 text-red-600 font-semibold text-[11px]">${ed || '-'}</td>
+        <td class="py-2 px-3 font-mono text-[10px] text-gray-500 uppercase">${batch || '-'}</td>
+        <td class="py-2 px-3 text-center">
+           <div class="flex items-center justify-center gap-1">
+              <button onclick="this.closest('tr').remove()" class="p-1 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200" title="Paraf/ACC">✅</button>
+              <button onclick="this.closest('tr').remove()" class="p-1 bg-red-100 text-red-700 rounded hover:bg-red-200" title="Hapus Data">🗑️</button>
+           </div>
+        </td>
+      `;
+      tabelDinamis.appendChild(newRow);
+
+      // Reset form input
+      document.getElementById("inputNamaObat").value = "";
+      document.getElementById("inputVolume").value = "";
+      document.getElementById("inputED").value = "";
+      document.getElementById("inputBatch").value = "";
+    };
 
     // FUNGSI DOWNLOAD PDF BUKTI PER TAMU
     window.downloadPdf = (data) => {
