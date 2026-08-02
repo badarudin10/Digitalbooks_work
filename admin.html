@@ -550,25 +550,35 @@ window.downloadPdf = (data) => {
     });
   }, 300);
 };
-        window.downloadPDFKeluhan = () => {
-      const element = document.getElementById('printAreaKeluhan');
-      // Tampilkan elemen secara inline agar html2canvas dapat membaca isinya dengan sempurna
-      element.style.display = 'block';
-      element.classList.remove('hidden');
+       // PERBAIKAN KHUSUS DOWNLOAD PDF KELUHAN DI ADMIN.HTML
+window.downloadPDFKeluhan = () => {
+  const element = document.getElementById('printAreaKeluhan');
+  
+  if (!element) {
+    console.error("Elemen printAreaKeluhan tidak ditemukan!");
+    return;
+  }
 
-      const opt = {
-        margin:       5,
-        filename:     'Laporan_Konsultasi_Dan_Pengaduan_UPTD.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
+  // Tampilkan elemen secara inline sementara agar html2canvas dapat membaca isinya dengan sempurna
+  element.style.display = 'block';
+  element.classList.remove('hidden');
 
-      html2pdf().from(element).set(opt).save().then(() => {
-        element.style.display = 'none';
-        element.classList.add('hidden');
-      });
-    };
+  const opt = {
+    margin:       5,
+    filename:     'Laporan_Konsultasi_Dan_Pengaduan_UPTD.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true, letterRendering: true, scrollX: 0, scrollY: 0 },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  // Beri jeda singkat agar DOM selesai merender teks & gambar sebelum di-capture
+  setTimeout(() => {
+    html2pdf().from(element).set(opt).save().then(() => {
+      element.style.display = 'none';
+      element.classList.add('hidden');
+    });
+  }, 300);
+};
 
     window.updateStatus = async (id, status, hpTamu, namaTamu, antrian, namaPetugas) => {
       let updateData = { 
