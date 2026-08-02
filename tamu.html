@@ -21,25 +21,13 @@
       height: auto;
     }
 
-    /* Penyesuaian layout grid PC/Laptop agar konsisten dengan halaman lain */
+    /* Penyesuaian layout lebar maksimum untuk Desktop/PC tanpa sidebar kiri */
     @media (min-width: 1024px) {
       .app-layout-wrapper {
-        max-width: 1200px !important;
+        max-width: 1280px !important;
         margin-left: auto;
         margin-right: auto;
-        display: grid;
-        grid-template-columns: repeat(12, minmax(0, 1fr));
-        gap: 20px;
-        padding: 20px;
-      }
-      .pc-sidebar {
-        grid-column: span 3 / span 3;
-        display: flex !important;
-        flex-direction: column;
-        gap: 16px;
-      }
-      .pc-main-content {
-        grid-column: span 9 / span 9;
+        padding: 24px;
       }
       .bottom-nav-wrapper {
         display: none !important;
@@ -53,9 +41,6 @@
     }
 
     @media (max-width: 1023px) {
-      .pc-sidebar {
-        display: none !important;
-      }
       .pc-header-desktop {
         display: none !important;
       }
@@ -95,29 +80,14 @@
     </div>
   </header>
 
-  <!-- KONTROL UTAMA LAYOUT RESPONSIF -->
-  <div class="app-layout-wrapper">
+  <!-- KONTROL UTAMA LAYOUT RESPONSIF TANPA SIDEBAR KIRI -->
+  <div class="app-layout-wrapper w-full">
 
-    <!-- SIDEBAR KIRI KHUSUS PC -->
-    <aside class="pc-sidebar space-y-4">
-      <!-- Kartu Profil Pegawai -->
-      <a href="profil.html" class="block bg-white p-4 rounded-2xl shadow-sm border border-blue-400 relative hover:border-blue-300 transition text-center">
-        <div class="flex flex-col items-center gap-2">
-          <div class="h-28 w-28 flex items-center justify-center flex-shrink-0 bg-transparent">
-            <img src="https://i.ibb.co.com/jPB3ZPgJ/Picsart-26-07-24-23-07-31-642.png" class="w-full h-full object-contain">
-          </div>
-          <div>
-            <h2 class="text-xs font-extrabold text-gray-800">Profil Pegawai</h2>
-            <p class="text-[11px] text-blue-900 font-extrabold uppercase tracking-wide mt-0.5">UPTD FARMASI</p>
-          </div>
-        </div>
-      </a>
-
-    <!-- KONTEN UTAMA -->
-    <div class="pc-main-content w-full">
+    <!-- KONTEN UTAMA (DIPERLEBAR MAKSIMAL DI PC) -->
+    <div class="w-full">
       <main class="main-container lg:max-w-none space-y-4 pt-1 pb-3">
         
-        <!-- Header Khusus Desktop -->
+        <!-- Header Khusus Desktop (Melebar penuh) -->
         <div class="pc-header-desktop hidden bg-white p-4 rounded-2xl shadow-sm border border-blue-400 mb-3">
           <div class="flex items-center gap-3">
             <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-12 w-12 object-contain">
@@ -133,6 +103,7 @@
           <h2 class="text-sm font-extrabold text-blue-900">Daftar Tamu & Pengambilan Obat</h2>
           <p class="text-[11px] text-gray-500 leading-relaxed">Cek status registrasi Anda secara real-time dan download bukti PDF pengambilan obat.</p>
         </div>
+
         <!-- Container Daftar Tamu dari Firestore -->
         <div id="containerTamu" class="space-y-3">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-blue-400 text-center text-xs text-gray-400">
@@ -192,7 +163,6 @@
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app" };
     const db = getFirestore(initializeApp(firebaseConfig));
 
-    // Menghubungkan langsung ke koleksi "tamu" sesuai database Firestore Anda
     const q = query(collection(db, "tamu"), orderBy("waktu", "desc"));
 
     onSnapshot(q, (snapshot) => {
@@ -211,7 +181,6 @@
       snapshot.forEach((docSnap) => {
         const item = docSnap.data();
 
-        // 1. Tangani Format Waktu (Mendukung Timestamp Firestore maupun String biasa untuk data lama)
         let waktuStr = '-';
         if (item.waktu) {
           if (typeof item.waktu.toDate === 'function') {
@@ -223,7 +192,6 @@
           waktuStr = item.tanggal || item.createdAt;
         }
 
-        // 2. Tangani Status (Mendukung berbagai variasi huruf besar/kecil)
         let statusColor = "bg-amber-50 text-amber-800 border-amber-200";
         let statusText = item.status || item.statusPelayanan || "Selesai";
         const statusLower = String(statusText).toLowerCase();
@@ -233,7 +201,6 @@
           statusColor = "bg-emerald-50 text-emerald-800 border-emerald-200";
         }
 
-        // 3. Tangani Daftar Obat (Mendukung struktur itemsObat array dari admin atau field teks lama)
         let itemsObatArr = [];
         if (Array.isArray(item.itemsObat) && item.itemsObat.length > 0) {
           itemsObatArr = item.itemsObat;
@@ -241,7 +208,6 @@
 
         const obatTerima = item.obatDiterima || item.daftarObat || item.obat || item.keteranganObat || '-';
 
-        // 4. NORMALISASI DATA: Menyatukan data baru dan data lama ke format standar yang aman
         const normalizedData = {
           nama: item.nama || item.namaTamu || item.namaLengkap || 'Tanpa Nama',
           instansi: item.instansi || item.asal || item.instansiAsal || '-',
@@ -257,7 +223,6 @@
         const card = document.createElement("div");
         card.className = "bg-white p-4 rounded-2xl shadow-sm border border-blue-400 space-y-3";
         
-        // Render tampilan tabel obat jika tersedia dari input admin, jika tidak tampilkan teks biasa
         let bagianObatHtml = '';
         if (normalizedData.itemsObat.length > 0) {
           let rowsHtml = '';
@@ -339,153 +304,143 @@
       `;
     });
 
-    // GENERATE PDF DENGAN KOP SURAT PRESISI SESUAI REFERENSI GAMBAR
-window.downloadPdf = (data) => {
-  const areaCetak = document.getElementById("areaCetakPdf");
-  areaCetak.style.display = "block";
+    window.downloadPdf = (data) => {
+      const areaCetak = document.getElementById("areaCetakPdf");
+      areaCetak.style.display = "block";
 
-  // Ambil data itemsObat secara dinamis
-  const items = (data.itemsObat && data.itemsObat.length > 0) ? data.itemsObat : [];
+      const items = (data.itemsObat && data.itemsObat.length > 0) ? data.itemsObat : [];
 
-  // Generate baris tabel HANYA sebanyak jumlah obat yang di-input
-  let rowsHtml = '';
-  if (items.length > 0) {
-    rowsHtml = items.map((item, i) => `
-      <tr>
-        <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px; height: 18px;">${i + 1}</td>
-        <td style="border: 1px solid #000; padding: 5px; font-size: 9px; font-weight: bold;">${item.nama || '-'}</td>
-        <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px;">${item.tahun || '-'}</td>
-        <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px;">${item.satuan || '-'}</td>
-        <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px;">${item.volume || '-'}</td>
-        <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px;">${item.ed || '-'}</td>
-        <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px; font-family: monospace;">${item.batch || '-'}</td>
-        <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px;"></td>
-      </tr>
-    `).join('');
-  } else {
-    rowsHtml = `
-      <tr>
-        <td style="border: 1px solid #000; text-align: center; padding: 6px; font-size: 9px;">1</td>
-        <td style="border: 1px solid #000; padding: 6px; font-size: 9px; text-align: center; font-style: italic;" colspan="7">Belum ada rincian barang/obat yang dimasukkan.</td>
-      </tr>
-    `;
-  }
-
-  areaCetak.innerHTML = `
-    <div style="padding: 15px 20px; font-family: Arial, sans-serif; color: #000; width: 100%; background: #fff; box-sizing: border-box;">
-      
-      <!-- KOP SURAT PRESISI SESUAI GAMBAR REFERENSI -->
-      <table style="width: 100%; border-collapse: collapse; border-bottom: 3.5px double #000; padding-bottom: 8px; margin-bottom: 12px;">
-        <tr>
-          <td style="width: 85px; vertical-align: middle; text-align: left; padding-left: 5px;">
-            <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" style="width: 72px; height: auto;" crossorigin="anonymous">
-          </td>
-          <td style="text-align: center; vertical-align: middle; padding-right: 35px;">
-            <h2 style="font-size: 13.5px; margin: 0; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">PEMERINTAH KOTA TANGERANG SELATAN</h2>
-            <h1 style="font-size: 15.5px; margin: 2px 0; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">DINAS KESEHATAN</h1>
-            <h1 style="font-size: 17px; margin: 2px 0; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">UPTD FARMASI</h1>
-            <p style="font-size: 9.5px; margin: 3px 0 1px 0;">Jl. Cendekia BSD Sektor XI Ciater Serpong, Kota Tangerang Selatan - Banten</p>
-            <p style="font-size: 9px; margin: 0; color: #000;">pos-el <span style="color: #0000ff; text-decoration: underline;">uptdfarmasi@tangerangselatankota.go.id</span></p>
-          </td>
-        </tr>
-      </table>
-
-      <!-- JUDUL DOKUMEN -->
-      <div style="text-align: center; margin-bottom: 12px;">
-        <div style="font-size: 11.5px; font-weight: bold; text-decoration: underline; display: inline-block; padding-bottom: 1px;">BUKTI PENGAMBILAN OBAT/PELAYANAN</div>
-      </div>
-
-      <!-- INFORMASI TAMU & PELAYANAN -->
-      <table style="width: 100%; font-size: 9.5px; margin-bottom: 12px; border-collapse: collapse;">
-        <tr>
-          <td style="width: 120px; font-weight: bold;">Nama</td>
-          <td style="width: 10px;">:</td>
-          <td style="font-weight: bold; text-transform: uppercase;">${data.nama || '-'}</td>
-          <td style="width: 110px; font-weight: bold;">No Antrian</td>
-          <td style="width: 10px; text-align: center;">:</td>
-          <td style="font-weight: bold;">${data.nomorAntrian || '-'}</td>
-        </tr>
-        <tr>
-          <td style="font-weight: bold;">Instansi</td>
-          <td>:</td>
-          <td style="text-transform: uppercase;">${data.instansi || '-'}</td>
-          <td style="font-weight: bold;">Status Pelayanan</td>
-          <td style="text-align: center;">:</td>
-          <td style="font-weight: bold; text-transform: uppercase;">${data.status || '-'}</td>
-        </tr>
-        <tr>
-          <td style="font-weight: bold;">Keperluan</td>
-          <td>:</td>
-          <td>${data.keperluan || '-'}</td>
-          <td style="font-weight: bold;">Durasi</td>
-          <td style="text-align: center;">:</td>
-          <td>${data.durasi || '-'}</td>
-        </tr>
-        <tr>
-          <td style="font-weight: bold;">Petugas Program</td>
-          <td>:</td>
-          <td>${data.petugas || '-'}</td>
-          <td style="font-weight: bold;">Waktu Kunjungan</td>
-          <td style="text-align: center;">:</td>
-          <td>${data.waktuFormatted || '-'}</td>
-        </tr>
-      </table>
-
-      <!-- TABEL OBAT DINAMIS -->
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
-        <thead>
-          <tr style="background-color: #f3f4f6; text-align: center; font-size: 9px; font-weight: bold;">
-            <th style="border: 1px solid #000; padding: 5px; width: 30px;">No</th>
-            <th style="border: 1px solid #000; padding: 5px;">Nama Barang</th>
-            <th style="border: 1px solid #000; padding: 5px; width: 65px;">Tahun</th>
-            <th style="border: 1px solid #000; padding: 5px; width: 65px;">Satuan</th>
-            <th style="border: 1px solid #000; padding: 5px; width: 55px;">Volume</th>
-            <th style="border: 1px solid #000; padding: 5px; width: 60px;">Ed</th>
-            <th style="border: 1px solid #000; padding: 5px; width: 75px;">No Batch</th>
-            <th style="border: 1px solid #000; padding: 5px; width: 50px;">Paraf</th>
+      let rowsHtml = '';
+      if (items.length > 0) {
+        rowsHtml = items.map((item, i) => `
+          <tr>
+            <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px; height: 18px;">${i + 1}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-size: 9px; font-weight: bold;">${item.nama || '-'}</td>
+            <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px;">${item.tahun || '-'}</td>
+            <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px;">${item.satuan || '-'}</td>
+            <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px;">${item.volume || '-'}</td>
+            <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px;">${item.ed || '-'}</td>
+            <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px; font-family: monospace;">${item.batch || '-'}</td>
+            <td style="border: 1px solid #000; text-align: center; padding: 5px; font-size: 9px;"></td>
           </tr>
-        </thead>
-        <tbody>
-          ${rowsHtml}
-        </tbody>
-      </table>
+        `).join('');
+      } else {
+        rowsHtml = `
+          <tr>
+            <td style="border: 1px solid #000; text-align: center; padding: 6px; font-size: 9px;">1</td>
+            <td style="border: 1px solid #000; padding: 6px; font-size: 9px; text-align: center; font-style: italic;" colspan="7">Belum ada rincian barang/obat yang dimasukkan.</td>
+          </tr>
+        `;
+      }
 
-      <!-- TANDA TANGAN -->
-      <table style="width: 100%; margin-top: 20px; font-size: 9.5px; border-collapse: collapse;">
-        <tr>
-          <td style="width: 50%; text-align: center; vertical-align: top;">
-            <p style="margin: 0; font-weight: bold;">Petugas</p>
-            <br><br><br>
-            <p style="margin: 0; font-weight: bold; text-decoration: underline;">${data.petugas && data.petugas !== '-' ? data.petugas : '......................................'}</p>
-          </td>
-          <td style="width: 50%; text-align: center; vertical-align: top;">
-            <p style="margin: 0; font-weight: bold;">Penerima</p>
-            <br><br><br>
-            <p style="margin: 0; font-weight: bold; text-decoration: underline;">${data.nama || '......................................'}</p>
-          </td>
-        </tr>
-      </table>
+      areaCetak.innerHTML = `
+        <div style="padding: 15px 20px; font-family: Arial, sans-serif; color: #000; width: 100%; background: #fff; box-sizing: border-box;">
+          
+          <table style="width: 100%; border-collapse: collapse; border-bottom: 3.5px double #000; padding-bottom: 8px; margin-bottom: 12px;">
+            <tr>
+              <td style="width: 85px; vertical-align: middle; text-align: left; padding-left: 5px;">
+                <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" style="width: 72px; height: auto;" crossorigin="anonymous">
+              </td>
+              <td style="text-align: center; vertical-align: middle; padding-right: 35px;">
+                <h2 style="font-size: 13.5px; margin: 0; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">PEMERINTAH KOTA TANGERANG SELATAN</h2>
+                <h1 style="font-size: 15.5px; margin: 2px 0; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">DINAS KESEHATAN</h1>
+                <h1 style="font-size: 17px; margin: 2px 0; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">UPTD FARMASI</h1>
+                <p style="font-size: 9.5px; margin: 3px 0 1px 0;">Jl. Cendekia BSD Sektor XI Ciater Serpong, Kota Tangerang Selatan - Banten</p>
+                <p style="font-size: 9px; margin: 0; color: #000;">pos-el <span style="color: #0000ff; text-decoration: underline;">uptdfarmasi@tangerangselatankota.go.id</span></p>
+              </td>
+            </tr>
+          </table>
 
-    </div>
-  `;
+          <div style="text-align: center; margin-bottom: 12px;">
+            <div style="font-size: 11.5px; font-weight: bold; text-decoration: underline; display: inline-block; padding-bottom: 1px;">BUKTI PENGAMBILAN OBAT/PELAYANAN</div>
+          </div>
 
-  // Render PDF stabil dengan jeda waktu singkat
-  setTimeout(() => {
-    const opt = {
-      margin:       [5, 5, 5, 5],
-      filename:     `Bukti_Pengambilan_Obat_${data.nama || 'Tamu'}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true, letterRendering: true, scrollX: 0, scrollY: 0 },
-      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          <table style="width: 100%; font-size: 9.5px; margin-bottom: 12px; border-collapse: collapse;">
+            <tr>
+              <td style="width: 120px; font-weight: bold;">Nama</td>
+              <td style="width: 10px;">:</td>
+              <td style="font-weight: bold; text-transform: uppercase;">${data.nama || '-'}</td>
+              <td style="width: 110px; font-weight: bold;">No Antrian</td>
+              <td style="width: 10px; text-align: center;">:</td>
+              <td style="font-weight: bold;">${data.nomorAntrian || '-'}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;">Instansi</td>
+              <td>:</td>
+              <td style="text-transform: uppercase;">${data.instansi || '-'}</td>
+              <td style="font-weight: bold;">Status Pelayanan</td>
+              <td style="text-align: center;">:</td>
+              <td style="font-weight: bold; text-transform: uppercase;">${data.status || '-'}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;">Keperluan</td>
+              <td>:</td>
+              <td>${data.keperluan || '-'}</td>
+              <td style="font-weight: bold;">Durasi</td>
+              <td style="text-align: center;">:</td>
+              <td>${data.durasi || '-'}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;">Petugas Program</td>
+              <td>:</td>
+              <td>${data.petugas || '-'}</td>
+              <td style="font-weight: bold;">Waktu Kunjungan</td>
+              <td style="text-align: center;">:</td>
+              <td>${data.waktuFormatted || '-'}</td>
+            </tr>
+          </table>
+
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+            <thead>
+              <tr style="background-color: #f3f4f6; text-align: center; font-size: 9px; font-weight: bold;">
+                <th style="border: 1px solid #000; padding: 5px; width: 30px;">No</th>
+                <th style="border: 1px solid #000; padding: 5px;">Nama Barang</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 65px;">Tahun</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 65px;">Satuan</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 55px;">Volume</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 60px;">Ed</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 75px;">No Batch</th>
+                <th style="border: 1px solid #000; padding: 5px; width: 50px;">Paraf</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+
+          <table style="width: 100%; margin-top: 20px; font-size: 9.5px; border-collapse: collapse;">
+            <tr>
+              <td style="width: 50%; text-align: center; vertical-align: top;">
+                <p style="margin: 0; font-weight: bold;">Petugas</p>
+                <br><br><br>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">${data.petugas && data.petugas !== '-' ? data.petugas : '......................................'}</p>
+              </td>
+              <td style="width: 50%; text-align: center; vertical-align: top;">
+                <p style="margin: 0; font-weight: bold;">Penerima</p>
+                <br><br><br>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">${data.nama || '......................................'}</p>
+              </td>
+            </tr>
+          </table>
+
+        </div>
+      `;
+
+      setTimeout(() => {
+        const opt = {
+          margin:       [5, 5, 5, 5],
+          filename:     `Bukti_Pengambilan_Obat_${data.nama || 'Tamu'}.pdf`,
+          image:        { type: 'jpeg', quality: 0.98 },
+          html2canvas:  { scale: 2, useCORS: true, letterRendering: true, scrollX: 0, scrollY: 0 },
+          jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().from(areaCetak).set(opt).save().then(() => {
+          areaCetak.style.display = "none";
+          areaCetak.innerHTML = "";
+        });
+      }, 300);
     };
-
-    html2pdf().from(areaCetak).set(opt).save().then(() => {
-      areaCetak.style.display = "none";
-      areaCetak.innerHTML = "";
-    });
-  }, 300);
-};
   </script>
 </body>
 </html>
-
