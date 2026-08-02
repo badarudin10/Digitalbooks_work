@@ -74,7 +74,7 @@
 <body class="bg-[#d1e7dd] font-sans min-h-screen pb-24 lg:pb-6">
 
   <!-- Header Atas (Hanya tampil di Mobile/HP) -->
-  <header class="mobile-header-bar bg-[#d1e7dd] px-4 py-3.5 shadow-sm sticky top-0 z-30 border border-blue-200">
+  <header class="mobile-header-bar bg-[#d1e7dd] px-4 py-3.5 shadow-sm sticky top-0 z-30 border-2 border-blue-100">
     <div class="max-w-md mx-auto text-center">
       <h1 class="font-extrabold text-blue-900 text-xs tracking-wider leading-tight uppercase">STATUS & BUKTI TAMU</h1>
       <p class="text-[9px] text-gray-600 font-semibold uppercase tracking-widest mt-0.5">UPTD Farmasi Tangsel</p>
@@ -97,14 +97,14 @@
         </div>
 
         <!-- Kartu Informasi -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-blue-400 text-center space-y-1 mb-5">
+        <div class="bg-white p-4 rounded-2xl shadow-sm border-2 border-blue-400 text-center space-y-1 mb-5">
           <h2 class="text-sm font-extrabold text-blue-900">Daftar Tamu & Pengambilan Obat</h2>
           <p class="text-[11px] text-gray-500 leading-relaxed">Cek status registrasi Anda secara real-time dan download bukti PDF pengambilan obat.</p>
         </div>
 
         <!-- Container Daftar Tamu dari Firestore -->
         <div id="containerTamu" class="space-y-3">
-          <div class="bg-white p-6 rounded-2xl shadow-sm border border-blue-400 text-center text-xs text-gray-400">
+          <div class="bg-white p-6 rounded-2xl shadow-sm border-2 border-blue-400 text-center text-xs text-gray-400">
             Memuat data registrasi dari database...
           </div>
         </div>
