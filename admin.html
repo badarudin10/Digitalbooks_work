@@ -551,16 +551,19 @@ window.downloadPdf = (data) => {
   }, 300);
 };
     
-       window.downloadPDFKeluhan = () => {
-  const element = document.getElementById('printAreaKeluhan');
+     window.downloadPDFKeluhan = () => {
+  const sourceElement = document.getElementById('printAreaKeluhan');
   
-  if (!element) {
+  if (!sourceElement) {
     console.error("Elemen printAreaKeluhan tidak ditemukan!");
     return;
   }
 
-  // Sesuaikan isi HTML printAreaKeluhan dengan kop surat resmi & tanda tangan petugas
-  element.innerHTML = `
+  // Ambil isi HTML yang sudah ada di dalam printAreaKeluhan (termasuk tabel dan datanya)
+  // lalu bungkus dengan kop surat resmi dan tanda tangan petugas penanggung jawab
+  const originalContent = sourceElement.innerHTML;
+
+  sourceElement.innerHTML = `
     <div style="padding: 15px 20px; font-family: Arial, sans-serif; color: #000; width: 100%; background: #fff; box-sizing: border-box;">
       
       <!-- KOP SURAT RESMI DISAMAKAN DENGAN BUKTI PENGAMBILAN OBAT -->
@@ -584,9 +587,9 @@ window.downloadPdf = (data) => {
         <div style="font-size: 11.5px; font-weight: bold; text-decoration: underline; display: inline-block; padding-bottom: 1px;">LAPORAN KONSULTASI DAN PENGADUAN UPTD FARMASI</div>
       </div>
 
-      <!-- KONTEN KELUHAN / TABEL ASLI (Diambil dari elemen tabel yang sudah ada di halaman) -->
-      <div id="contentKeluhanBody" style="margin-bottom: 25px; font-size: 10px;">
-        ${document.getElementById('tabelKeluhanContainer') ? document.getElementById('tabelKeluhanContainer').innerHTML : ''}
+      <!-- ISI KONTEN / TABEL PENGADUAN ASLI DILETAKKAN DI SINI -->
+      <div style="margin-bottom: 25px; width: 100%;">
+        ${originalContent}
       </div>
 
       <!-- TANDA TANGAN PETUGAS PENANGGUNG JAWAB -->
@@ -606,8 +609,8 @@ window.downloadPdf = (data) => {
   `;
 
   // Tampilkan elemen secara inline agar html2canvas dapat merender dengan sempurna
-  element.style.display = 'block';
-  element.classList.remove('hidden');
+  sourceElement.style.display = 'block';
+  sourceElement.classList.remove('hidden');
 
   const opt = {
     margin:       [5, 5, 5, 5],
@@ -619,9 +622,11 @@ window.downloadPdf = (data) => {
 
   // Beri jeda singkat untuk memastikan DOM & gambar termuat utuh
   setTimeout(() => {
-    html2pdf().from(element).set(opt).save().then(() => {
-      element.style.display = 'none';
-      element.classList.add('hidden');
+    html2pdf().from(sourceElement).set(opt).save().then(() => {
+      // Kembalikan isi asli dan sembunyikan kembali
+      sourceElement.innerHTML = originalContent;
+      sourceElement.style.display = 'none';
+      sourceElement.classList.add('hidden');
     });
   }, 300);
 };
