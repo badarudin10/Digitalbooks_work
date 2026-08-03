@@ -190,6 +190,12 @@
           waktuStr = item.tanggal || item.createdAt;
         }
 
+        // Perhitungan durasi persis seperti di panel admin
+        let durasi = "-"; 
+        if (item.status === 'selesai' && item.waktuSelesai && item.waktuProses) {
+          durasi = Math.round((item.waktuSelesai.toDate() - item.waktuProses.toDate()) / 60000) + " Menit";
+        }
+
         let statusColor = "bg-amber-50 text-amber-800 border-amber-200";
         let statusText = item.status || item.statusPelayanan || "Selesai";
         const statusLower = String(statusText).toLowerCase();
@@ -205,13 +211,15 @@
         }
 
         const obatTerima = item.obatDiterima || item.daftarObat || item.obat || item.keteranganObat || '-';
+        const namaPetugasVal = item.petugas || item.namaPetugas || item.petugasProgram || '-';
 
         const normalizedData = {
           nama: item.nama || item.namaTamu || item.namaLengkap || 'Tanpa Nama',
           instansi: item.instansi || item.asal || item.instansiAsal || '-',
           keperluan: item.keperluan || item.tujuan || '-',
-          petugas: item.petugas || item.namaPetugas || item.petugasProgram || '-',
+          petugas: namaPetugasVal,
           waktuFormatted: waktuStr,
+          durasi: durasi,
           status: statusText,
           obatTerimaFormatted: obatTerima,
           itemsObat: itemsObatArr,
@@ -275,6 +283,8 @@
               <h3 class="font-extrabold text-xs text-blue-900">${normalizedData.nama}</h3>
               <p class="text-[10px] text-gray-600"><b>Instansi:</b> ${normalizedData.instansi}</p>
               <p class="text-[10px] text-gray-600"><b>Keperluan:</b> ${normalizedData.keperluan}</p>
+              <p class="text-[10px] text-gray-600"><b>Petugas:</b> ${normalizedData.petugas}</p>
+              <p class="text-[10px] text-gray-600"><b>Durasi:</b> ${normalizedData.durasi}</p>
               ${normalizedData.nomorAntrian ? `<p class="text-[10px] text-blue-700 font-bold">No. Antrian: ${normalizedData.nomorAntrian}</p>` : ''}
             </div>
             <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border shrink-0 ${statusColor}">
@@ -442,3 +452,4 @@
   </script>
 </body>
 </html>
+
