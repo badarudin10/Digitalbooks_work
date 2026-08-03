@@ -63,6 +63,7 @@
             <th class="p-3">Instansi</th>
             <th class="p-3">Status</th>
             <th class="p-3">Durasi</th>
+            <th class="p-3">Surat Permintaan</th>
             <th class="p-3">Form Input Obat & Aksi Resmi</th>
           </tr>
         </thead>
@@ -259,12 +260,19 @@
             itemsObat: data.itemsObat || []
           }).replace(/"/g, '&quot;');
 
+          // Kolom tombol download surat jika tersedia suratUrl
+          let suratHtml = '<span class="text-xs text-gray-400 italic">Tidak ada file</span>';
+          if (data.suratUrl) {
+            suratHtml = `<a href="${data.suratUrl}" target="_blank" class="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-indigo-700 transition inline-flex items-center gap-1 shadow-sm">📥 Download Surat</a>`;
+          }
+
           tabel.innerHTML += `<tr class="border-b text-sm">
             <td class="p-3 font-bold">${data.nomorAntrian || '-'}</td>
             <td class="p-3 font-semibold text-blue-900">${data.nama || '-'}</td>
             <td class="p-3 text-gray-600">${data.instansi || '-'}</td>
             <td class="p-3 font-bold text-${data.status === 'selesai' ? 'green' : (data.status === 'proses' ? 'blue' : 'yellow')}-600 uppercase text-xs">${data.status || 'menunggu'}</td>
             <td class="p-3 text-gray-500">${durasi}</td>
+            <td class="p-3">${suratHtml}</td>
             <td class="p-3 space-y-3 min-w-[340px]">
               
               <!-- FORM INPUT OBAT SESUAI KOLOM YANG DIMINTA -->
@@ -559,12 +567,7 @@ window.downloadPdf = (data) => {
     return;
   }
 
-  // Simpan HTML asli untuk dikembalikan nanti
   const originalContent = sourceElement.innerHTML;
-
-  // Hapus kop surat/judul bawaan lama dari HTML asli jika ada, 
-  // atau kita ambil bagian tabel datanya saja secara spesifik.
-  // Misal kita ambil elemen pembungkus tabel di dalamnya:
   const tabelContainer = sourceElement.querySelector('table') || sourceElement;
   const tabelHtml = tabelContainer.outerHTML;
 
@@ -640,7 +643,6 @@ window.downloadPdf = (data) => {
       };
       await updateDoc(doc(db, "tamu", id), updateData);
       
-      // Cari nomor WhatsApp pemegang program yang dipilih dari koleksi pegawai
       let noWaPetugas = '';
       if (namaPetugas && namaPetugas !== '-') {
         try {
@@ -656,7 +658,6 @@ window.downloadPdf = (data) => {
         }
       }
 
-      // Format nomor WhatsApp pemegang program atau kirim ke tamu
       if (noWaPetugas) {
         let cleanWa = noWaPetugas.startsWith('0') ? '62' + noWaPetugas.substring(1) : (noWaPetugas.startsWith('8') ? '62' + noWaPetugas : noWaPetugas);
         let pesanPetugas = status === 'proses' 
@@ -713,7 +714,7 @@ window.downloadPdf = (data) => {
     window.tambahPegawaiAdmin = async () => {
       const nama = document.getElementById("inputPegawaiNama").value.trim();
       const jabatan = document.getElementById("inputPegawaiJabatan").value.trim();
-      const hp = document.getElementById("inputPegawaiPj").value.trim(); // Disesuaikan untuk input nomor WA/PJ
+      const hp = document.getElementById("inputPegawaiPj").value.trim();
       if (!nama || !jabatan) { alert("Nama & Jabatan wajib diisi!"); return; }
       await addDoc(collection(db, "pegawai"), { nama, jabatan, hp, waktuInput: Date.now() });
       alert("Pegawai ditambah!");
