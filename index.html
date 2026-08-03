@@ -48,10 +48,13 @@
             <option value="HEPATITIS_VAKSIN_PROGRAM">G. HEPATITIS_VAKSIN_PROGRAM</option>
           </select>
 
-          <!-- Tambahan Kolom Upload Surat Permintaan -->
+          <!-- Tambahan Kolom Upload Surat Permintaan dengan Informasi Ukuran Maksimal -->
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">Upload Surat Permintaan (PDF / Gambar)</label>
+            <label class="block text-xs font-bold text-gray-700 mb-1">
+              Upload Surat Permintaan (PDF / Gambar) - <span class="text-red-600 font-semibold">Maksimal 2 MB</span>
+            </label>
             <input type="file" id="fileSurat" accept=".pdf,image/*" class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-900 hover:file:bg-blue-100 border border-gray-300 rounded-xl p-1">
+            <p id="errorFile" class="text-xs text-red-500 mt-1 hidden">Ukuran file melebihi batas 2 MB!</p>
           </div>
           
           <button id="btnSubmit" class="w-full bg-blue-900 text-white p-4 rounded-lg font-bold hover:bg-blue-900 transition">
@@ -70,7 +73,7 @@
           Wajib Isi Survei Kepuasan Masyarakat
         </a>
 
-        <!-- Tombol Panduan Aplikasi (Ditambahkan persis di bawah Survei) -->
+        <!-- Tombol Panduan Aplikasi -->
         <a href="panduan.html" class="block w-full bg-blue-900 text-white text-center p-4 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg">
          Panduan Penggunaan Aplikasi
         </a>
@@ -89,7 +92,6 @@
   <h3 class="font-bold text-blue-900 mb-4">Kegiatan UPTD FARMASI</h3>
   <div id="galeriPublik" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 border border-blue-200 p-3 rounded-2xl bg-white shadow-sm"></div>
 </div>
-  </div>
 
   <footer class="mt-12 border-t border-[#1e3a8a] pt-6 pb-4 text-center text-[#1e3a8a] text-sm">
     <div class="max-w-4xl mx-auto px-2 space-y-3">
@@ -98,24 +100,17 @@
 Telepon (021) 29307897 Faksimili (021) 29307989
  Laman dinkes.tangerangselatankota.go.id , pos-el uptd_farmasi@tangerangselatankota.go.id</p>
       
-      <!-- Bagian Ikon Media Sosial (Hanya Logo Saja) -->
+      <!-- Bagian Ikon Media Sosial -->
       <div class="flex flex-wrap justify-center items-center gap-4 text-sm font-medium pt-2">
-        <!-- WhatsApp -->
         <a href="https://wa.me/62881080698977" target="_blank" class="hover:opacity-80 transition" title="WhatsApp">
           <img src="https://i.ibb.co.com/v6wYHRJB/Picsart-26-07-30-09-23-28-344.png" alt="WhatsApp" class="w-16 h-16 object-contain">
         </a>
-        
-        <!-- Instagram -->
         <a href="https://instagram.com" target="_blank" class="hover:opacity-80 transition" title="Instagram">
           <img src="https://i.ibb.co.com/5gp37W1P/Picsart-26-07-30-09-26-58-677.png" alt="Instagram" class="w-16 h-16 object-contain">
         </a>
-        
-        <!-- TikTok -->
         <a href="https://tiktok.com" target="_blank" class="hover:opacity-80 transition" title="TikTok">
           <img src="https://i.ibb.co.com/kgvJ7Gqw/Picsart-26-07-30-09-24-35-037.png" alt="TikTok" class="w-16 h-16 object-contain">
         </a>
-        
-        <!-- YouTube -->
         <a href="https://youtube.com" target="_blank" class="hover:opacity-80 transition" title="YouTube">
           <img src="https://i.ibb.co.com/hxpYdj5L/Picsart-26-07-30-09-31-31-407.png" alt="YouTube" class="w-16 h-16 object-contain">
         </a>
@@ -142,18 +137,18 @@ Telepon (021) 29307897 Faksimili (021) 29307989
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
 
     // Konfigurasi nomor WhatsApp per kategori
     const daftarWA = {
-      "OBAT_PKD": "6281214090200",    // Ganti nomor ini
-      "VAKSIN": "628126449487",      // Ganti nomor ini
-      "REAGEN": "62881080698977",      // Ganti nomor ini
-      "TB_KUSTA": "6285311642234",    // Ganti nomor ini
-      "HIV_PKG": "628989979798",    // Ganti nomor ini
-      "DBD_MALARIA": "628568838556", // Ganti nomor ini
-      "HEPATITIS_VAKSIN_PROGRAM": "6287829700205",   // Ganti nomor ini
+      "OBAT_PKD": "6281214090200",
+      "VAKSIN": "628126449487",
+      "REAGEN": "62881080698977",
+      "TB_KUSTA": "6285311642234",
+      "HIV_PKG": "628989979798",
+      "DBD_MALARIA": "628568838556",
+      "HEPATITIS_VAKSIN_PROGRAM": "6287829700205",
     };
 
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
@@ -180,15 +175,33 @@ Telepon (021) 29307897 Faksimili (021) 29307989
     };
 
     document.getElementById("btnSubmit").addEventListener("click", async () => {
-      const nama = document.getElementById("nama").value;
-      const instansi = document.getElementById("instansi").value;
-      const hp = document.getElementById("hp").value;
+      const nama = document.getElementById("nama").value.trim();
+      const instansi = document.getElementById("instansi").value.trim();
+      const hp = document.getElementById("hp").value.trim();
       const keperluan = document.getElementById("keperluan").value;
       const fileInput = document.getElementById("fileSurat");
-      
-      if (!nama || !keperluan || !hp) return alert("Mohon isi Nama, No. HP, dan Keperluan!");
-      
+      const errorFile = document.getElementById("errorFile");
       const btn = document.getElementById("btnSubmit");
+
+      // Sembunyikan pesan error sebelumnya
+      errorFile.classList.add("hidden");
+
+      if (!nama || !keperluan || !hp) {
+        alert("Mohon isi Nama, No. HP, dan Keperluan!");
+        return;
+      }
+
+      // Validasi Ukuran File Maksimal 2 MB (2 * 1024 * 1024 bytes)
+      if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const maxSize = 2 * 1024 * 1024; // 2 MB
+        if (file.size > maxSize) {
+          errorFile.classList.remove("hidden");
+          alert("Ukuran file terlalu besar! Maksimal 2 MB.");
+          return;
+        }
+      }
+      
       btn.disabled = true;
       btn.innerText = "Mengunggah & Memproses...";
 
@@ -226,7 +239,9 @@ Telepon (021) 29307897 Faksimili (021) 29307989
         };
       } catch (error) {
         console.error("Gagal check-in:", error);
-        alert("Terjadi kesalahan saat mengunggah file atau mengirim data.");
+        alert("Terjadi kesalahan saat mengunggah file atau mengirim data: " + error.message);
+      } finally {
+        // Blok ini memastikan tombol selalu kembali normal jika sukses maupun gagal
         btn.disabled = false;
         btn.innerText = "Check-In & Ambil Antrian";
       }
