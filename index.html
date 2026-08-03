@@ -138,7 +138,6 @@ Telepon (021) 29307897 Faksimili (021) 29307989
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
 
     // Konfigurasi nomor WhatsApp per kategori
     const daftarWA = {
@@ -154,7 +153,6 @@ Telepon (021) 29307897 Faksimili (021) 29307989
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app", messagingSenderId: "905407530155", appId: "1:905407530155:web:dd90e18d4158ce42fae3ee", measurementId: "G-LL7GF2RMF8" };
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const storage = getStorage(app);
 
     onSnapshot(query(collection(db, "galeri"), orderBy("waktuInput", "desc")), (snapshot) => {
       const galeriContainer = document.getElementById("galeriPublik");
@@ -174,6 +172,14 @@ Telepon (021) 29307897 Faksimili (021) 29307989
       document.getElementById("modalGambar").className = "visible fade-modal fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4";
     };
 
+    // Fungsi bantu konversi file ke Base64 tanpa Storage
+    const toBase64 = file => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+
     document.getElementById("btnSubmit").addEventListener("click", async () => {
       const nama = document.getElementById("nama").value.trim();
       const instansi = document.getElementById("instansi").value.trim();
@@ -191,6 +197,8 @@ Telepon (021) 29307897 Faksimili (021) 29307989
         return;
       }
 
+      let suratUrl = "";
+
       // Validasi Ukuran File Maksimal 2 MB (2 * 1024 * 1024 bytes)
       if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
@@ -200,20 +208,20 @@ Telepon (021) 29307897 Faksimili (021) 29307989
           alert("Ukuran file terlalu besar! Maksimal 2 MB.");
           return;
         }
+
+        try {
+          suratUrl = await toBase64(file);
+        } catch (err) {
+          console.error("Gagal membaca file:", err);
+          alert("Gagal memproses file lampiran.");
+          return;
+        }
       }
       
       btn.disabled = true;
       btn.innerText = "Mengunggah & Memproses...";
 
       try {
-        let suratUrl = "";
-        if (fileInput.files.length > 0) {
-          const file = fileInput.files[0];
-          const storageRef = ref(storage, 'surat_permintaan/' + Date.now() + '_' + file.name);
-          const snapshot = await uploadBytes(storageRef, file);
-          suratUrl = await getDownloadURL(snapshot.ref);
-        }
-
         const snap = await getDocs(collection(db, "tamu"));
         const kode = keperluan.substring(0, 1) + "-" + (snap.size + 1).toString().padStart(3, '0');
         
@@ -222,7 +230,7 @@ Telepon (021) 29307897 Faksimili (021) 29307989
           instansi, 
           hp, 
           keperluan, 
-          suratUrl: suratUrl, 
+          suratUrl: suratUrl, // Tersimpan rapi ke Firestore tanpa Storage berbayar
           nomorAntrian: kode, 
           waktu: serverTimestamp(), 
           status: "menunggu" 
@@ -239,7 +247,7 @@ Telepon (021) 29307897 Faksimili (021) 29307989
         };
       } catch (error) {
         console.error("Gagal check-in:", error);
-        alert("Terjadi kesalahan saat mengunggah file atau mengirim data: " + error.message);
+        alert("Terjadi kesalahan saat mengirim data: " + error.message);
       } finally {
         // Blok ini memastikan tombol selalu kembali normal jika sukses maupun gagal
         btn.disabled = false;
@@ -249,3 +257,4 @@ Telepon (021) 29307897 Faksimili (021) 29307989
   </script>
 </body>
 </html>
+
