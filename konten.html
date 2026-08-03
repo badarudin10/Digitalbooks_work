@@ -291,13 +291,26 @@
 
       <!-- KONTEN DINAMIS -->
       <div id="pageDaftar" class="hidden-custom main-container lg:max-w-none p-4 bg-white rounded-2xl shadow-sm border-2 border-blue-400">
-        <button onclick="kembaliKeDashboard()" class="text-blue-900 font-bold mb-4 text-xs inline-flex items-center gap-1">← Kembali ke Dashboard</button>
+        <div id="areaDiarahkanDaftar"></div>
         <div id="areaDaftar"></div>
+        
+        <!-- Tombol Kembali ke Dashboard di Bawah Sebelah Kanan dengan Kotak Biru Tua -->
+        <div class="flex justify-end mt-6">
+          <div class="bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-md transition cursor-pointer inline-flex items-center gap-1" onclick="kembaliKeDashboard()">
+            ← Kembali ke Dashboard
+          </div>
+        </div>
       </div>
 
       <div id="pageBaca" class="hidden-custom main-container lg:max-w-none p-5 bg-white rounded-2xl shadow-sm border-2 border-blue-400">
-        <button onclick="kembaliKeDaftar()" class="text-blue-900 font-bold mb-4 text-xs inline-flex items-center gap-1">← Kembali ke Daftar</button>
         <div id="areaBaca"></div>
+        
+        <!-- Tombol Kembali ke Daftar di Bawah Sebelah Kanan dengan Kotak Biru Tua -->
+        <div class="flex justify-end mt-6">
+          <div class="bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-md transition cursor-pointer inline-flex items-center gap-1" onclick="kembaliKeDaftar()">
+            ← Kembali ke Daftar
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -388,7 +401,7 @@
     window.bukaDaftar = async (kategori) => {
       document.getElementById('mainDashboard').className = 'hidden-custom';
       document.getElementById('pageBaca').className = 'hidden-custom';
-      document.getElementById('pageDaftar').className = 'visible-custom main-container lg:max-w-none p-4 bg-white rounded-2xl shadow-sm border border-gray-100';
+      document.getElementById('pageDaftar').className = 'visible-custom main-container lg:max-w-none p-4 bg-white rounded-2xl shadow-sm border-2 border-blue-400';
       const area = document.getElementById('areaDaftar');
       area.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">Memuat data ${kategori}...</p>`;
       
@@ -419,7 +432,7 @@
 
     window.bukaArtikel = (data) => {
       document.getElementById('pageDaftar').className = 'hidden-custom';
-      document.getElementById('pageBaca').className = 'visible-custom main-container lg:max-w-none p-5 bg-white rounded-2xl shadow-sm border border-gray-100';
+      document.getElementById('pageBaca').className = 'visible-custom main-container lg:max-w-none p-5 bg-white rounded-2xl shadow-sm border-2 border-blue-400';
       
       document.getElementById('areaBaca').innerHTML = `
         <h2 class="text-lg font-extrabold text-blue-900 mb-4 text-center">${data.judul}</h2>
@@ -443,7 +456,7 @@
 
     window.kembaliKeDaftar = () => {
       document.getElementById('pageBaca').className = 'hidden-custom';
-      document.getElementById('pageDaftar').className = 'visible-custom main-container lg:max-w-none p-4 bg-white rounded-2xl shadow-sm border border-gray-100';
+      document.getElementById('pageDaftar').className = 'visible-custom main-container lg:max-w-none p-4 bg-white rounded-2xl shadow-sm border-2 border-blue-400';
     };
   </script>
 </body>
