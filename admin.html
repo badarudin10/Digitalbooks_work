@@ -195,26 +195,13 @@
     const auth = getAuth(app);
     let chart;
 
-    // Cache daftar pegawai untuk pilihan dropdown petugas
-    let listPegawaiCache = [];
-
     onAuthStateChanged(auth, (user) => {
       const loginScreen = document.getElementById("loginScreen");
       const dashboardAdmin = document.getElementById("dashboardAdmin");
       if (user) {
         loginScreen.classList.add("hidden");
         dashboardAdmin.classList.remove("hidden");
-        
-        // Ambil data pegawai untuk opsi petugas
-        getDocs(collection(db, "pegawai")).then((snap) => {
-          listPegawaiCache = [];
-          snap.forEach((d) => {
-            if(d.data().nama) listPegawaiCache.push(d.data().nama);
-          });
-          tampilkanDashboardData();
-        }).catch(() => {
-          tampilkanDashboardData();
-        });
+        tampilkanDashboardData();
       } else {
         loginScreen.classList.remove("hidden");
         dashboardAdmin.classList.add("hidden");
@@ -248,14 +235,6 @@
     }
 
     function tampilkanDashboardData() {
-      // Perbarui cache pegawai secara real-time juga jika diperlukan
-      onSnapshot(collection(db, "pegawai"), (snap) => {
-        listPegawaiCache = [];
-        snap.forEach((d) => {
-          if(d.data().nama) listPegawaiCache.push(d.data().nama);
-        });
-      });
-
       onSnapshot(query(collection(db, "tamu"), orderBy("waktu", "desc")), (snapshot) => {
         let total=0, proses=0, selesai=0, dataPerHari = {}; const tabel = document.getElementById("tabelTamu"); tabel.innerHTML = "";
         snapshot.forEach((docSnap) => {
@@ -270,13 +249,14 @@
           }
 
           const fileLink = data.suratUrl || data.fileUrl || data.fileLampiran || '';
+          const namaPetugasVal = data.petugas || data.namaPetugas || '';
 
           const dataObjStr = JSON.stringify({
             nomorAntrian: data.nomorAntrian || '-',
             nama: data.nama || '-',
             instansi: data.instansi || '-',
             keperluan: data.keperluan || '-',
-            petugas: data.petugas || '-',
+            petugas: namaPetugasVal,
             waktuFormatted: waktuFormatted,
             durasi: durasi || '-',
             status: data.status || 'SELESAI',
@@ -284,7 +264,6 @@
             fileUrl: fileLink
           }).replace(/"/g, '&quot;');
 
-          // Render Kolom File Lampiran Tamu (Mendukung URL maupun Base64)
           let fileLampiranHtml = '<span class="text-gray-400 italic text-xs">Tidak ada file</span>';
           if (fileLink && fileLink.length > 0) {
             fileLampiranHtml = `
@@ -293,13 +272,6 @@
               </div>
             `;
           }
-
-          // Generate opsi dropdown petugas
-          let opsiPetugasHtml = `<option value="-">-- Pilih Petugas --</option>`;
-          listPegawaiCache.forEach(namaPeg => {
-            const selected = (data.petugas === namaPeg) ? 'selected' : '';
-            opsiPetugasHtml += `<option value="${namaPeg}" ${selected}>${namaPeg}</option>`;
-          });
 
           tabel.innerHTML += `<tr class="border-b text-sm">
             <td class="p-3 font-bold">${data.nomorAntrian || '-'}</td>
@@ -310,12 +282,13 @@
             <td class="p-3 align-top">${fileLampiranHtml}</td>
             <td class="p-3 space-y-3 min-w-[340px]">
               
-              <!-- PILIHAN PETUGAS & FORM INPUT OBAT -->
+              <!-- FORM INPUT MANUAL NAMA PETUGAS & INPUT OBAT -->
               <div class="border border-blue-200 rounded-lg p-3 bg-blue-50/40 space-y-2">
-                <div class="text-[11px] font-extrabold text-blue-900 border-b border-blue-200 pb-1">👤 Pilih Petugas Pelayanan</div>
-                <select id="pilihPetugas_${docSnap.id}" class="w-full p-1.5 border rounded text-xs bg-white font-semibold text-blue-900">
-                  ${opsiPetugasHtml}
-                </select>
+                <div class="text-[11px] font-extrabold text-blue-900 border-b border-blue-200 pb-1">👤 Input Nama Petugas</div>
+                <div class="flex items-center gap-1.5">
+                  <input type="text" id="inPetugas_${docSnap.id}" value="${namaPetugasVal}" placeholder="Ketik nama petugas..." class="w-full p-1.5 border rounded text-xs bg-white font-semibold text-blue-900">
+                  <button onclick="simpanPetugasAdmin('${docSnap.id}')" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-[11px] px-3 py-1.5 rounded transition shrink-0 shadow-sm">Simpan</button>
+                </div>
 
                 <div class="text-[11px] font-extrabold text-blue-900 border-b border-blue-200 pt-1 pb-1">➕ Tambah Item Barang/Obat</div>
                 <div class="grid grid-cols-2 gap-1.5">
@@ -408,6 +381,20 @@
       });
     }
 
+    // Fungsi menyimpan input manual nama petugas ke Firestore
+    window.simpanPetugasAdmin = async (id) => {
+      const inputVal = document.getElementById(`inPetugas_${id}`).value.trim();
+      try {
+        await updateDoc(doc(db, "tamu", id), {
+          petugas: inputVal
+        });
+        alert("Nama petugas berhasil disimpan!");
+      } catch (err) {
+        console.error("Gagal menyimpan petugas:", err);
+        alert("Gagal menyimpan nama petugas.");
+      }
+    };
+
     window.tambahItemObatTamu = async (id) => {
       const nama = document.getElementById(`inNama_${id}`).value.trim();
       const tahun = document.getElementById(`inTahun_${id}`).value.trim() || "APBD 2025";
@@ -454,6 +441,10 @@
 
     // GENERATE PDF DENGAN KOP SURAT PRESISI & INFORMASI LAMPIRAN FILE
     window.downloadPdf = (data) => {
+      // Ambil nilai terbaru langsung dari input teks petugas agar data langsung terikut
+      const inputPetugasElem = document.getElementById(`inPetugas_${data.docId}`);
+      const namaPetugasFinal = inputPetugasElem ? inputPetugasElem.value.trim() : (data.petugas || '-');
+
       const areaCetak = document.getElementById("areaCetakPdf");
       areaCetak.style.display = "block";
 
@@ -532,7 +523,7 @@
             <tr>
               <td style="font-weight: bold;">Petugas Program</td>
               <td>:</td>
-              <td>${data.petugas || '-'}</td>
+              <td>${namaPetugasFinal}</td>
               <td style="font-weight: bold;">Waktu Kunjungan</td>
               <td style="text-align: center;">:</td>
               <td>${data.waktuFormatted || '-'}</td>
@@ -567,7 +558,7 @@
               <td style="width: 50%; text-align: center; vertical-align: top;">
                 <p style="margin: 0; font-weight: bold;">Petugas</p>
                 <br><br><br>
-                <p style="margin: 0; font-weight: bold; text-decoration: underline;">${data.petugas && data.petugas !== '-' ? data.petugas : '......................................'}</p>
+                <p style="margin: 0; font-weight: bold; text-decoration: underline;">${namaPetugasFinal && namaPetugasFinal !== '-' ? namaPetugasFinal : '......................................'}</p>
               </td>
               <td style="width: 50%; text-align: center; vertical-align: top;">
                 <p style="margin: 0; font-weight: bold;">Penerima</p>
@@ -661,9 +652,8 @@
     };
     
     window.updateStatusViaAdmin = async (id, status, hpTamu, namaTamu, antrian) => {
-      // Ambil nama petugas dari dropdown baris tersebut secara konsisten
-      const selectPetugas = document.getElementById(`pilihPetugas_${id}`);
-      const namaPetugas = selectPetugas ? selectPetugas.value : '-';
+      const inputPetugas = document.getElementById(`inPetugas_${id}`);
+      const namaPetugas = inputPetugas ? inputPetugas.value.trim() : '-';
 
       let updateData = { 
         status: status, 
@@ -672,28 +662,7 @@
       };
       await updateDoc(doc(db, "tamu", id), updateData);
       
-      let noWaPetugas = '';
-      if (namaPetugas && namaPetugas !== '-') {
-        try {
-          const pegawaiSnap = await getDocs(collection(db, "pegawai"));
-          pegawaiSnap.forEach((docP) => {
-            const pData = docP.data();
-            if (pData.nama && pData.nama.toLowerCase() === namaPetugas.toLowerCase()) {
-              noWaPetugas = pData.hp || pData.noWa || pData.whatsapp || '';
-            }
-          });
-        } catch (err) {
-          console.error("Gagal mengambil data pegawai:", err);
-        }
-      }
-
-      if (noWaPetugas) {
-        let cleanWa = noWaPetugas.startsWith('0') ? '62' + noWaPetugas.substring(1) : (noWaPetugas.startsWith('8') ? '62' + noWaPetugas : noWaPetugas);
-        let pesanPetugas = status === 'proses' 
-          ? `Halo ${namaPetugas}, tamu atas nama *${namaTamu}* (No Antrian: ${antrian}) sedang diproses.` 
-          : `Halo ${namaPetugas}, pelayanan tamu atas nama *${namaTamu}* (No Antrian: ${antrian}) telah selesai.`;
-        window.open(`https://wa.me/${cleanWa}?text=${encodeURIComponent(pesanPetugas)}`, '_blank');
-      } else if (hpTamu) {
+      if (hpTamu) {
         let phone = hpTamu.startsWith('0') ? '62' + hpTamu.substring(1) : (hpTamu.startsWith('8') ? '62' + hpTamu : hpTamu);
         let pesanTamu = status === 'proses' ? `Halo ${namaTamu}, antrian (${antrian}) Anda sedang diproses.` : `Halo ${namaTamu}, antrian (${antrian}) Anda sudah selesai. Silakan unduh dokumen bukti pengambilan obat Anda.`;
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(pesanTamu)}`, '_blank');
@@ -755,3 +724,4 @@
   </script>
 </body>
 </html>
+
