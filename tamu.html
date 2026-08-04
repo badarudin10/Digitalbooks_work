@@ -212,6 +212,7 @@
 
         const obatTerima = item.obatDiterima || item.daftarObat || item.obat || item.keteranganObat || '-';
         const namaPetugasVal = item.petugas || item.namaPetugas || item.petugasProgram || '-';
+        const fileLink = item.suratUrl || item.fileUrl || item.fileLampiran || '';
 
         const normalizedData = {
           nama: item.nama || item.namaTamu || item.namaLengkap || 'Tanpa Nama',
@@ -223,7 +224,8 @@
           status: statusText,
           obatTerimaFormatted: obatTerima,
           itemsObat: itemsObatArr,
-          nomorAntrian: item.nomorAntrian || item.noAntrian || ''
+          nomorAntrian: item.nomorAntrian || item.noAntrian || '',
+          fileUrl: fileLink
         };
 
         const card = document.createElement("div");
@@ -277,6 +279,15 @@
           `;
         }
 
+        let fileLampiranHtml = '';
+        if (fileLink && fileLink.length > 0) {
+          fileLampiranHtml = `
+            <div class="pt-1">
+              <a href="${fileLink}" download="Surat_Permintaan_${normalizedData.nama}" target="_blank" class="inline-block bg-blue-100 text-blue-800 px-2.5 py-1 rounded text-[10px] font-bold hover:bg-blue-200 transition">📥 Lihat/Unduh File Lampiran</a>
+            </div>
+          `;
+        }
+
         card.innerHTML = `
           <div class="flex justify-between items-start gap-2">
             <div class="space-y-0.5">
@@ -292,6 +303,7 @@
             </span>
           </div>
 
+          ${fileLampiranHtml}
           ${bagianObatHtml}
 
           <div class="border-t pt-2 flex justify-between items-center text-[10px] text-gray-500">
@@ -395,6 +407,11 @@
               <td style="font-weight: bold;">Waktu Kunjungan</td>
               <td style="text-align: center;">:</td>
               <td>${data.waktuFormatted || '-'}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;">Lampiran File</td>
+              <td>:</td>
+              <td colspan="4" style="color: #0000ff;">${data.fileUrl ? 'File Lampiran Tersedia' : 'Tidak ada file dilampirkan'}</td>
             </tr>
           </table>
 
