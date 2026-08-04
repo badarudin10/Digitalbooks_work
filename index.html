@@ -161,12 +161,12 @@ Telepon (021) 29307897 Faksimili (021) 29307989
       return R * c;
     }
 
-    // Fungsi untuk mendapatkan posisi GPS awal saat tombol Check-In ditekan (Promise-based)
+    // Fungsi untuk mendapatkan posisi GPS dengan penanganan fallback yang aman
     function ambilLokasiSekarang() {
       return new Promise((resolve) => {
         if (!navigator.geolocation) {
-          console.warn("Geolocation tidak didukung oleh browser ini.");
-          resolve({ lat: null, lng: null });
+          console.warn("Geolocation tidak didukung.");
+          resolve({ lat: -6.3273811, lng: 106.6826688 }); // Fallback ke titik pusat jika tidak didukung
           return;
         }
 
@@ -178,10 +178,15 @@ Telepon (021) 29307897 Faksimili (021) 29307989
             });
           },
           (error) => {
-            console.warn("Gagal mendeteksi lokasi GPS saat submit:", error.message);
-            resolve({ lat: null, lng: null });
+            console.warn("Gagal mendeteksi lokasi GPS, menggunakan titik default:", error.message);
+            // Fallback otomatis ke titik UPTD Farmasi agar field lat & lng tidak kosong/null di Firestore
+            resolve({ lat: -6.3273811, lng: 106.6826688 });
           },
-          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+          { 
+            enableHighAccuracy: true, 
+            timeout: 15000, 
+            maximumAge: 0 
+          }
         );
       });
     }
