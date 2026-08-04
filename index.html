@@ -137,7 +137,79 @@ Telepon (021) 29307897 Faksimili (021) 29307989
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, getDocs, onSnapshot, query, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    // Titik Pusat Koordinat UPTD Farmasi Tangerang Selatan
+    const FARMASI_LAT = -6.290700;
+    const FARMASI_LNG = 106.689500;
+    const BATAS_RADIUS_METER = 100; // Batas radius maksimal dalam meter
+
+    let intervalGpsId = null;
+
+    // Fungsi Haversine untuk menghitung jarak meter antara dua titik koordinat GPS
+    function hitungJarakMeter(lat1, lon1, lat2, lon2) {
+      const R = 6371e3;
+      const φ1 = lat1 * Math.PI / 180;
+      const φ2 = lat2 * Math.PI / 180;
+      const Δφ = (lat2 - lat1) * Math.PI / 180;
+      const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+      const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+                Math.cos(φ1) * Math.cos(φ2) *
+                Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    // Fungsi untuk memulai pemantauan GPS berkala setelah check-in berhasil
+    function mulaiPemantauanGPSBerkala(docIdAntrian) {
+      if (!navigator.geolocation) {
+        console.warn("Geolocation tidak didukung oleh browser ini.");
+        return;
+      }
+
+      const kirimDanValidasiLokasi = () => {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const currentLat = position.coords.latitude;
+            const currentLng = position.coords.longitude;
+
+            // Hitung jarak ke UPTD Farmasi
+            const jarak = hitungJarakMeter(FARMASI_LAT, FARMASI_LNG, currentLat, currentLng);
+            console.log(`Jarak tamu ke UPTD Farmasi: ${Math.round(jarak)} meter`);
+
+            let updatePayload = {
+              lat: currentLat,
+              lng: currentLng,
+              updateGpsTerakhir: serverTimestamp()
+            };
+
+            // Jika jarak melebihi batas radius, ubah status otomatis menjadi Dilewati
+            if (jarak > BATAS_RADIUS_METER) {
+              updatePayload.status = "Antrean Dilewati (Di Luar Lokasi)";
+              console.warn("Tamu berada di luar radius lokasi. Status antrean diubah otomatis.");
+            }
+
+            try {
+              await updateDoc(doc(db, "tamu", docIdAntrian), updatePayload);
+            } catch (err) {
+              console.error("Gagal memperbarui posisi/status GPS ke database:", err);
+            }
+          },
+          (error) => {
+            console.error("Gagal mendeteksi lokasi GPS:", error.message);
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+      };
+
+      // Jalankan sekali di awal
+      kirimDanValidasiLokasi();
+
+      // Jalankan pemantauan secara berkala setiap 60 detik (1 menit)
+      if (intervalGpsId) clearInterval(intervalGpsId);
+      intervalGpsId = setInterval(kirimDanValidasiLokasi, 60000);
+    }
 
     // Konfigurasi nomor WhatsApp per kategori
     const daftarWA = {
@@ -225,7 +297,8 @@ Telepon (021) 29307897 Faksimili (021) 29307989
         const snap = await getDocs(collection(db, "tamu"));
         const kode = keperluan.substring(0, 1) + "-" + (snap.size + 1).toString().padStart(3, '0');
         
-        await addDoc(collection(db, "tamu"), { 
+        // Simpan data tamu ke Firestore
+        const docRef = await addDoc(collection(db, "tamu"), { 
           nama, 
           instansi, 
           hp, 
@@ -235,6 +308,9 @@ Telepon (021) 29307897 Faksimili (021) 29307989
           waktu: serverTimestamp(), 
           status: "menunggu" 
         });
+
+        // Panggil fungsi pemantauan GPS berkala menggunakan ID dokumen antrian baru
+        mulaiPemantauanGPSBerkala(docRef.id);
         
         document.getElementById("nomorAntrianDisplay").innerText = kode;
         document.getElementById("modalAntrian").className = "visible fade-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40";
