@@ -25,7 +25,6 @@
       height: auto;
     }
 
-    /* Penyesuaian layout lebar maksimum untuk Desktop/PC tanpa sidebar kiri */
     @media (min-width: 1024px) {
       .app-layout-wrapper {
         max-width: 1280px !important;
@@ -33,117 +32,81 @@
         margin-right: auto;
         padding: 24px;
       }
-      .bottom-nav-wrapper {
-        display: none !important;
-      }
-      .pc-header-desktop {
-        display: block !important;
-      }
-      .mobile-header-bar {
-        display: none !important;
-      }
     }
 
     @media (max-width: 1023px) {
-      .pc-header-desktop {
-        display: none !important;
-      }
-      .mobile-header-bar {
-        display: block !important;
-      }
       .main-container {
         max-width: 448px;
         margin-left: auto;
         margin-right: auto;
         width: 100%;
-        /* Diperlebar sedikit jarak padding kiri & kanan agar tidak menempel ke tepi layar HP */
         padding-left: 16px;
         padding-right: 16px;
         box-sizing: border-box;
       }
-      .bottom-nav-wrapper {
-        max-width: 448px;
-        margin-left: auto;
-        margin-right: auto;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        position: fixed;
-        z-index: 40;
-      }
     }
   </style>
-  <title>Buku Tamu & Status - UPTD Farmasi Tangsel</title>
+  <title>Panel Admin & Pemantauan Tamu - UPTD Farmasi Tangsel</title>
 </head>
-<body class="bg-[#d1e7dd] font-sans min-h-screen pb-24 lg:pb-6">
+<body class="bg-[#d1e7dd] font-sans min-h-screen pb-12">
 
-  <!-- Header Atas (Hanya tampil di Mobile/HP) -->
-  <header class="mobile-header-bar bg-[#d1e7dd] px-4 py-3.5 shadow-sm sticky top-0 z-30 border border-blue-200">
-    <div class="max-w-md mx-auto text-center">
-      <h1 class="font-extrabold text-blue-900 text-xs tracking-wider leading-tight uppercase">STATUS & BUKTI TAMU</h1>
-      <p class="text-[9px] text-gray-600 font-semibold uppercase tracking-widest mt-0.5">UPTD Farmasi Tangsel</p>
+  <!-- Header Panel Admin -->
+  <header class="bg-[#d1e7dd] px-4 py-3.5 shadow-sm sticky top-0 z-30 border border-blue-200">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <div>
+        <h1 class="font-extrabold text-blue-900 text-sm md:text-base tracking-wider leading-tight uppercase">PANEL ADMIN & PEMANTAUAN LOKASI</h1>
+        <p class="text-[10px] md:text-xs text-gray-700 font-semibold uppercase tracking-widest mt-0.5">UPTD Farmasi Kota Tangerang Selatan</p>
+      </div>
+      <a href="index.html" class="bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs px-3.5 py-2 rounded-xl shadow transition">
+        Logout / Keluar
+      </a>
     </div>
   </header>
 
-  <!-- KONTROL UTAMA LAYOUT RESPONSIF TANPA SIDEBAR KIRI -->
+  <!-- KONTROL UTAMA LAYOUT -->
   <div class="app-layout-wrapper w-full">
-
-    <!-- KONTEN UTAMA (DIPERLEBAR MAKSIMAL DI PC) -->
     <div class="w-full">
-      <main class="main-container lg:max-w-none space-y-4 pt-1 pb-3">
+      <main class="main-container lg:max-w-none space-y-4 pt-3 pb-3">
         
-        <!-- Header Khusus Desktop (Kotak pembungkus dan logo dihilangkan) -->
-        <div class="pc-header-desktop hidden mb-3 px-1">
-          <div>
-            <h1 class="font-extrabold text-blue-900 text-lg tracking-wide leading-tight">STATUS & BUKTI TAMU</h1>
-            <p class="text-xs text-gray-700 font-semibold uppercase tracking-wider mt-0.5">UPTD Farmasi Kota Tangerang Selatan</p>
-          </div>
+        <!-- Informasi & Statistik Singkat -->
+        <div class="bg-white p-4 rounded-2xl shadow-sm border-2 border-blue-400 space-y-2">
+          <h2 class="text-sm font-extrabold text-blue-900">Manajemen Antrian & Validasi Lokasi Tamu</h2>
+          <p class="text-[11px] text-gray-600 leading-relaxed">
+            Admin dapat memantau posisi koordinat GPS tamu terdaftar. Jika tamu terdeteksi berada <b>di luar radius 100 meter</b> lokasi UPTD Farmasi, sistem otomatis memberi tanda dan antrian dapat dilewati.
+          </p>
         </div>
 
-        <!-- Kartu Informasi -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border-2 border-blue-400 text-center space-y-1 mb-5">
-          <h2 class="text-sm font-extrabold text-blue-900">Daftar Tamu & Pengambilan Obat</h2>
-          <p class="text-[11px] text-gray-500 leading-relaxed">Cek status registrasi Anda secara real-time, pantau lokasi kehadiran, dan download bukti PDF pengambilan obat.</p>
-        </div>
-
-        <!-- Container Daftar Tamu dari Firestore -->
-        <div id="containerTamu" class="space-y-3">
+        <!-- Container Daftar Tamu Real-time dari Firestore -->
+        <div id="containerAdminTamu" class="space-y-3">
           <div class="bg-white p-6 rounded-2xl shadow-sm border-2 border-blue-400 text-center text-xs text-gray-400">
-            Memuat data registrasi dari database...
+            Memuat data antrian dan lokasi tamu dari database...
           </div>
-        </div>
-
-        <!-- Tombol Kembali -->
-        <div class="flex justify-end pt-2">
-          <a href="konten.html" class="bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition inline-flex items-center gap-1.5">
-            ← Kembali
-          </a>
         </div>
 
       </main>
     </div>
   </div>
 
-  <!-- Modal Peta Pemantauan Lokasi Tamu -->
-  <div id="modalMap" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
+  <!-- Modal Peta Pemantauan Lokasi Tamu (Admin) -->
+  <div id="modalMapAdmin" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden border-2 border-blue-400 flex flex-col max-h-[90vh]">
       <div class="bg-blue-900 text-white px-4 py-3 flex justify-between items-center">
         <div>
-          <h3 class="font-extrabold text-xs uppercase tracking-wider">Pemantauan Lokasi Tamu</h3>
-          <p id="modalVisitorName" class="text-[10px] text-blue-200 mt-0.5 font-semibold">-</p>
+          <h3 class="font-extrabold text-xs uppercase tracking-wider">Pemantauan Lokasi GPS Tamu</h3>
+          <p id="modalVisitorNameAdmin" class="text-[10px] text-blue-200 mt-0.5 font-semibold">-</p>
         </div>
-        <button onclick="closeMapModal()" class="text-white hover:text-gray-200 font-bold text-base px-2 py-1 rounded-lg bg-blue-800 transition">✕</button>
+        <button onclick="closeMapModalAdmin()" class="text-white hover:text-gray-200 font-bold text-base px-2 py-1 rounded-lg bg-blue-800 transition">✕</button>
       </div>
       <div class="p-3 bg-gray-50 border-b border-gray-100 flex justify-between items-center text-[11px]">
-        <span id="lokasiStatusBadge" class="px-2.5 py-1 rounded-lg font-extrabold border text-[10px]">Mengecek jarak...</span>
-        <span id="jarakInfoText" class="text-gray-600 font-bold">-</span>
+        <span id="lokasiStatusBadgeAdmin" class="px-2.5 py-1 rounded-lg font-extrabold border text-[10px]">Mengecek jarak...</span>
+        <span id="jarakInfoTextAdmin" class="text-gray-600 font-bold">-</span>
       </div>
       <div class="relative w-full h-72 sm:h-80 bg-gray-200">
-        <div id="leafletMap" class="w-full h-full z-10"></div>
+        <div id="leafletMapAdmin" class="w-full h-full z-10"></div>
       </div>
       <div class="p-3 bg-white border-t border-gray-100 text-[10px] text-gray-500 flex justify-between items-center">
-        <p>Radius valid lokasi: <b class="text-blue-900">100 meter</b> dari UPTD Farmasi Tangsel.</p>
-        <button onclick="closeMapModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-1.5 rounded-xl font-bold transition">Tutup</button>
+        <p>Batas Radius Lokasi: <b class="text-blue-900">100 meter</b> UPTD Farmasi.</p>
+        <button onclick="closeMapModalAdmin()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-1.5 rounded-xl font-bold transition">Tutup</button>
       </div>
     </div>
   </div>
@@ -151,58 +114,28 @@
   <!-- Area Tersembunyi untuk Format Cetak PDF Bukti Pengambilan Obat -->
   <div id="areaCetakPdf" style="display: none;"></div>
 
-  <!-- Bottom Navigation Bar (Hanya tampil di Mobile/HP) -->
-  <div class="bottom-nav-wrapper">
-    <nav class="bg-[#d1e7dd] border border-blue-200 shadow-lg py-2.5 px-6 flex justify-around items-center rounded-t-2xl">
-      <a href="index.html#registrasi" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
-        <div class="w-7 h-7 flex items-center justify-center overflow-visible">
-          <img src="https://i.ibb.co.com/k2H9XQMH/Picsart-26-07-29-23-12-02-981.png" class="w-20 h-20 max-w-none object-contain scale-[1.35]">
-        </div>
-        <span class="text-[10px] mt-2 font-extrabold tracking-tight text-center">Registrasi</span>
-      </a>
-      <a href="maps.html" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
-        <div class="w-7 h-7 flex items-center justify-center overflow-visible">
-          <img src="https://i.ibb.co.com/4RhdPmBn/Picsart-26-07-30-01-18-55-191.png" class="w-24 h-24 max-w-none object-contain scale-[1.35]">
-        </div>
-        <span class="text-[10px] mt-2 font-bold tracking-tight text-center">Maps</span>
-      </a>
-      <a href="tamu.html" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
-        <div class="w-7 h-7 flex items-center justify-center overflow-visible">
-          <img src="https://i.ibb.co.com/KcX3dhTq/Picsart-26-07-30-01-19-44-361.png" class="w-24 h-24 max-w-none object-contain scale-[1.35]">
-        </div>
-        <span class="text-[10px] mt-2 font-bold tracking-tight text-center">Tamu</span>
-      </a>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex flex-col items-center justify-center text-emerald-900 font-bold">
-        <div class="w-7 h-7 flex items-center justify-center overflow-visible">
-          <img src="https://i.ibb.co.com/WpFvvtry/Picsart-26-07-29-23-12-41-517.png" class="w-24 h-24 max-w-none object-contain scale-[1.35]">
-        </div>
-        <span class="text-[10px] mt-2 font-bold tracking-tight text-center">Survei</span>
-      </a>
-    </nav>
-  </div>
-
-  <!-- SKRIP FIREBASE & LOGIKA HALAMAN -->
+  <!-- SKRIP FIREBASE & LOGIKA ADMIN -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const firebaseConfig = { apiKey: "AIzaSyA6B5MysWIMi4weR3Wgo3HuaIl-aaZpChw", authDomain: "digital-books-d22c9.firebaseapp.com", projectId: "digital-books-d22c9", storageBucket: "digital-books-d22c9.firebasestorage.app" };
     const db = getFirestore(initializeApp(firebaseConfig));
 
     const q = query(collection(db, "tamu"), orderBy("waktu", "desc"));
 
-    // Koordinat Resmi UPTD Farmasi Tangerang Selatan (-6.2907, 106.6895 atau sesuaikan titik referensi)
+    // Titik Koordinat Resmi UPTD Farmasi Tangerang Selatan
     const FARMASI_LAT = -6.290700;
     const FARMASI_LNG = 106.689500;
-    const RADIUS_MAKS_METER = 100; // Batas radius dalam meter
+    const RADIUS_MAKS_METER = 100;
 
-    let activeMap = null;
-    let activeMarkerTamu = null;
-    let activeMarkerFarmasi = null;
-    let activeCircleRadius = null;
+    let activeMapAdmin = null;
+    let activeMarkerTamuAdmin = null;
+    let activeMarkerFarmasiAdmin = null;
+    let activeCircleRadiusAdmin = null;
 
     function hitungJarakMeter(lat1, lon1, lat2, lon2) {
-      const R = 6371e3; // Radius bumi dalam meter
+      const R = 6371e3;
       const φ1 = lat1 * Math.PI/180;
       const φ2 = lat2 * Math.PI/180;
       const Δφ = (lat2-lat1) * Math.PI/180;
@@ -212,24 +145,38 @@
                 Math.cos(φ1) * Math.cos(φ2) *
                 Math.sin(Δλ/2) * Math.sin(Δλ/2);
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
       return R * c;
     }
 
+    // Fungsi bagi Admin untuk mengubah status antrian menjadi dilewati (di luar lokasi)
+    window.ubahStatusAntrian = async (docId, statusBaru) => {
+      try {
+        const docRef = doc(db, "tamu", docId);
+        await updateDoc(docRef, {
+          status: statusBaru
+        });
+        alert(`Status berhasil diperbarui menjadi: ${statusBaru}`);
+      } catch (err) {
+        console.error("Gagal memperbarui status:", err);
+        alert("Terjadi kesalahan saat memperbarui status antrian.");
+      }
+    };
+
     onSnapshot(q, (snapshot) => {
-      const container = document.getElementById("containerTamu");
+      const container = document.getElementById("containerAdminTamu");
       container.innerHTML = "";
 
       if (snapshot.empty) {
         container.innerHTML = `
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center text-xs text-gray-400">
-            Belum ada riwayat registrasi yang tercatat di sistem.
+            Belum ada data antrian tamu yang masuk ke sistem.
           </div>
         `;
         return;
       }
 
       snapshot.forEach((docSnap) => {
+        const idDoc = docSnap.id;
         const item = docSnap.data();
 
         let waktuStr = '-';
@@ -243,7 +190,6 @@
           waktuStr = item.tanggal || item.createdAt;
         }
 
-        // Perhitungan durasi persis seperti di panel admin
         let durasi = "-"; 
         if (item.status === 'selesai' && item.waktuSelesai && item.waktuProses) {
           durasi = Math.round((item.waktuSelesai.toDate() - item.waktuProses.toDate()) / 60000) + " Menit";
@@ -256,6 +202,8 @@
           statusColor = "bg-blue-50 text-blue-800 border-blue-200";
         } else if (statusLower.includes("selesai")) {
           statusColor = "bg-emerald-50 text-emerald-800 border-emerald-200";
+        } else if (statusLower.includes("dilewati") || statusLower.includes("diluar")) {
+          statusColor = "bg-red-50 text-red-800 border-red-200";
         }
 
         let itemsObatArr = [];
@@ -267,11 +215,11 @@
         const namaPetugasVal = item.petugas || item.namaPetugas || item.petugasProgram || '-';
         const fileLink = item.suratUrl || item.fileUrl || item.fileLampiran || '';
 
-        // Koordinat Tamu dari data pendaftaran (lat / lng atau latitude / longitude)
         let tamuLat = item.lat || item.latitude || item.gpsLat || null;
         let tamuLng = item.lng || item.longitude || item.gpsLng || null;
 
         const normalizedData = {
+          id: idDoc,
           nama: item.nama || item.namaTamu || item.namaLengkap || 'Tanpa Nama',
           instansi: item.instansi || item.asal || item.instansiAsal || '-',
           keperluan: item.keperluan || item.tujuan || '-',
@@ -342,31 +290,45 @@
         if (fileLink && fileLink.length > 0) {
           fileLampiranHtml = `
             <div class="pt-1">
-              <a href="${fileLink}" download="Surat_Permintaan_${normalizedData.nama}" target="_blank" class="inline-block bg-blue-100 text-blue-800 px-2.5 py-1 rounded text-[10px] font-bold hover:bg-blue-200 transition">📥 Lihat/Unduh File Lampiran</a>
+              <a href="${fileLink}" download target="_blank" class="inline-block bg-blue-100 text-blue-800 px-2.5 py-1 rounded text-[10px] font-bold hover:bg-blue-200 transition">📥 Lihat/Unduh Lampiran Tamu</a>
             </div>
           `;
         }
 
-        // Tombol Navigasi Peta Lokasi Tamu untuk Admin
+        // Navigasi Map & Tombol Aksi Lewati Antrean jika di luar lokasi
         let mapButtonHtml = '';
         if (normalizedData.lat && normalizedData.lng) {
           const jarakVal = hitungJarakMeter(FARMASI_LAT, FARMASI_LNG, Number(normalizedData.lat), Number(normalizedData.lng));
           const isDiLuar = jarakVal > RADIUS_MAKS_METER;
           const badgeLokasiClass = isDiLuar ? "bg-red-50 text-red-700 border-red-200" : "bg-emerald-50 text-emerald-700 border-emerald-200";
-          const badgeLokasiText = isDiLuar ? "⚠️ Di Luar Lokasi (Antrian Dilewati)" : "✅ Di Lokasi UPTD";
+          const badgeLokasiText = isDiLuar ? "⚠️ Di Luar Lokasi (Diluar Area UPTD)" : "✅ Di Lokasi UPTD";
+
+          let aksiLewatiHtml = '';
+          if (isDiLuar) {
+            aksiLewatiHtml = `
+              <button onclick="ubahStatusAntrian('${normalizedData.id}', 'Antrian Dilewati (Di Luar Lokasi)')" class="bg-red-700 hover:bg-red-600 text-white px-2.5 py-1 rounded-xl text-[10px] font-extrabold transition shadow-sm">
+                ⏭️ Lewati Antrian
+              </button>
+            `;
+          }
 
           mapButtonHtml = `
-            <div class="pt-1 flex items-center justify-between gap-2">
-              <span class="px-2 py-0.5 rounded-md text-[9px] font-extrabold border ${badgeLokasiClass}">${badgeLokasiText} (${Math.round(jarakVal)}m)</span>
-              <button onclick='openMapModal(${JSON.stringify(normalizedData)})' class="bg-emerald-800 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-xl text-[10px] font-bold transition inline-flex items-center gap-1 shadow-sm">
-                📍 Cek Posisi Map
-              </button>
+            <div class="pt-1 flex flex-wrap items-center justify-between gap-2 bg-blue-50/50 p-2 rounded-xl border border-blue-100">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-md text-[9px] font-extrabold border ${badgeLokasiClass}">${badgeLokasiText} (${Math.round(jarakVal)}m)</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button onclick='openMapModalAdmin(${JSON.stringify(normalizedData)})' class="bg-emerald-800 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-xl text-[10px] font-bold transition inline-flex items-center gap-1 shadow-sm">
+                  📍 Cek Map
+                </button>
+                ${aksiLewatiHtml}
+              </div>
             </div>
           `;
         } else {
           mapButtonHtml = `
             <div class="pt-1">
-              <span class="text-[9px] text-gray-400 italic">Koordinat GPS tamu tidak tersedia.</span>
+              <span class="text-[9px] text-gray-400 italic">Koordinat GPS pendaftaran tamu tidak terekam.</span>
             </div>
           `;
         }
@@ -392,89 +354,84 @@
 
           <div class="border-t pt-2 flex justify-between items-center text-[10px] text-gray-500">
             <span><b>Waktu:</b> ${normalizedData.waktuFormatted}</span>
-            <button onclick='downloadPdf(${JSON.stringify(normalizedData)})' class="bg-blue-900 hover:bg-blue-800 text-white px-3 py-1.5 rounded-xl font-bold transition shadow-sm inline-flex items-center gap-1">
-              Download PDF 📥
+            <button onclick='downloadPdfAdmin(${JSON.stringify(normalizedData)})' class="bg-blue-900 hover:bg-blue-800 text-white px-3 py-1.5 rounded-xl font-bold transition shadow-sm inline-flex items-center gap-1">
+              Download Bukti PDF 📥
             </button>
           </div>
         `;
         container.appendChild(card);
       });
     }, (error) => {
-      console.error("Gagal memuat data tamu:", error);
-      document.getElementById("containerTamu").innerHTML = `
+      console.error("Gagal memuat data admin:", error);
+      document.getElementById("containerAdminTamu").innerHTML = `
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-blue-400 text-center text-xs text-red-400">
-          Gagal memuat data dari database.
+          Gagal mengambil data dari database.
         </div>
       `;
     });
 
-    // Fungsi Modal Peta Leaflet
-    window.openMapModal = (data) => {
-      document.getElementById("modalVisitorName").innerText = `${data.nama} (${data.instansi})`;
-      document.getElementById("modalMap").classList.remove("hidden");
+    // Fungsi Modal Peta Admin
+    window.openMapModalAdmin = (data) => {
+      document.getElementById("modalVisitorNameAdmin").innerText = `${data.nama} (${data.instansi})`;
+      document.getElementById("modalMapAdmin").classList.remove("hidden");
 
       setTimeout(() => {
-        if (!activeMap) {
-          activeMap = L.map('leafletMap').setView([FARMASI_LAT, FARMASI_LNG], 16);
+        if (!activeMapAdmin) {
+          activeMapAdmin = L.map('leafletMapAdmin').setView([FARMASI_LAT, FARMASI_LNG], 16);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap'
-          }).addTo(activeMap);
+          }).addTo(activeMapAdmin);
         } else {
-          activeMap.invalidateSize();
+          activeMapAdmin.invalidateSize();
         }
 
-        // Hapus marker/lingkaran lama jika ada
-        if (activeMarkerFarmasi) activeMap.removeLayer(activeMarkerFarmasi);
-        if (activeMarkerTamu) activeMap.removeLayer(activeMarkerTamu);
-        if (activeCircleRadius) activeMap.removeLayer(activeCircleRadius);
+        if (activeMarkerFarmasiAdmin) activeMapAdmin.removeLayer(activeMarkerFarmasiAdmin);
+        if (activeMarkerTamuAdmin) activeMapAdmin.removeLayer(activeMarkerTamuAdmin);
+        if (activeCircleRadiusAdmin) activeMapAdmin.removeLayer(activeCircleRadiusAdmin);
 
-        // Tambah titik UPTD Farmasi
-        activeMarkerFarmasi = L.marker([FARMASI_LAT, FARMASI_LNG]).addTo(activeMap)
-          .bindPopup("<b>UPTD Farmasi Kota Tangerang Selatan</b><br>Titik Lokasi Layanan Utama");
+        activeMarkerFarmasiAdmin = L.marker([FARMASI_LAT, FARMASI_LNG]).addTo(activeMapAdmin)
+          .bindPopup("<b>UPTD Farmasi Kota Tangerang Selatan</b><br>Titik Pusat Lokasi Layanan");
 
-        // Tambah lingkaran radius valid
-        activeCircleRadius = L.circle([FARMASI_LAT, FARMASI_LNG], {
+        activeCircleRadiusAdmin = L.circle([FARMASI_LAT, FARMASI_LNG], {
           color: 'blue',
           fillColor: '#3b82f6',
           fillOpacity: 0.15,
           radius: RADIUS_MAKS_METER
-        }).addTo(activeMap);
+        }).addTo(activeMapAdmin);
 
         const tLat = Number(data.lat);
         const tLng = Number(data.lng);
         const jarak = hitungJarakMeter(FARMASI_LAT, FARMASI_LNG, tLat, tLng);
         const diLuar = jarak > RADIUS_MAKS_METER;
 
-        const badgeEl = document.getElementById("lokasiStatusBadge");
-        const infoEl = document.getElementById("jarakInfoText");
+        const badgeEl = document.getElementById("lokasiStatusBadgeAdmin");
+        const infoEl = document.getElementById("jarakInfoTextAdmin");
 
         infoEl.innerText = `Jarak dari UPTD: ${Math.round(jarak)} meter`;
         if (diLuar) {
           badgeEl.className = "px-2.5 py-1 rounded-lg font-extrabold border text-[10px] bg-red-50 text-red-700 border-red-200";
-          badgeEl.innerText = "⚠️ STATUS: DI LUAR LOKASI (ANTRIAN DILEWATI)";
+          badgeEl.innerText = "⚠️ DI LUAR LOKASI (ANTRIAN BISA DILEWATI)";
         } else {
           badgeEl.className = "px-2.5 py-1 rounded-lg font-extrabold border text-[10px] bg-emerald-50 text-emerald-700 border-emerald-200";
-          badgeEl.innerText = "✅ STATUS: BERADA DI LOKASI UPTD FARMASI";
+          badgeEl.innerText = "✅ BERADA DI DALAM LOKASI UPTD";
         }
 
-        // Tambah marker Tamu
-        activeMarkerTamu = L.marker([tLat, tLng]).addTo(activeMap)
+        activeMarkerTamuAdmin = L.marker([tLat, tLng]).addTo(activeMapAdmin)
           .bindPopup(`<b>Tamu: ${data.nama}</b><br>Instansi: ${data.instansi}<br>Jarak: ${Math.round(jarak)}m`)
           .openPopup();
 
-        // Fit bounds agar kedua titik terlihat
         const bounds = L.latLngBounds([[FARMASI_LAT, FARMASI_LNG], [tLat, tLng]]);
-        activeMap.fitBounds(bounds, { padding: [50, 50] });
+        activeMapAdmin.fitBounds(bounds, { padding: [50, 50] });
 
       }, 200);
     };
 
-    window.closeMapModal = () => {
-      document.getElementById("modalMap").classList.add("hidden");
+    window.closeMapModalAdmin = () => {
+      document.getElementById("modalMapAdmin").classList.add("hidden");
     };
 
-    window.downloadPdf = (data) => {
+    window.downloadPdfAdmin = (data) => {
       const areaCetak = document.getElementById("areaCetakPdf");
       areaCetak.style.display = "block";
 
@@ -619,4 +576,3 @@
   </script>
 </body>
 </html>
-
