@@ -161,6 +161,31 @@ Telepon (021) 29307897 Faksimili (021) 29307989
       return R * c;
     }
 
+    // Fungsi untuk mendapatkan posisi GPS awal saat tombol Check-In ditekan (Promise-based)
+    function ambilLokasiSekarang() {
+      return new Promise((resolve) => {
+        if (!navigator.geolocation) {
+          console.warn("Geolocation tidak didukung oleh browser ini.");
+          resolve({ lat: null, lng: null });
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            resolve({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            });
+          },
+          (error) => {
+            console.warn("Gagal mendeteksi lokasi GPS saat submit:", error.message);
+            resolve({ lat: null, lng: null });
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+      });
+    }
+
     // Fungsi untuk memulai pemantauan GPS berkala setelah check-in berhasil
     function mulaiPemantauanGPSBerkala(docIdAntrian) {
       if (!navigator.geolocation) {
@@ -291,13 +316,16 @@ Telepon (021) 29307897 Faksimili (021) 29307989
       }
       
       btn.disabled = true;
-      btn.innerText = "Mengunggah & Memproses...";
+      btn.innerText = "Mengambil Lokasi & Memproses...";
 
       try {
+        // Ambil koordinat GPS perangkat tamu sesaat sebelum data dikirim ke Firestore
+        const lokasiTamu = await ambilLokasiSekarang();
+
         const snap = await getDocs(collection(db, "tamu"));
         const kode = keperluan.substring(0, 1) + "-" + (snap.size + 1).toString().padStart(3, '0');
         
-        // Simpan data tamu ke Firestore
+        // Simpan data tamu ke Firestore beserta lat & lng
         const docRef = await addDoc(collection(db, "tamu"), { 
           nama, 
           instansi, 
@@ -305,6 +333,8 @@ Telepon (021) 29307897 Faksimili (021) 29307989
           keperluan, 
           suratUrl: suratUrl, // Tersimpan rapi ke Firestore tanpa Storage berbayar
           nomorAntrian: kode, 
+          lat: lokasiTamu.lat, // Disimpan ke Firestore
+          lng: lokasiTamu.lng, // Disimpan ke Firestore
           waktu: serverTimestamp(), 
           status: "menunggu" 
         });
@@ -333,4 +363,3 @@ Telepon (021) 29307897 Faksimili (021) 29307989
   </script>
 </body>
 </html>
-
