@@ -742,10 +742,12 @@
       }, 300);
     };
     
-    window.downloadPDFKeluhan = () => {
+        window.downloadPDFKeluhan = () => {
       const sourceElement = document.getElementById('printAreaKeluhan');
       if (!sourceElement) return;
-      const originalContent = sourceElement.innerHTML;
+
+      // Ambil elemen tabelnya saja dari dalam printAreaKeluhan untuk menghindari duplikasi judul
+      const tabelHtml = sourceElement.querySelector('table').outerHTML;
 
       sourceElement.innerHTML = `
         <div style="padding: 15px 20px; font-family: Arial, sans-serif; color: #000; width: 100%; background: #fff; box-sizing: border-box;">
@@ -769,7 +771,7 @@
           </div>
 
           <div style="margin-bottom: 25px; width: 100%;">
-            ${originalContent}
+            ${tabelHtml}
           </div>
 
           <table style="width: 100%; margin-top: 30px; font-size: 9.5px; border-collapse: collapse; page-break-inside: avoid;">
@@ -785,6 +787,44 @@
           </table>
         </div>
       `;
+
+      sourceElement.style.display = 'block';
+      sourceElement.classList.remove('hidden');
+
+      const opt = {
+        margin:       [5, 5, 5, 5],
+        filename:     'Laporan_Konsultasi_Dan_Pengaduan_UPTD.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, letterRendering: true, scrollX: 0, scrollY: 0 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      setTimeout(() => {
+        html2pdf().from(sourceElement).set(opt).save().then(() => {
+          // Kembalikan isi asli printAreaKeluhan setelah selesai di-generate
+          sourceElement.innerHTML = `
+            <div class="text-center mb-4">
+              <h3 class="text-xs font-black uppercase tracking-wider underline">LAPORAN KONSULTASI DAN PENGADUAN KELUHAN</h3>
+            </div>
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="border-b text-gray-700 text-[10px] uppercase bg-gray-50">
+                  <th class="p-2 border">Waktu</th>
+                  <th class="p-2 border">Nama</th>
+                  <th class="p-2 border">Instansi</th>
+                  <th class="p-2 border">Kontak</th>
+                  <th class="p-2 border">Kategori</th>
+                  <th class="p-2 border">Isi Keluhan</th>
+                </tr>
+              </thead>
+              <tbody id="tabelKonsultasiPDF" class="text-[11px] text-gray-800"></tbody>
+            </table>
+          `;
+          sourceElement.style.display = 'none';
+          sourceElement.classList.add('hidden');
+        });
+      }, 300);
+    };
 
       sourceElement.style.display = 'block';
       sourceElement.classList.remove('hidden');
