@@ -169,30 +169,31 @@
           <p class="text-[11px] text-gray-500 leading-relaxed">Pelajari langkah-langkah mudah menggunakan sistem layanan digital UPTD Farmasi Tangsel.</p>
         </div>
 
-        <!-- Langkah 1: Registrasi -->
+        <!-- Langkah 1: Registrasi & Validasi GPS -->
         <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-2">
           <div class="flex items-center gap-2.5 border-b pb-2">
             <div class="w-7 h-7 rounded-full bg-blue-100 text-blue-900 flex items-center justify-center font-extrabold text-xs">1</div>
-            <h3 class="font-extrabold text-xs text-blue-900 uppercase">Cara Melakukan Registrasi Kunjungan</h3>
+            <h3 class="font-extrabold text-xs text-blue-900 uppercase">Cara Melakukan Registrasi & Validasi GPS</h3>
           </div>
           <ol class="list-decimal list-inside text-[11px] text-gray-700 space-y-1.5 leading-relaxed pl-1">
-            <li>Buka halaman utama atau menu <b>Registrasi</b>.</li>
-            <li>Isi formulir data diri dengan lengkap, meliputi: <b>Nama Lengkap / Tamu</b>, <b>Instansi / Asal Puskesmas/Instansi</b>, serta <b>Keperluan Kunjungan</b> (misal: pengambilan Reagen, obat, dll).</li>
-            <li>Pastikan data sudah benar, lalu klik tombol kirim/registrasi.</li>
-            <li>Sistem akan mencatat data Anda secara real-time dan memberikan nomor antrian (jika tersedia).</li>
+            <li>Buka halaman utama atau menu <b>Registrasi</b> saat Anda berada di area UPTD Farmasi.</li>
+            <li>Isi formulir data diri dengan lengkap, meliputi: <b>Nama Lengkap / Tamu</b>, <b>Instansi / Asal Puskesmas</b>, dan nomor kontak.</li>
+            <li>Sistem akan secara otomatis mendeteksi posisi koordinat GPS perangkat Anda untuk memastikan Anda berada dalam radius kantor (maksimal radius 100 meter dari titik UPTD Farmasi). Pastikan izin akses lokasi (*Location Permission*) diaktifkan pada browser HP Anda.</li>
+            <li>Lampirkan dokumen/surat pendukung dengan ukuran maksimal <b>700 KB</b> agar berhasil terkirim ke sistem.</li>
+            <li>Klik tombol kirim/registrasi untuk mendapatkan nomor antrian secara real-time.</li>
           </ol>
         </div>
 
-        <!-- Langkah 2: Status & Download PDF -->
+        <!-- Langkah 2: Status, Input Obat & Download PDF -->
         <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-2">
           <div class="flex items-center gap-2.5 border-b pb-2">
             <div class="w-7 h-7 rounded-full bg-blue-100 text-blue-900 flex items-center justify-center font-extrabold text-xs">2</div>
-            <h3 class="font-extrabold text-xs text-blue-900 uppercase">Cek Status & Download Bukti PDF</h3>
+            <h3 class="font-extrabold text-xs text-blue-900 uppercase">Cek Status, Rincian Obat & Download Bukti PDF</h3>
           </div>
           <ul class="list-disc list-inside text-[11px] text-gray-700 space-y-1.5 leading-relaxed pl-1">
-            <li>Masuk ke menu <b>Tamu</b> untuk melihat daftar riwayat kunjungan dan status pelayanan secara berkala (Status: <i>Menunggu</i>, <i>Diproses</i>, atau <i>Selesai</i>).</li>
-            <li>Jika status sudah <b>Selesai</b> dan petugas telah menginput daftar obat/barang yang diterima, Anda dapat menekan tombol <b>Download PDF 📥</b>.</li>
-            <li>Sistem akan otomatis menghasilkan dokumen resmi berkop surat Pemkot Tangerang Selatan lengkap dengan detail rincian obat dan tanda tangan untuk disimpan atau dicetak.</li>
+            <li>Masuk ke menu <b>Tamu</b> untuk memantau daftar riwayat kunjungan dan status pelayanan (Status: <i>Menunggu</i>, <i>Diproses</i>, atau <i>Selesai</i>).</li>
+            <li>Admin akan melakukan pengisian rincian obat (nama obat, batch, ed, satuan, tahun anggaran, dan volume) serta memantau jarak koordinat GPS kunjungan Anda melalui peta interaktif.</li>
+            <li>Jika status sudah <b>Selesai</b>, Anda dapat menekan tombol <b>Download PDF 📥</b> untuk mengunduh bukti tanda terima resmi berkop surat Pemkot Tangerang Selatan lengkap dengan detail rincian obat.</li>
           </ul>
         </div>
 
@@ -221,7 +222,7 @@
                 <img src="https://i.ibb.co.com/Xf1wsJ41/Picsart-26-07-25-12-29-14-940.png" class="w-full h-full object-contain">
               </div>
               <div>
-                <span class="font-bold text-blue-900">Registrasi:</span> Halaman utama tempat Anda mendaftarkan kunjungan dan keperluan ke UPTD Farmasi.
+                <span class="font-bold text-blue-900">Registrasi:</span> Halaman utama tempat Anda mendaftarkan kunjungan, keperluan, dan validasi lokasi GPS radius kantor.
               </div>
             </div>
 
@@ -241,7 +242,7 @@
                 <img src="https://i.ibb.co.com/YBSNWNGM/Picsart-26-07-24-23-37-45-946.png" class="w-full h-full object-contain">
               </div>
               <div>
-                <span class="font-bold text-blue-900">Tamu:</span> Berisi daftar riwayat seluruh kunjungan, pengecekan status pelayanan, dan tempat unduh bukti PDF.
+                <span class="font-bold text-blue-900">Tamu:</span> Berisi daftar riwayat seluruh kunjungan, pemantauan status pelayanan secara real-time, rincian obat, dan tempat unduh bukti PDF.
               </div>
             </div>
 
