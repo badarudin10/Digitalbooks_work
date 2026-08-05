@@ -327,16 +327,24 @@ Telepon (021) 29307897 Faksimili (021) 29307989
         // Ambil koordinat GPS perangkat tamu sesaat sebelum data dikirim ke Firestore
         const lokasiTamu = await ambilLokasiSekarang();
 
-        // Hitung nomor antrean khusus yang terpisah berdasarkan kategori layanan (keperluan) yang sama pada hari ini
+        // Hitung nomor antrean murni terpisah berdasarkan kategori layanan (keperluan) yang sama pada hari ini
         const snap = await getDocs(collection(db, "tamu"));
         let countLayananHariIni = 0;
         const hariIniStr = new Date().toDateString();
 
         snap.forEach((docSnap) => {
           const data = docSnap.data();
-          if (data.keperluan === keperluan && data.waktu) {
-            const tanggalData = data.waktu.toDate ? data.waktu.toDate().toDateString() : "";
-            if (tanggalData === hariIniStr) {
+          if (data.keperluan === keperluan) {
+            let tglData = null;
+            if (data.waktu && typeof data.waktu.toDate === 'function') {
+              tglData = data.waktu.toDate().toDateString();
+            }
+            // Jika dokumen baru dibuat dengan serverTimestamp(), data.waktu mungkin masih null sebelum tersimpan,
+            // tapi kita filter berdasarkan nomor antrean yang sudah ada dengan awalan huruf kategori yang sama pada hari ini
+            if (tglData === hariIniStr) {
+              countLayananHariIni++;
+            } else if (!data.waktu && data.nomorAntrian && data.nomorAntrian.startsWith(keperluan.substring(0, 1) + "-")) {
+              // Menghindari bentrok jika timestamp server belum sempat turun ke cache lokal saat klik beruntun
               countLayananHariIni++;
             }
           }
