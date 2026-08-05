@@ -327,8 +327,23 @@ Telepon (021) 29307897 Faksimili (021) 29307989
         // Ambil koordinat GPS perangkat tamu sesaat sebelum data dikirim ke Firestore
         const lokasiTamu = await ambilLokasiSekarang();
 
+        // Hitung nomor antrean khusus yang terpisah berdasarkan kategori layanan (keperluan) yang sama pada hari ini
         const snap = await getDocs(collection(db, "tamu"));
-        const kode = keperluan.substring(0, 1) + "-" + (snap.size + 1).toString().padStart(3, '0');
+        let countLayananHariIni = 0;
+        const hariIniStr = new Date().toDateString();
+
+        snap.forEach((docSnap) => {
+          const data = docSnap.data();
+          if (data.keperluan === keperluan && data.waktu) {
+            const tanggalData = data.waktu.toDate ? data.waktu.toDate().toDateString() : "";
+            if (tanggalData === hariIniStr) {
+              countLayananHariIni++;
+            }
+          }
+        });
+
+        const nomorUrutBaru = countLayananHariIni + 1;
+        const kode = keperluan.substring(0, 1) + "-" + nomorUrutBaru.toString().padStart(3, '0');
         
         // Simpan data tamu ke Firestore beserta lat & lng
         const docRef = await addDoc(collection(db, "tamu"), { 
