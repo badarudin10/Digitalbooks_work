@@ -107,7 +107,7 @@
       </div>
     </div>
 
-    <!-- AREA KHUSUS CETAK PDF KELUHAN (BERSIH DARI DUA KOP) -->
+    <!-- AREA KHUSUS CETAK PDF KELUHAN -->
     <div id="printAreaKeluhan" class="hidden bg-white p-6 text-black box-border">
       <div class="text-center mb-4">
         <h3 class="text-xs font-black uppercase tracking-wider underline">LAPORAN KONSULTASI DAN PENGADUAN KELUHAN</h3>
@@ -214,7 +214,6 @@
     const auth = getAuth(app);
     let chart;
 
-    // Titik Pusat Koordinat UPTD Farmasi yang benar di admin.html
     const FARMASI_LAT = -6.3273811;
     const FARMASI_LNG = 106.6826688;
     const RADIUS_MAKS_METER = 100;
@@ -742,11 +741,10 @@
       }, 300);
     };
     
-        window.downloadPDFKeluhan = () => {
+    window.downloadPDFKeluhan = () => {
       const sourceElement = document.getElementById('printAreaKeluhan');
       if (!sourceElement) return;
 
-      // Ambil elemen tabelnya saja dari dalam printAreaKeluhan untuk menghindari duplikasi judul
       const tabelHtml = sourceElement.querySelector('table').outerHTML;
 
       sourceElement.innerHTML = `
@@ -801,7 +799,6 @@
 
       setTimeout(() => {
         html2pdf().from(sourceElement).set(opt).save().then(() => {
-          // Kembalikan isi asli printAreaKeluhan setelah selesai di-generate
           sourceElement.innerHTML = `
             <div class="text-center mb-4">
               <h3 class="text-xs font-black uppercase tracking-wider underline">LAPORAN KONSULTASI DAN PENGADUAN KELUHAN</h3>
@@ -820,26 +817,6 @@
               <tbody id="tabelKonsultasiPDF" class="text-[11px] text-gray-800"></tbody>
             </table>
           `;
-          sourceElement.style.display = 'none';
-          sourceElement.classList.add('hidden');
-        });
-      }, 300);
-    };
-
-      sourceElement.style.display = 'block';
-      sourceElement.classList.remove('hidden');
-
-      const opt = {
-        margin:       [5, 5, 5, 5],
-        filename:     'Laporan_Konsultasi_Dan_Pengaduan_UPTD.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, letterRendering: true, scrollX: 0, scrollY: 0 },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-
-      setTimeout(() => {
-        html2pdf().from(sourceElement).set(opt).save().then(() => {
-          sourceElement.innerHTML = originalContent;
           sourceElement.style.display = 'none';
           sourceElement.classList.add('hidden');
         });
@@ -919,3 +896,4 @@
   </script>
 </body>
 </html>
+
