@@ -331,7 +331,6 @@
             `;
           }
 
-          // Tombol Peta & Validasi Radius Admin
           let mapButtonHtml = '';
           if (tamuLat && tamuLng) {
             const jarakVal = hitungJarakMeter(FARMASI_LAT, FARMASI_LNG, Number(tamuLat), Number(tamuLng));
@@ -381,7 +380,6 @@
             </td>
             <td class="p-3 space-y-3 min-w-[340px]">
               
-              <!-- FORM INPUT MANUAL NAMA PETUGAS & INPUT OBAT -->
               <div class="border border-blue-200 rounded-lg p-3 bg-blue-50/40 space-y-2">
                 <div class="text-[11px] font-extrabold text-blue-900 border-b border-blue-200 pb-1">👤 Input Nama Petugas</div>
                 <div class="flex items-center gap-1.5">
@@ -480,7 +478,6 @@
       });
     }
 
-    // Fungsi mengubah status antrian (misal dilewati karena di luar lokasi)
     window.ubahStatusAntrianAdmin = async (docId, statusBaru) => {
       try {
         await updateDoc(doc(db, "tamu", docId), { status: statusBaru });
@@ -491,7 +488,6 @@
       }
     };
 
-    // Fungsi Modal Peta Admin
     window.openMapModalAdmin = (data) => {
       document.getElementById("modalVisitorNameAdmin").innerText = `${data.nama} (${data.instansi})`;
       document.getElementById("modalMapAdmin").classList.remove("hidden");
@@ -552,7 +548,6 @@
       document.getElementById("modalMapAdmin").classList.add("hidden");
     };
 
-    // Fungsi menyimpan input manual nama petugas ke Firestore
     window.simpanPetugasAdmin = async (id) => {
       const inputVal = document.getElementById(`inPetugas_${id}`).value.trim();
       try {
@@ -610,7 +605,6 @@
       });
     };
 
-    // GENERATE PDF DENGAN KOP SURAT PRESISI & INFORMASI LAMPIRAN FILE
     window.downloadPdf = (data) => {
       const inputPetugasElem = document.getElementById(`inPetugas_${data.docId}`);
       const namaPetugasFinal = inputPetugasElem ? inputPetugasElem.value.trim() : (data.petugas || '-');
@@ -800,7 +794,6 @@
           </table>
         </div>
       `;
-};
 
       sourceElement.style.display = 'block';
       sourceElement.classList.remove('hidden');
@@ -895,4 +888,3 @@
   </script>
 </body>
 </html>
-
