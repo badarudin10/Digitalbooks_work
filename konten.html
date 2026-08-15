@@ -104,9 +104,10 @@
   <!-- KONTROL UTAMA LAYOUT RESPONSIF -->
   <div class="app-layout-wrapper">
 
-    <!-- Menu Navigasi Samping (Dipisah Menjadi Kartu Terpisah) -->
+    <!-- Menu Navigasi Samping (Sidebar Kiri PC) -->
     <aside class="pc-sidebar-left space-y-3">
-      <!-- Kartu Profil Pegawai (Hanya tampil di Sidebar PC / Desktop) -->
+      
+      <!-- 1. Kartu Profil Pegawai (Hanya tampil di Sidebar PC, ditaruh di paling atas sidebar) -->
       <div class="hidden lg:block bg-white p-3 rounded-2xl shadow-sm border-2 border-blue-400">
         <nav>
           <a href="profil.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
@@ -121,7 +122,7 @@
         </nav>
       </div>
   
-      <!-- Kotak 1: Registrasi -->
+      <!-- 2. Kotak Registrasi -->
       <div class="bg-white p-3 rounded-2xl shadow-sm border-2 border-blue-400">
         <nav>
           <a href="index.html#registrasi" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
@@ -133,7 +134,7 @@
         </nav>
       </div>
 
-      <!-- Kotak 2: Maps -->
+      <!-- 3. Kotak Maps -->
       <div class="bg-white p-3 rounded-2xl shadow-sm border-2 border-blue-400">
         <nav>
           <a href="maps.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
@@ -145,7 +146,7 @@
         </nav>
       </div>
 
-      <!-- Kotak 3: Tamu -->
+      <!-- 4. Kotak Tamu -->
       <div class="bg-white p-3 rounded-2xl shadow-sm border-2 border-blue-400">
         <nav>
           <a href="tamu.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
@@ -157,7 +158,7 @@
         </nav>
       </div>
 
-      <!-- Kotak 5: Survei -->
+      <!-- 5. Kotak Survei -->
       <div class="bg-white p-3 rounded-2xl shadow-sm border-2 border-blue-400">
         <nav>
           <a href="https://docs.google.com/forms/d/e/1FAIpQLSexxMw_FdW-XT6yTyiPUVnpFyKf_j01-4lk-JmiQRrT3IC04A/viewform" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 text-emerald-900 font-bold text-xs transition">
@@ -174,7 +175,7 @@
     <div class="pc-main-content w-full">
       <main id="mainDashboard" class="main-container lg:max-w-none space-y-3 pt-1 pb-3">
         
-        <!-- Header Khusus Desktop (Memanjang hingga ujung kanan sejajar konten utama) -->
+        <!-- Header Khusus Desktop (Memanjang penuh hingga ujung kanan) -->
         <div class="pc-header-desktop hidden lg:block bg-white p-4 rounded-2xl shadow-sm border-2 border-blue-400 mb-3 w-full">
           <div class="flex items-center gap-3">
             <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-24 w-24 object-contain">
@@ -185,7 +186,7 @@
           </div>
         </div>
 
-        <!-- Kartu Profil Pegawai (Hanya tampil di Mobile/HP) -->
+        <!-- Kartu Profil Pegawai (Hanya tampil 1 buah khusus di Mobile/HP) -->
         <a href="profil.html" class="block lg:hidden bg-white p-3 rounded-2xl shadow-sm border-2 border-blue-400 relative hover:border-blue-700 transition">
           <div class="flex items-center justify-between gap-3 text-left">
             <div>
@@ -198,36 +199,6 @@
             </div>
           </div>
         </a>
-
-    <!-- KONTEN UTAMA -->
-    <div class="pc-main-content w-full">
-      <main id="mainDashboard" class="main-container lg:max-w-none space-y-3 pt-1 pb-3">
-        
-        <!-- Header Khusus Desktop -->
-        <div class="pc-header-desktop hidden bg-white p-4 rounded-2xl shadow-sm border-2 border-blue-400 mb-3">
-          <div class="flex items-center gap-3">
-            <img src="https://i.ibb.co.com/ksp2gP0q/Lambang-Kota-Tangerang-Selatan-1.png" alt="Logo" class="h-24 w-24 object-contain">
-            <div>
-              <h1 class="font-extrabold text-blue-900 text-base tracking-wide leading-tight">UPTD FARMASI</h1>
-              <p class="text-xs text-gray-600 font-semibold uppercase tracking-wider">Kota Tangerang Selatan</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Kartu Profil Pegawai (Hanya tampil di Mobile/HP) -->
-        <a href="profil.html" class="block lg:hidden bg-white p-3 rounded-2xl shadow-sm border-2 border-blue-400 relative hover:border-blue-700 transition">
-          <div class="flex items-center justify-between gap-3 text-left">
-            <div>
-              <p class="text-[9px] text-blue-900 font-extrabold uppercase tracking-wide">PROFIL PEGAWAI</p>
-              <h2 class="text-xs font-extrabold text-gray-800 mt-0.5">UPTD FARMASI</h2>
-              <p class="text-[9px] text-gray-600 font-mono mt-0.5">Kota Tangerang Selatan</p>
-            </div>
-            <div class="h-16 w-16 flex items-center justify-center flex-shrink-0 bg-transparent">
-              <img src="https://i.ibb.co.com/XrXxN4xj/Picsart-26-07-29-23-07-44-990.png" class="w-full h-full object-contain scale-[1.0]">
-            </div>
-          </div>
-        </a>
-
         <!-- Kotak Aksi Cepat -->
         <div class="bg-white p-3 rounded-2xl shadow-sm border-2 border-blue-400">
           <div class="flex items-center gap-2 mb-2 text-gray-700 font-bold text-xs">
